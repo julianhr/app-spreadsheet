@@ -29,6 +29,11 @@
     "test": "craco test",
     "eject": "react-scripts eject"
   },
+  "husky": {
+    "hooks": {
+      "pre-push": "jest"
+    }
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
