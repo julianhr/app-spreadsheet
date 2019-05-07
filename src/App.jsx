@@ -1,15 +1,21 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import styled from '@emotion/styled'
+
+
+const P = styled.p`
+  color: green;
+`
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
+        <P>
           Edit <code>src/App.js</code> and save to reload.
-        </p>
+        </P>
         <a
           className="App-link"
           href="https://reactjs.org"
