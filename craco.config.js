@@ -1,3 +1,6 @@
+const path = require('path')
+
+
 module.exports = ({ env }) => {
   const isProd = env === 'production'
   const isTest = env === 'test'
@@ -13,5 +16,10 @@ module.exports = ({ env }) => {
         ],
       ],
     },
+    webpack: {
+      alias: {
+        '~': path.resolve(__dirname, 'src'),
+      }
+    }
   }
 }
