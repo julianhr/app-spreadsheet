@@ -21,6 +21,7 @@
     "babel-plugin-emotion": "^10.0.9",
     "husky": "^2.2.0",
     "jest-emotion": "^10.0.10",
+    "react-test-renderer": "^16.8.6",
     "typescript": "^3.4.5"
   },
   "scripts": {
@@ -28,6 +29,11 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "CI=true npm run test"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
