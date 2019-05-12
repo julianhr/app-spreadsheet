@@ -1,9 +1,17 @@
-import rootReducer from './rootReducer'
 import { configureStore } from 'redux-starter-kit'
 
+import globalReducer from './globalReducer'
+import tableReducer from './tableReducer'
 
-const appStore = configureStore({
-    reducer: rootReducer
-})
 
-export default appStore
+const appStoreFn = () => (
+  configureStore({
+    reducer: {
+      global: globalReducer,
+      table: tableReducer,
+    }
+  })
+)
+
+
+export default appStoreFn
