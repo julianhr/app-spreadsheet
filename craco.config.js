@@ -17,9 +17,30 @@ module.exports = ({ env }) => {
       ],
     },
     jest: {
-      configure: {
-        moduleNameMapper: {
-          "^~(.*)$": "<rootDir>/src$1",
+      configure: (jestConfig, { rootDir }) => {
+        return {
+          ...jestConfig,
+          clearMocks: true,
+          coveragePathIgnorePatterns: [
+            ...(jestConfig.coveragePathIgnorePatterns || []),
+            'src/styles/',
+          ],
+          moduleNameMapper: {
+            ...(jestConfig.moduleNameMapper || {}),
+            '^~(.*)$': '<rootDir>/src$1',
+          },
+          restoreMocks: true,
+          roots: [
+            ...(jestConfig.roots || []),
+            '<rootDir>/src'
+          ],
+          setupFilesAfterEnv: [
+            ...(jestConfig.setupFilesAfterEnv || []),
+            './jest_configs/jestExtendConfig.js',
+          ],
+          testMatch: [
+            '**/__tests__/**/*\\.(test|spec)\\.js',
+          ],
         }
       }
     },
