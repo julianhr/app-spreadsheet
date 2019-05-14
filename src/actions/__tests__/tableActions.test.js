@@ -4,7 +4,7 @@ import * as actions from '~/actions/tableActions'
 
 describe('tableActions', () => {
   describe('#setCellValue', () => {
-    it('sets currently active cell', () => {
+    it('sets currently active cell', async () => {
       const cell = 'B-2'
       const value = {
         location: cell,
@@ -14,7 +14,7 @@ describe('tableActions', () => {
       const appStore = appStoreGen()
 
       expect(appStore.getState().table[cell]).toBeUndefined()
-      appStore.dispatch(actions.setCellValue(value))
+      await appStore.dispatch(actions.setCellValue(value))
       expect(appStore.getState().table[cell]).toEqual({ text: value.text, formula: value.formula })
     })
   })

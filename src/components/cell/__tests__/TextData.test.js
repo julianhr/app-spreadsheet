@@ -67,7 +67,7 @@ describe('TextData', () => {
       props.isFocused = true
       renderApp(props)
 
-      const tag = document.querySelector(`#${props.location}`)
+      const tag = document.querySelector(`#t-${props.location}`)
       expect(document.activeElement).toBe(tag)
     })
 
@@ -76,7 +76,7 @@ describe('TextData', () => {
       props.isFocused = false
       renderApp(props)
 
-      const tag = document.querySelector(`#${props.location}`)
+      const tag = document.querySelector(`#t-${props.location}`)
       expect(document.activeElement).not.toBe(tag)
     })
   })
@@ -87,7 +87,7 @@ describe('TextData', () => {
       expect(store.getState().global.activeCell).toBeNull()
 
       renderApp(testProps, store)
-      const tag = document.querySelector(`#${testProps.location}`)
+      const tag = document.querySelector(`#t-${testProps.location}`)
       fireEvent.keyDown(tag, { key: 'a' })
       expect(store.getState().global.activeCell).toEqual(testProps.location)
     })
@@ -108,7 +108,7 @@ describe('TextData', () => {
         [',', true]
       ]
       renderApp(testProps, store)
-      const tag = document.querySelector(`#${testProps.location}`)
+      const tag = document.querySelector(`#t-${testProps.location}`)
 
       for (let [key, expected] of keys) {
         await store.dispatch(setCellValue(value))
@@ -128,7 +128,7 @@ describe('TextData', () => {
       ]
       testProps.onKeyDownEditable.mockReset()
       renderApp(testProps)
-      const tag = document.querySelector(`#${testProps.location}`)
+      const tag = document.querySelector(`#t-${testProps.location}`)
 
       for (let [key, times] of keys) {
         fireEvent.keyDown(tag, { key })

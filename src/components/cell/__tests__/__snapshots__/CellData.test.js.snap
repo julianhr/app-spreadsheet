@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CellData functional tests lifecycle snapshots: 1. initial text tag 1`] = `
+<DocumentFragment>
+  <div
+    class="css-meb6x1-Wrapper eoyj2860"
+  >
+    <div
+      class="css-gchdh-Text e1anysog0"
+      id="t-B-2"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`CellData functional tests lifecycle snapshots: 2. initial input tag 1`] = `
+<DocumentFragment>
+  <div
+    class="css-meb6x1-Wrapper eoyj2860"
+  >
+    <input
+      class="css-te4i1p-Input egik0ru0"
+      id="f-B-2"
+      value=""
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`CellData functional tests lifecycle snapshots: 3. text tag has text 1`] = `
+<DocumentFragment>
+  <div
+    class="css-meb6x1-Wrapper eoyj2860"
+  >
+    <div
+      class="css-gchdh-Text e1anysog0"
+      id="t-B-2"
+      tabindex="0"
+    >
+      pending evaluateFormula
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`CellData functional tests lifecycle snapshots: 4. input tag has formula 1`] = `
+<DocumentFragment>
+  <div
+    class="css-meb6x1-Wrapper eoyj2860"
+  >
+    <input
+      class="css-te4i1p-Input egik0ru0"
+      id="f-B-2"
+      value="=2+3+4"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`CellData functional tests lifecycle snapshots: 5. cell value deleted with Backspace 1`] = `
+<DocumentFragment>
+  <div
+    class="css-meb6x1-Wrapper eoyj2860"
+  >
+    <div
+      class="css-gchdh-Text e1anysog0"
+      id="t-B-2"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`CellData functional tests lifecycle snapshots: 6. key down "a" on text tag 1`] = `
+<DocumentFragment>
+  <div
+    class="css-meb6x1-Wrapper eoyj2860"
+  >
+    <input
+      class="css-te4i1p-Input egik0ru0"
+      id="f-B-2"
+      value=""
+    />
+  </div>
+</DocumentFragment>
+`;
