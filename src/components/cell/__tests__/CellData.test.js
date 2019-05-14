@@ -119,23 +119,33 @@ describe('CellData', () => {
       expect(xstate.Interpreter.prototype.stop).toHaveBeenCalledTimes(1)
     })
 
-    it('matches snapshot during lifecycle', () => {
+    test('lifecycle snapshots', () => {
       let tag, input
       const [wrapper, _] = renderApp(testProps)
-      expect(wrapper.asFragment()).toMatchSnapshot('Initial text tag')
+      expect(wrapper.asFragment()).toMatchSnapshot('1. initial text tag')
 
       tag = document.querySelector(`#t-${testProps.location}`)
       fireEvent.doubleClick(tag)
-      expect(wrapper.asFragment()).toMatchSnapshot('Initial input tag')
+      expect(wrapper.asFragment()).toMatchSnapshot('2. initial input tag')
 
       input = document.querySelector(`#f-${testProps.location}`)
       input.value = '=2+3+4'
       fireEvent.keyDown(input, { key: 'Enter' })
-      expect(wrapper.asFragment()).toMatchSnapshot('Text tag has text')
+      expect(wrapper.asFragment()).toMatchSnapshot('3. text tag has text')
 
       tag = document.querySelector(`#t-${testProps.location}`)
       fireEvent.doubleClick(tag)
-      expect(wrapper.asFragment()).toMatchSnapshot('Input tag has formula')
+      expect(wrapper.asFragment()).toMatchSnapshot('4. input tag has formula')
+
+      input = document.querySelector(`#f-${testProps.location}`)
+      fireEvent.keyDown(input, { key: 'Escape' })
+      tag = document.querySelector(`#t-${testProps.location}`)
+      fireEvent.keyDown(tag, { key: 'Backspace' })
+      expect(wrapper.asFragment()).toMatchSnapshot('5. cell value deleted with Backspace')
+
+      fireEvent.keyDown(tag, { key: 'a' })
+      input = document.querySelector(`#f-${testProps.location}`)
+      expect(wrapper.asFragment()).toMatchSnapshot('6. key down "a" on text tag')
     })
   })
 })
