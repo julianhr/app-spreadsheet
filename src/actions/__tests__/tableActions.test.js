@@ -20,7 +20,7 @@ describe('tableActions', () => {
   })
 
   describe('#clearCellValue', () => {
-    it.only('deletes value from store', async () => {
+    it('deletes value from store', async () => {
       const cell = 'B-2'
       const value = {
         location: cell,
