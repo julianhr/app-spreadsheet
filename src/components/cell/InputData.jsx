@@ -99,7 +99,7 @@ export class InputData extends React.PureComponent {
     return (
       <Input
         ref={this.refInput}
-        id={this.props.location}
+        id={`f-${this.props.location}`}
         defaultValue={defaultValue}
         onKeyDown={this.handleOnKeyDown}
         onBlur={this.handleOnBlur}

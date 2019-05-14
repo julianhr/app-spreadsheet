@@ -67,7 +67,7 @@ export class TextData extends React.PureComponent {
     return (
       <Text
         ref={this.refText}
-        id={this.props.location}
+        id={`t-${this.props.location}`}
         tabIndex='0'
         onKeyDown={this.handleOnKeyDown}
         onDoubleClick={this.props.onDoubleClick}

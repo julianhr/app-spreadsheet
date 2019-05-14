@@ -4,7 +4,7 @@ exports[`InputData functional tests displays default value if replaceValue is fa
 <DocumentFragment>
   <input
     class="css-te4i1p-Input egik0ru0"
-    id="B-2"
+    id="f-B-2"
     value="test formula"
   />
 </DocumentFragment>
@@ -14,7 +14,7 @@ exports[`InputData functional tests will not display default value if replaceVal
 <DocumentFragment>
   <input
     class="css-te4i1p-Input egik0ru0"
-    id="B-2"
+    id="f-B-2"
     value=""
   />
 </DocumentFragment>
