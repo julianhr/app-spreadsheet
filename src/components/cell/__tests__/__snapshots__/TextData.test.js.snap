@@ -1,13 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TextData functional tests matches snapshot 1`] = `
-<div
-  className="css-gchdh-Text e1anysog0"
-  id="B-2"
-  onDoubleClick={[MockFunction]}
-  onKeyDown={[Function]}
-  tabIndex="0"
->
-  test string
-</div>
+<DocumentFragment>
+  <div
+    class="css-gchdh-Text e1anysog0"
+    id="B-2"
+    tabindex="0"
+  />
+</DocumentFragment>
 `;

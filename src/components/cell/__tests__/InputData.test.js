@@ -1,24 +1,28 @@
 import React from 'react'
 import { create } from 'react-test-renderer'
-import { render, fireEvent, cleanup, waitForElement } from 'react-testing-library'
-import { connect } from 'react-redux'
+import { render, fireEvent, cleanup } from 'react-testing-library'
 
-import InputDataConnected, { InputData } from '../InputData'
+import ConnectedInputData, { InputData } from '../InputData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import appStoreGen from '~/reducers'
 import { setCellValue } from '~/actions/tableActions'
 
 
+const requiredProps = {
+  // props
+  replaceValue: false,
+  location: 'B-2',
+  onEscape: jest.fn(),
+  onCommit: jest.fn(),
+  // redux
+  clearCellValue: jest.fn(),
+  setCellValue: jest.fn(),
+}
+
 const testProps = {
-    // props
-    replaceValue: true,
-    location: 'B-2',
-    onEscape: jest.fn(),
-    onCommit: jest.fn(),
-    // redux
-    clearCellValue: jest.fn(),
-    formula: 'test formula',
-    setCellValue: jest.fn(),
+  ...requiredProps,
+  // props
+  formula: 'test formula',
 }
 
 const createApp = (props) => {
@@ -28,10 +32,14 @@ const createApp = (props) => {
   return [wrapper, instance]
 }
 
-const renderApp = (props) => {
-  const appStore = appStoreGen()
-  const wrapper = render(<MockApp customStore={appStore}><InputDataConnected {...props} /></MockApp>)
-  return [wrapper, appStore]
+const renderApp = (props, customStore) => {
+  const store = customStore || appStoreGen()
+  const wrapper = render(
+    <MockApp customStore={store}>
+      <ConnectedInputData {...props} />
+    </MockApp>
+  )
+  return [wrapper, store]
 }
 
 describe('InputData', () => {
@@ -39,48 +47,26 @@ describe('InputData', () => {
 
   describe('props', () => {
     it('does not raise warning if al required props are passed', () => {
-      expect(() => createApp(testProps)).not.toThrow()
+      expect(() => createApp(requiredProps)).not.toThrow()
     })
 
-    test('replaceValue is required', () => {
-      const props = {...testProps}
-      delete props.replaceValue
-      expect(() => createApp(props)).toThrow()
-    })
-
-    test('location is required', () => {
-      const props = {...testProps}
-      delete props.location
-      expect(() => createApp(props)).toThrow()
-    })
-
-    test('onEscape is required', () => {
-      const props = {...testProps}
-      delete props.onEscape
-      expect(() => createApp(props)).toThrow()
-    })
-
-    test('onCommit is required', () => {
-      const props = {...testProps}
-      delete props.onCommit
-      expect(() => createApp(props)).toThrow()
-    })
-
-    test('clearCellValue is required', () => {
-      const props = {...testProps}
-      delete props.clearCellValue
-      expect(() => createApp(props)).toThrow()
-    })
-
-    test('setCellValue is required', () => {
-      const props = {...testProps}
-      delete props.setCellValue
-      expect(() => createApp(props)).toThrow()
+    it('raises warning if required props is not present', () => {
+      Object.keys(requiredProps).forEach(key => {
+        const props = {...testProps}
+        delete props[key]
+        expect(() => createApp(props)).toThrow()
+      })
     })
   })
 
   describe('#focusInputTag', () => {
-    it('focuses text tag and places cursor at far-right', () => {
+    it('focuses input tag when component mounts', () => {
+      const [wrapper, _] = renderApp(testProps)
+      const input = wrapper.getByDisplayValue('')
+      expect(document.activeElement).toBe(input)
+    })
+
+    it('places cursor on far-right of formula string', async () => {
       const mockRef = { focus: jest.fn(), scrollLeft: 0, scrollWidth: 25 }
       const [_, instance] = createApp(testProps)
       instance.refInput.current = mockRef
@@ -92,39 +78,43 @@ describe('InputData', () => {
   })
 
   describe('#setNewValue', () => {
-    it('if string is empty the current value is deleted', () => {
-      const value = ''
-      testProps.clearCellValue.mockReset()
-      testProps.setCellValue.mockReset()
-      const [_, instance] = createApp(testProps)
+    it('if string is empty the current value is deleted', async () => {
+      const appStore = appStoreGen()
+      const saved = { location: testProps.location, text: 'test string', formula: 'formula string' }
+      await appStore.dispatch(setCellValue(saved))
+      expect(appStore.getState().table[saved.location]).toBeTruthy()
 
-      instance.setNewValue(value)
-      expect(testProps.clearCellValue).toHaveBeenCalledTimes(1)
-      expect(testProps.setCellValue).toHaveBeenCalledTimes(0)
+      const [wrapper, _] = renderApp(testProps, appStore)
+      const input = wrapper.getByDisplayValue(saved.formula)
+
+      input.value = ''
+      fireEvent.keyDown(input, { key: 'Enter' })
+      expect(appStore.getState().table[saved.location]).toBeUndefined()
     })
 
     it('saves trimmed value if string is valid', () => {
-      const value = ' this is valid but not trimmed\n'
-      const saved = { location: testProps.location, text: value.trim(), formula: value.trim() }
-      testProps.clearCellValue.mockReset()
-      testProps.setCellValue.mockReset()
-      const [_, instance] = createApp(testProps)
+      const appStore = appStoreGen()
+      const saved = { location: testProps.location, text: 'test string', formula: 'formula string' }
+      expect(appStore.getState().table[saved.location]).toBeUndefined()
 
-      instance.setNewValue(value)
-      expect(testProps.clearCellValue).toHaveBeenCalledTimes(0)
-      expect(testProps.setCellValue).toHaveBeenCalledTimes(1)
-      expect(testProps.setCellValue.mock.calls[0][0]).toEqual(saved)
+      const [wrapper, _] = renderApp(testProps, appStore)
+      const input = wrapper.getByDisplayValue('')
+      const value = ' test value\n'
+
+      input.value = value
+      fireEvent.keyDown(input, { key: 'Enter' })
+      expect(appStore.getState().table[saved.location].formula).toBe(value.trim())
     })
 
-    it('calls formula evaluator if value starts with "="', () => {
-      const [_, instance] = createApp(testProps)
-      jest.spyOn(instance, 'evaluateFormula')
+    it('calls #evaluateFormula if value starts with "="', () => {
+      const [wrapper, _] = renderApp(testProps)
+      const input = wrapper.getByDisplayValue('')
+      const formula = '=2+3'
 
-      instance.setNewValue('=2+2')
-      expect(instance.evaluateFormula).toHaveBeenCalledTimes(1)
-
-      instance.setNewValue('regular string')
-      expect(instance.evaluateFormula).toHaveBeenCalledTimes(1)
+      jest.spyOn(InputData.prototype, 'evaluateFormula')
+      input.value = formula
+      fireEvent.keyDown(input, { key: 'Enter' })
+      expect(InputData.prototype.evaluateFormula).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -134,45 +124,50 @@ describe('InputData', () => {
   describe('#handleOnKeyDown', () => {
     test('sequence of events if key is "Escape"', () => {
       testProps.onEscape.mockReset()
-      const [_, instance] = createApp(testProps)
-      const event = { key: 'Escape' }
-      instance.handleOnKeyDown(event)
+      const [wrapper, _] = renderApp(testProps)
+      const input = wrapper.getByDisplayValue('')
+      fireEvent.keyDown(input, { key: 'Escape' })
       expect(testProps.onEscape).toHaveBeenCalledTimes(1)
     })
 
     test('sequence of event if key is "Enter', () => {
       testProps.onCommit.mockReset()
-      const [_, instance] = createApp(testProps)
-      const event = { key: 'Enter', target: { value: 'test value' } }
-      jest.spyOn(instance, 'setNewValue')
-
-      instance.handleOnKeyDown(event)
+      const [wrapper, _] = renderApp(testProps)
+      const input = wrapper.getByDisplayValue('')
+      fireEvent.keyDown(input, { key: 'Enter' })
       expect(testProps.onCommit).toHaveBeenCalledTimes(1)
-      expect(instance.setNewValue).toHaveBeenCalledTimes(1)
     })
 
-    test('sequence of events if key is not "Enter" or "Escape"', () => {
-      const [_, instance] = createApp(testProps)
-      let event = { stopPropagation: jest.fn() }
-      const events = [['b', 1], ['2', 2], [',', 3]]
+    test('keydown event does not bubble unless key is "Enter" or "Escape"', () => {
+      const events = 'b Enter 2 , t Escape E s 5'.split(' ')
+      const spyKeyDown = jest.fn()
+      const Listener = ({ children }) => <div onKeyDown={spyKeyDown}>{children}</div>
+      render(
+        <MockApp>
+          <Listener>
+            <InputData {...testProps}  />
+          </Listener>
+        </MockApp>
+      )
+      const input = document.querySelector('input')
 
-      for (let [key, count] of events) {
-        event.key = key
-        instance.handleOnKeyDown(event)
-        expect(event.stopPropagation).toHaveBeenCalledTimes(count)
-      }
+      events.forEach(key => fireEvent.keyDown(input, { key }))
+      expect(spyKeyDown).toHaveBeenCalledTimes(2)
     })
   })
 
   describe('#handleOnBlur', () => {
-    test('sequence of events', () => {
-      let event = { target: { value: 'test value' } }
-      const [_, instance] = createApp(testProps)
-      jest.spyOn(instance, 'setNewValue').mockReturnValue('mocked setNewValue')
-      testProps.onCommit.mockReset()
+    test('stores value and calls #onCommit', () => {
+      const [_, store] = renderApp(testProps)
+      const formula = 'test value'
+      const value = { text: formula, formula }
 
-      instance.handleOnBlur(event)
-      expect(instance.setNewValue).toHaveBeenCalledTimes(1)
+      testProps.onCommit.mockReset()
+      const input = document.querySelector('input')
+      input.value = formula
+      fireEvent.blur(input)
+
+      expect(store.getState().table[testProps.location]).toEqual(value)
       expect(testProps.onCommit).toHaveBeenCalledTimes(1)
     })
   })
@@ -186,35 +181,33 @@ describe('InputData', () => {
       onCommit: jest.fn(),
     }
 
-    test('#componentDidMount sequence', () => {
-      jest.spyOn(InputData.prototype, 'focusInputTag').mockReturnValue('mock cdm')
-      renderApp(funcProps)
-      expect(InputData.prototype.focusInputTag).toHaveBeenCalledTimes(1)
-    })
-
-    it('displays default value if replaceValue is false', () => {
-      const props = {...funcProps}
-      props.replaceValue = false
-      const [wrapper, appStore] = renderApp(props)
+    it('displays default value if replaceValue is false', async () => {
       const value = {
         location: funcProps.location,
         text: 'test text',
         formula: 'test formula'
       }
-      appStore.dispatch(setCellValue(value))
+      const store = appStoreGen()
+      await store.dispatch(setCellValue(value))
+      const props = {...funcProps}
+      props.replaceValue = false
+      const [wrapper, _] = renderApp(props, store)
+
       expect(wrapper.asFragment()).toMatchSnapshot()
     })
 
-    it('will not display default value if replaceValue is true', () => {
-      const props = {...funcProps}
-      props.replaceValue = true
-      const [wrapper, appStore] = renderApp(props)
+    it('will not display default value if replaceValue is true', async () => {
       const value = {
         location: funcProps.location,
         text: 'test text',
         formula: 'test formula'
       }
-      appStore.dispatch(setCellValue(value))
+      const store = appStoreGen()
+      await store.dispatch(setCellValue(value))
+      const props = {...funcProps}
+      props.replaceValue = true
+      const [wrapper, _] = renderApp(props, store)
+
       expect(wrapper.asFragment()).toMatchSnapshot()
     })
   })
