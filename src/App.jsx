@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styled from '@emotion/styled'
 
-import { setActiveCell } from './actions/rootActions'
+import { setActiveCell } from './actions/globalActions'
 import Header from './components/header/Header'
 import Table from './components/table/Table'
 
