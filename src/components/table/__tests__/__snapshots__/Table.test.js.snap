@@ -1,0 +1,347 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table functional tests matches snapshot 1`] = `
+<DocumentFragment>
+  <table
+    class="css-x9fnjs-RootTable e1tmjcr20"
+  >
+    <tbody>
+      <tr>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-A-1"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-B-1"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-C-1"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-D-1"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-E-1"
+              tabindex="0"
+            />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-A-2"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-B-2"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-C-2"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-D-2"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-E-2"
+              tabindex="0"
+            />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-A-3"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-B-3"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-C-3"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-D-3"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-E-3"
+              tabindex="0"
+            />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-A-4"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-B-4"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-C-4"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-D-4"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-E-4"
+              tabindex="0"
+            />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-A-5"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-B-5"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-C-5"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-D-5"
+              tabindex="0"
+            />
+          </div>
+        </td>
+        <td
+          class="css-vmxvgu-Td e1tmjcr21"
+        >
+          <div
+            class="css-meb6x1-Wrapper eoyj2860"
+          >
+            <div
+              class="css-gchdh-Text e1anysog0"
+              id="t-E-5"
+              tabindex="0"
+            />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;
