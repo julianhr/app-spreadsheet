@@ -1,5 +1,8 @@
 const colors = {
   text: '#3D3D3D',
+  cell: {
+    border: 'lightgray'
+  },
   primary: {
     strong: '#E10D75'
   },
