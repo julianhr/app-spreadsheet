@@ -16,6 +16,24 @@ module.exports = ({ env }) => {
         ],
       ],
     },
+    eslint: {
+      configure: {
+        rules: {
+          'no-unused-vars': [
+            'error',
+            {
+              'argsIgnorePattern': '^_$"',
+              'varsIgnorePattern': '^(_|jsx)$',
+            }
+          ],
+          'react/display-name': false,
+          'semi': [
+            'error',
+            'never',
+          ]
+        }
+      }
+    },
     jest: {
       configure: (jestConfig, { rootDir }) => {
         return {

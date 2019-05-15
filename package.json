@@ -44,7 +44,7 @@
         "error",
         {
           "argsIgnorePattern": "^_$",
-          "varsIgnorePattern": "^_$"
+          "varsIgnorePattern": "^(_|jsx)$"
         }
       ],
       "react/display-name": false,

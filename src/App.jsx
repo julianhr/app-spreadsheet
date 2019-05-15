@@ -20,7 +20,7 @@ const Main = styled.main`
 `
 
 function App({ setActiveCell }) {
-  const handleOnClick = (event) => {
+  const handleOnClick = () => {
     setActiveCell(null)
   }
 
