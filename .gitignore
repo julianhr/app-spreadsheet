@@ -1,0 +1,17 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Directories
+/.pnp
+/build
+/coverage
+/node_modules
+/playground
+
+# Files
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.pnp.js
+npm-debug.log*

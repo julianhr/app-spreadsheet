@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InputData functional tests displays default value if replaceValue is false 1`] = `
+<DocumentFragment>
+  <input
+    class="css-te4i1p-Input egik0ru0"
+    id="f-B-2"
+    value="test formula"
+  />
+</DocumentFragment>
+`;
+
+exports[`InputData functional tests will not display default value if replaceValue is true 1`] = `
+<DocumentFragment>
+  <input
+    class="css-te4i1p-Input egik0ru0"
+    id="f-B-2"
+    value=""
+  />
+</DocumentFragment>
+`;
