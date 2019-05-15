@@ -1,4 +1,18 @@
 language: node_js
-node_js: "11"
+node_js: '11'
+cache:
+  directories:
+  - node_modules
 script:
   - npm run test
+  - npm run build
+
+deploy:
+  slug: 'spreadsheet'
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: build
+  keep_history: true
+  on:
+    branch: master
