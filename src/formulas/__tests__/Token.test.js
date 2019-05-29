@@ -7,10 +7,10 @@ describe('Token', () => {
       type: 'test type',
       text: 'test text',
       whitespace: '  ',
-      value: 'test value',
     }
+    const repr = { ...args }
 
     const token = new Token(...Object.values(args))
-    expect(token._repr()).toEqual(args)
+    expect(token._repr()).toEqual(repr)
   })
 })
