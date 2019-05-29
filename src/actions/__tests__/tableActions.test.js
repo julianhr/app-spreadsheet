@@ -6,33 +6,33 @@ describe('tableActions', () => {
   describe('#setCellValue', () => {
     it('sets currently active cell', async () => {
       const cell = 'B-2'
-      const value = {
+      const args = {
         location: cell,
-        text: 'test text',
+        value: 'test value',
         formula: 'test formula'
       }
       const appStore = appStoreGen()
 
       expect(appStore.getState().table[cell]).toBeUndefined()
-      await appStore.dispatch(actions.setCellValue(value))
-      expect(appStore.getState().table[cell]).toEqual({ text: value.text, formula: value.formula })
+      await appStore.dispatch(actions.setCellValue(args))
+      expect(appStore.getState().table[cell]).toEqual({ value: args.value, formula: args.formula })
     })
   })
 
   describe('#clearCellValue', () => {
     it('deletes value from store', async () => {
       const cell = 'B-2'
-      const value = {
+      const args = {
         location: cell,
-        text: 'test text',
+        value: 'test value',
         formula: 'test formula'
       }
       const appStore = appStoreGen()
 
       expect(appStore.getState().table[cell]).toBeUndefined()
 
-      appStore.dispatch(actions.setCellValue(value))
-      expect(appStore.getState().table[cell]).toEqual({ text: value.text, formula: value.formula })
+      appStore.dispatch(actions.setCellValue(args))
+      expect(appStore.getState().table[cell]).toEqual({ value: args.value, formula: args.formula })
 
       await appStore.dispatch(actions.clearCellValue(cell))
       expect(appStore.getState().table[cell]).toBeUndefined()
@@ -40,15 +40,15 @@ describe('tableActions', () => {
 
     it('dispatches action only if there is a value', async () => {
       const cell = 'B-2'
-      const value = {
+      const args = {
         location: cell,
-        text: 'test text',
+        value: 'test value',
         formula: 'test formula'
       }
       const appStore = appStoreGen()
       let res
 
-      appStore.dispatch(actions.setCellValue(value))
+      appStore.dispatch(actions.setCellValue(args))
       res = await appStore.dispatch(actions.clearCellValue(cell))
       expect(res).toBeTruthy()
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { create } from 'react-test-renderer'
 import { render, fireEvent, cleanup } from 'react-testing-library'
 
-import ConnectedTextData, { TextData } from '../TextData'
+import ConnectedEvaluatedData, { EvaluatedData } from '../EvaluatedData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import appStoreGen from '~/reducers'
 import { setCellValue } from '~/actions/tableActions'
@@ -16,7 +16,7 @@ const requiredProps = {
   // redux
   clearCellValue: jest.fn(),
   setActiveCell: jest.fn(),
-  text: 'test string',
+  value: 'test string',
 }
 
 const testProps = {
@@ -26,11 +26,11 @@ const testProps = {
 }
 
 const createApp = (props) => {
-  jest.spyOn(TextData.prototype, 'focusTextTag').mockReturnValueOnce(null)
-  const wrapper = create(<MockApp><TextData {...props} /></MockApp>)
+  jest.spyOn(EvaluatedData.prototype, 'focusDataTag').mockReturnValueOnce(null)
+  const wrapper = create(<MockApp><EvaluatedData {...props} /></MockApp>)
 
-  const cell = wrapper.root.findByType(TextData).instance
-  cell.refText.current = document.createElement('div')
+  const cell = wrapper.root.findByType(EvaluatedData).instance
+  cell.refDataTag.current = document.createElement('div')
   return wrapper
 }
 
@@ -38,13 +38,13 @@ const renderApp = (props, customStore) => {
   const store = customStore || appStoreGen()
   const wrapper = render(
     <MockApp customStore={store}>
-      <ConnectedTextData {...props} />
+      <ConnectedEvaluatedData {...props} />
     </MockApp>
   )
   return [wrapper, store]
 }
 
-describe('TextData', () => {
+describe('EvaluatedData', () => {
   afterEach(cleanup)
 
   describe('props', () => {
@@ -61,7 +61,7 @@ describe('TextData', () => {
     })
   })
 
-  describe('#focusTextTag', () => {
+  describe('#focusDataTag', () => {
     it('if props.isFocused = true then focus text tag on mount', () => {
       const props = {...testProps}
       props.isFocused = true

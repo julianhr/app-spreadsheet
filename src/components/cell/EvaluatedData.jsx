@@ -7,7 +7,7 @@ import { clearCellValue } from '~/actions/tableActions'
 import { setActiveCell } from '~/actions/globalActions'
 
 
-const Text = styled.div`
+const DataTag = styled.div`
   display: flex;
   align-items: center;
   outline: none;
@@ -21,7 +21,7 @@ const Text = styled.div`
   }
 `
 
-export class TextData extends React.PureComponent {
+export class EvaluatedData extends React.PureComponent {
   static propTypes = {
     // props
     isFocused: PropTypes.bool,
@@ -31,7 +31,10 @@ export class TextData extends React.PureComponent {
     // redux
     clearCellValue: PropTypes.func.isRequired,
     setActiveCell: PropTypes.func.isRequired,
-    text: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]).isRequired,
   }
 
   constructor() {
@@ -39,21 +42,23 @@ export class TextData extends React.PureComponent {
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
   }
 
-  refText = React.createRef()
+  refDataTag = React.createRef()
 
   componentDidMount() {
-    this.focusTextTag()
+    this.focusDataTag()
   }
 
-  focusTextTag() {
-    if (this.props.isFocused) { this.refText.current.focus() }
+  focusDataTag() {
+    if (this.props.isFocused) { this.refDataTag.current.focus() }
   }
 
   handleOnKeyDown({ key }) {
     this.props.setActiveCell(this.props.location)
 
     if (['Delete', 'Backspace'].includes(key)) {
-      if (this.props.text.length > 0) {
+      const valueStr = '' + this.props.value
+
+      if (valueStr.length > 0) {
         this.props.clearCellValue(this.props.location)
       }
       // key pressed is a printable symbol, ex: 'a', '1', ','
@@ -65,25 +70,25 @@ export class TextData extends React.PureComponent {
 
   render() {
     return (
-      <Text
-        ref={this.refText}
+      <DataTag
+        ref={this.refDataTag}
         id={`t-${this.props.location}`}
         tabIndex='0'
         onKeyDown={this.handleOnKeyDown}
         onDoubleClick={this.props.onDoubleClick}
       >
-        {this.props.text}
-      </Text>
+        {this.props.value}
+      </DataTag>
     )
   }
 }
 
 function mapStateToProps(state, ownProps) {
   const cell = state.table[ownProps.location]
-  const text = cell ? cell.text : ''
-  return { text }
+  const value = cell ? cell.value : ''
+  return { value }
 }
 
 const mapDispatchToProps = { clearCellValue, setActiveCell }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextData)
+export default connect(mapStateToProps, mapDispatchToProps)(EvaluatedData)

@@ -1,8 +1,12 @@
 import React from 'react'
 import { create } from 'react-test-renderer'
-import { render, fireEvent, cleanup } from 'react-testing-library'
+import { render, fireEvent, cleanup, waitForElement } from 'react-testing-library'
 
-import ConnectedInputData, { InputData } from '../InputData'
+import ConnectedInputData, {
+  InputData,
+  ERR_DIV_BY_ZERO,
+  ERR_GENERIC,
+} from '../InputData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import appStoreGen from '~/reducers'
 import { setCellValue } from '~/actions/tableActions'
@@ -80,7 +84,7 @@ describe('InputData', () => {
   describe('#setNewValue', () => {
     it('if string is empty the current value is deleted', async () => {
       const appStore = appStoreGen()
-      const saved = { location: testProps.location, text: 'test string', formula: 'formula string' }
+      const saved = { location: testProps.location, value: 'test string', formula: 'formula string' }
       await appStore.dispatch(setCellValue(saved))
       expect(appStore.getState().table[saved.location]).toBeTruthy()
 
@@ -94,7 +98,7 @@ describe('InputData', () => {
 
     it('saves trimmed value if string is valid', () => {
       const appStore = appStoreGen()
-      const saved = { location: testProps.location, text: 'test string', formula: 'formula string' }
+      const saved = { location: testProps.location, value: 'test string', formula: 'formula string' }
       expect(appStore.getState().table[saved.location]).toBeUndefined()
 
       const [wrapper, _] = renderApp(testProps, appStore)
@@ -118,7 +122,39 @@ describe('InputData', () => {
     })
   })
 
-  xdescribe('#evaluateFormula', () => {
+  describe('#evaluateFormula', () => {
+    it('returns interpreted result if formula is valid', () => {
+      const [_, store] = renderApp(testProps)
+      const input = document.querySelector('#f-B-2')
+      const formula = '=2+3'
+      const cellData = { value: 5, formula }
+
+      input.value = formula
+      fireEvent.keyDown(input, { key: 'Enter' })
+      expect(store.getState().table[testProps.location]).toEqual(cellData)
+    })
+
+    it('returns error if dividing by zero', () => {
+      const [_, store] = renderApp(testProps)
+      const input = document.querySelector('#f-B-2')
+      const formula = '=3/0'
+      const cellData = { value: ERR_DIV_BY_ZERO, formula }
+
+      input.value = formula
+      fireEvent.keyDown(input, { key: 'Enter' })
+      expect(store.getState().table[testProps.location]).toEqual(cellData)
+    })
+
+    it('returns error if formula cannot be interpreted', () => {
+      const [_, store] = renderApp(testProps)
+      const input = document.querySelector('#f-B-2')
+      const formula = '=3+5)'
+      const cellData = { value: ERR_GENERIC, formula }
+
+      input.value = formula
+      fireEvent.keyDown(input, { key: 'Enter' })
+      expect(store.getState().table[testProps.location]).toEqual(cellData)
+    })
   })
 
   describe('#handleOnKeyDown', () => {
@@ -160,14 +196,14 @@ describe('InputData', () => {
     test('stores value and calls #onCommit', () => {
       const [_, store] = renderApp(testProps)
       const formula = 'test value'
-      const value = { text: formula, formula }
+      const cellData = { value: formula, formula }
 
       testProps.onCommit.mockReset()
       const input = document.querySelector('input')
       input.value = formula
       fireEvent.blur(input)
 
-      expect(store.getState().table[testProps.location]).toEqual(value)
+      expect(store.getState().table[testProps.location]).toEqual(cellData)
       expect(testProps.onCommit).toHaveBeenCalledTimes(1)
     })
   })
@@ -182,13 +218,13 @@ describe('InputData', () => {
     }
 
     it('displays default value if replaceValue is false', async () => {
-      const value = {
+      const cellData = {
         location: funcProps.location,
-        text: 'test text',
+        value: 'test text',
         formula: 'test formula'
       }
       const store = appStoreGen()
-      await store.dispatch(setCellValue(value))
+      await store.dispatch(setCellValue(cellData))
       const props = {...funcProps}
       props.replaceValue = false
       const [wrapper, _] = renderApp(props, store)
@@ -197,13 +233,13 @@ describe('InputData', () => {
     })
 
     it('will not display default value if replaceValue is true', async () => {
-      const value = {
+      const cellData = {
         location: funcProps.location,
-        text: 'test text',
+        value: 'test text',
         formula: 'test formula'
       }
       const store = appStoreGen()
-      await store.dispatch(setCellValue(value))
+      await store.dispatch(setCellValue(cellData))
       const props = {...funcProps}
       props.replaceValue = true
       const [wrapper, _] = renderApp(props, store)

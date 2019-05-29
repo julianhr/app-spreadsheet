@@ -5,7 +5,7 @@ import { interpret } from 'xstate'
 
 import displayMachine from './displayMachine'
 import InputData from './InputData'
-import TextData from './TextData'
+import EvaluatedData from './EvaluatedData'
 
 
 const Wrapper = styled.div`
@@ -23,10 +23,10 @@ class CellData extends React.PureComponent {
 
   constructor() {
     super()
-    this.textTagOnDoubleClick = this.textTagOnDoubleClick.bind(this)
-    this.textTagOnKeyDownEditable = this.textTagOnKeyDownEditable.bind(this)
-    this.inputTagOnEscape = this.inputTagOnEscape.bind(this)
-    this.inputTagOnCommit = this.inputTagOnCommit.bind(this)
+    this.evaluatedOnDoubleClick = this.evaluatedOnDoubleClick.bind(this)
+    this.evaluatedOnKeyDownEditable = this.evaluatedOnKeyDownEditable.bind(this)
+    this.inputOnEscape = this.inputOnEscape.bind(this)
+    this.inputOnCommit = this.inputOnCommit.bind(this)
   }
 
   state = {
@@ -44,19 +44,19 @@ class CellData extends React.PureComponent {
     this.displayService.stop()
   }
   
-  textTagOnDoubleClick() {
+  evaluatedOnDoubleClick() {
     this.displayService.send('EDITABLE_MODIFY')
   }
 
-  textTagOnKeyDownEditable() {
+  evaluatedOnKeyDownEditable() {
     this.displayService.send('EDITABLE_REPLACE')
   }
 
-  inputTagOnEscape() {
+  inputOnEscape() {
     this.displayService.send('STATIC_FOCUSED')
   }
 
-  inputTagOnCommit() {
+  inputOnCommit() {
     this.displayService.send('STATIC')
   }
 
@@ -68,16 +68,16 @@ class CellData extends React.PureComponent {
         <InputData
           replaceValue={displayState.matches('editable.replace')}
           location={this.props.location}
-          onEscape={this.inputTagOnEscape}
-          onCommit={this.inputTagOnCommit}
+          onEscape={this.inputOnEscape}
+          onCommit={this.inputOnCommit}
         />
       )
     } else {
       return (
-        <TextData
+        <EvaluatedData
           location={this.props.location}
-          onDoubleClick={this.textTagOnDoubleClick}
-          onKeyDownEditable={this.textTagOnKeyDownEditable}
+          onDoubleClick={this.evaluatedOnDoubleClick}
+          onKeyDownEditable={this.evaluatedOnKeyDownEditable}
           isFocused={displayState.matches('static.focused')}
         />
       )
