@@ -60,6 +60,45 @@ NumberNode {
 }
 `;
 
+exports[`Parser #parse happy path "=2+-3" 1`] = `
+BinaryOp {
+  "leftNode": NumberNode {
+    "numberNode": Token {
+      "html": null,
+      "text": "2",
+      "type": "NUMBER",
+      "value": null,
+      "whitespace": "",
+    },
+  },
+  "opNode": Token {
+    "html": null,
+    "text": "+",
+    "type": "PLUS",
+    "value": null,
+    "whitespace": "",
+  },
+  "rightNode": UnaryOp {
+    "expr": NumberNode {
+      "numberNode": Token {
+        "html": null,
+        "text": "3",
+        "type": "NUMBER",
+        "value": null,
+        "whitespace": "",
+      },
+    },
+    "opNode": Token {
+      "html": null,
+      "text": "-",
+      "type": "MINUS",
+      "value": null,
+      "whitespace": "",
+    },
+  },
+}
+`;
+
 exports[`Parser #parse happy path "=2+3" 1`] = `
 BinaryOp {
   "leftNode": NumberNode {

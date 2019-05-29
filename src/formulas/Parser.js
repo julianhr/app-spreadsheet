@@ -1,5 +1,5 @@
 import { TOKENS as t } from './Lexer'
-import { BinaryOp, FuncOp, NumberNode } from './ast'
+import { BinaryOp, UnaryOp, FuncOp, NumberNode } from './ast'
 
 
 class Parser {
@@ -56,8 +56,11 @@ class Parser {
   }
 
   factor() {
-    // factor : NUMBER | LPAREN expr RPAREN | FUNCTION LPAREN list RPAREN
+    // factor : ( PLUS | MINUS ) NUMBER | LPAREN expr RPAREN | FUNCTION LPAREN list RPAREN
     switch (this.peekType()) {
+      case t.PLUS:
+      case t.MINUS:
+        return this.unaryOp()
       case t.NUMBER:
         return this.number()
       case t.LPAREN:
@@ -151,6 +154,17 @@ class Parser {
       this.consume()
     } else {
       throw new Error('Missing right parenthesis')
+    }
+  }
+
+  unaryOp() {
+    if ([t.PLUS, t.MINUS].includes(this.peekType())) {
+      const curr = this.curr
+      this.consume()
+      const node = new UnaryOp(curr, this.factor())
+      return node
+    } else {
+      throw new Error('Missing unary operator')
     }
   }
 

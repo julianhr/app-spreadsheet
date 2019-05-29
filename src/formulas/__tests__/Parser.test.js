@@ -41,7 +41,14 @@ describe('Parser', () => {
         const ast = parser.parse()
         expect(ast).toMatchSnapshot()
       })
-  
+
+      test('"=2+-3"', () => {
+        const input = '=2+-3'
+        const parser = getParser(input)
+        const ast = parser.parse()
+        expect(ast).toMatchSnapshot()
+      })
+
       test('"=2+3/10+8"', () => {
         const input = '=2+3/10+8'
         const parser = getParser(input)

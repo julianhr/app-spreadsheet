@@ -34,6 +34,8 @@ class Interpreter {
         return this.FuncOp(node)
       case 'BinaryOp':
         return this.BinaryOp(node)
+      case 'UnaryOp':
+          return this.UnaryOp(node)
       default:
         throw new Error(`Unrecognized AST node ${node.constructor.name}`)
     }
@@ -41,6 +43,11 @@ class Interpreter {
 
   NumberNode(node) {
     return node.eval()
+  }
+
+  UnaryOp(node) {
+    const result = this.visit(node.expr)
+    return node.eval(result)
   }
 
   FuncOp(node) {

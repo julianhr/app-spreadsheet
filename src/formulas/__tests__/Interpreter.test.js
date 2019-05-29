@@ -46,7 +46,14 @@ describe('Interpreter', () => {
         const result = interpreter.interpret()
         expect(result).toBe(7)
       })
-  
+
+      test('=5 + -4 * (3 + -1)', () => {
+        const input = '=5 + -4 * (3 + -1)'
+        const interpreter = new Interpreter(input)
+        const result = interpreter.interpret()
+        expect(result).toBe(-3)
+      })
+
       test('=( 5 + 2) * 3', () => {
         const input = '=( 5 + 2) * 3'
         const interpreter = new Interpreter(input)
