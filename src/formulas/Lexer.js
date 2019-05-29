@@ -48,11 +48,11 @@ const GRAMMAR = [
   new Rule(/\)/g, 0, t.RPAREN),
   // operators
   new Rule(/\+/g, 0, t.PLUS),
-  new Rule(/\-/g, 0, t.MINUS),
+  new Rule(/\-/g, 0, t.MINUS), // eslint-disable-line
   new Rule(/\*/g, 0, t.MULT),
   new Rule(/\//g, 0, t.DIV),
   // multi-character
-  new Rule(/[\d\.]+/g, 0, t.NUMBER),
+  new Rule(/[\d\.]+/g, 0, t.NUMBER), // eslint-disable-line
   new Rule(/[a-z]+[\d]+/gi, 0, t.CELL),
   new Rule(/([a-z]+)\(/gi, 1, t.FUNCTION),
 ]

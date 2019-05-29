@@ -1,4 +1,4 @@
-import { Lexer, GRAMMAR, TOKENS as t } from './Lexer'
+import { Lexer, GRAMMAR } from './Lexer'
 import Parser from './Parser'
 
 
