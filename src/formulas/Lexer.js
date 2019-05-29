@@ -1,5 +1,28 @@
 import Token from './Token'
 
+const TOKENS = {
+  // internal
+  EOF: 'EOF',
+  UNKNOWN: 'UNKNOWN',
+  // structure
+  EQUALS: 'EQUALS',
+  COMMA: 'COMMA',
+  COLON: 'COLON',
+  LPAREN: 'LPAREN',
+  RPAREN: 'RPAREN',
+  // operators
+  PLUS: 'PLUS',
+  MINUS: 'MINUS',
+  MULT: 'MULT',
+  DIV: 'DIV',
+  // entities
+  NUMBER: 'NUMBER',
+  CELL: 'CELL',
+  FUNCTION: 'FUNCTION',
+}
+
+const t = TOKENS
+
 class Rule {
   constructor(regex, groupIndex, token) {
     this.regex = regex
@@ -18,27 +41,24 @@ class Rule {
 
 const GRAMMAR = [
   // internal
-  new Rule(/=/g, 0, 'EQUALS'),
-  new Rule(/,/g, 0, 'COMMA'),
-  new Rule(/:/g, 0, 'COLON'),
-  new Rule(/\(/g, 0, 'LPAREN'),
-  new Rule(/\)/g, 0, 'RPAREN'),
+  new Rule(/=/g, 0, t.EQUALS),
+  new Rule(/,/g, 0, t.COMMA),
+  new Rule(/:/g, 0, t.COLON),
+  new Rule(/\(/g, 0, t.LPAREN),
+  new Rule(/\)/g, 0, t.RPAREN),
   // operators
-  new Rule(/\+/g, 0, 'PLUS'),
-  new Rule(/\-/g, 0, 'MINUS'),
-  new Rule(/\*/g, 0, 'MULT'),
-  new Rule(/\//g, 0, 'DIV'),
+  new Rule(/\+/g, 0, t.PLUS),
+  new Rule(/\-/g, 0, t.MINUS),
+  new Rule(/\*/g, 0, t.MULT),
+  new Rule(/\//g, 0, t.DIV),
   // multi-character
-  new Rule(/[\d\.]+/g, 0, 'NUMBER'),
-  new Rule(/[a-z]+[\d]+/gi, 0, 'CELL'),
-  new Rule(/([a-z]+)\(/gi, 1, 'FUNCTION'),
+  new Rule(/[\d\.]+/g, 0, t.NUMBER),
+  new Rule(/[a-z]+[\d]+/gi, 0, t.CELL),
+  new Rule(/([a-z]+)\(/gi, 1, t.FUNCTION),
 ]
 
 
 class Lexer {
-  EOF = -1
-  UNKNOWN = 'UNKNOWN'
-
   constructor(input, grammar) {
     this.input = input
     this.grammar = grammar
@@ -49,7 +69,7 @@ class Lexer {
   }
 
   getTokens() {
-    while (this.char !== this.EOF) {
+    while (this.char !== t.EOF) {
       const token = this.nextToken()
       this.tokens.push(token)
     }
@@ -58,8 +78,8 @@ class Lexer {
   }
 
   nextToken() {
-    if (this.char === this.EOF) {
-      return new Token('EOF', this.EOF)
+    if (this.char === t.EOF) {
+      return new Token(t.EOF, t.EOF)
     }
 
     // console.log('before whitespace', this.char, this.index)
@@ -95,7 +115,7 @@ class Lexer {
     }
     
     const word = chars.join('')
-    return new Token(this.UNKNOWN, word, whitespace)
+    return new Token(t.UNKNOWN, word, whitespace)
   }
 
   consume() {
@@ -104,12 +124,12 @@ class Lexer {
     if (this.index < this.input.length) {
       this.char = this.input[this.index]
     } else {
-      this.char = this.EOF
+      this.char = t.EOF
     }
   }
 
   isEOF() {
-    return this.char === this.EOF
+    return this.char === t.EOF
   }
 
   isWhitespace() {
@@ -133,4 +153,4 @@ class Lexer {
 }
 
 export default Lexer
-export { Rule, GRAMMAR, Lexer }
+export { Rule, GRAMMAR, TOKENS, Lexer }
