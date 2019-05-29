@@ -6,7 +6,7 @@ exports[`CellData functional tests lifecycle snapshots: 1. initial text tag 1`] 
     class="css-meb6x1-Wrapper eoyj2860"
   >
     <div
-      class="css-gchdh-Text e1anysog0"
+      class="css-1c8e41e-DataTag e1dfe2wz0"
       id="t-B-2"
       tabindex="0"
     />
@@ -34,11 +34,11 @@ exports[`CellData functional tests lifecycle snapshots: 3. text tag has text 1`]
     class="css-meb6x1-Wrapper eoyj2860"
   >
     <div
-      class="css-gchdh-Text e1anysog0"
+      class="css-1c8e41e-DataTag e1dfe2wz0"
       id="t-B-2"
       tabindex="0"
     >
-      pending evaluateFormula
+      9
     </div>
   </div>
 </DocumentFragment>
@@ -64,7 +64,7 @@ exports[`CellData functional tests lifecycle snapshots: 5. cell value deleted wi
     class="css-meb6x1-Wrapper eoyj2860"
   >
     <div
-      class="css-gchdh-Text e1anysog0"
+      class="css-1c8e41e-DataTag e1dfe2wz0"
       id="t-B-2"
       tabindex="0"
     />

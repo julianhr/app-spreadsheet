@@ -45,10 +45,10 @@ describe('CellData', () => {
     })
   })
 
-  describe('#textTagOnDoubleClick', () => {
+  describe('#evaluatedOnDoubleClick', () => {
     it('displays input tag with current formula value when text tag is double-clicked', async () => {
       const value = 'test value'
-      const cell = { location: testProps.location, text: value, formula: value }
+      const cell = { location: testProps.location, value: value, formula: value }
       const store = appStoreGen()
       await store.dispatch(setCellValue(cell))
       renderApp(testProps, store)
@@ -59,10 +59,10 @@ describe('CellData', () => {
     })
   })
 
-  describe('#textTagOnKeyDownEditable', () => {
+  describe('#evaluatedOnKeyDownEditable', () => {
     it('displays input tag with empty field', async () => {
       const value = 'test value'
-      const cell = { location: testProps.location, text: value, formula: value }
+      const cell = { location: testProps.location, value: value, formula: value }
       const store = appStoreGen()
       await store.dispatch(setCellValue(cell))
       renderApp(testProps, store)
