@@ -1,0 +1,318 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Parser #parse happy path "=(2+3)*5" 1`] = `
+BinaryOp {
+  "leftNode": BinaryOp {
+    "leftNode": NumberNode {
+      "numberNode": Token {
+        "html": null,
+        "text": "2",
+        "type": "NUMBER",
+        "value": null,
+        "whitespace": "",
+      },
+    },
+    "opNode": Token {
+      "html": null,
+      "text": "+",
+      "type": "PLUS",
+      "value": null,
+      "whitespace": "",
+    },
+    "rightNode": NumberNode {
+      "numberNode": Token {
+        "html": null,
+        "text": "3",
+        "type": "NUMBER",
+        "value": null,
+        "whitespace": "",
+      },
+    },
+  },
+  "opNode": Token {
+    "html": null,
+    "text": "*",
+    "type": "MULT",
+    "value": null,
+    "whitespace": "",
+  },
+  "rightNode": NumberNode {
+    "numberNode": Token {
+      "html": null,
+      "text": "5",
+      "type": "NUMBER",
+      "value": null,
+      "whitespace": "",
+    },
+  },
+}
+`;
+
+exports[`Parser #parse happy path "=2" 1`] = `
+NumberNode {
+  "numberNode": Token {
+    "html": null,
+    "text": "2",
+    "type": "NUMBER",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path "=2+3" 1`] = `
+BinaryOp {
+  "leftNode": NumberNode {
+    "numberNode": Token {
+      "html": null,
+      "text": "2",
+      "type": "NUMBER",
+      "value": null,
+      "whitespace": "",
+    },
+  },
+  "opNode": Token {
+    "html": null,
+    "text": "+",
+    "type": "PLUS",
+    "value": null,
+    "whitespace": "",
+  },
+  "rightNode": NumberNode {
+    "numberNode": Token {
+      "html": null,
+      "text": "3",
+      "type": "NUMBER",
+      "value": null,
+      "whitespace": "",
+    },
+  },
+}
+`;
+
+exports[`Parser #parse happy path "=2+3/10+8" 1`] = `
+BinaryOp {
+  "leftNode": BinaryOp {
+    "leftNode": NumberNode {
+      "numberNode": Token {
+        "html": null,
+        "text": "2",
+        "type": "NUMBER",
+        "value": null,
+        "whitespace": "",
+      },
+    },
+    "opNode": Token {
+      "html": null,
+      "text": "+",
+      "type": "PLUS",
+      "value": null,
+      "whitespace": "",
+    },
+    "rightNode": BinaryOp {
+      "leftNode": NumberNode {
+        "numberNode": Token {
+          "html": null,
+          "text": "3",
+          "type": "NUMBER",
+          "value": null,
+          "whitespace": "",
+        },
+      },
+      "opNode": Token {
+        "html": null,
+        "text": "/",
+        "type": "DIV",
+        "value": null,
+        "whitespace": "",
+      },
+      "rightNode": NumberNode {
+        "numberNode": Token {
+          "html": null,
+          "text": "10",
+          "type": "NUMBER",
+          "value": null,
+          "whitespace": "",
+        },
+      },
+    },
+  },
+  "opNode": Token {
+    "html": null,
+    "text": "+",
+    "type": "PLUS",
+    "value": null,
+    "whitespace": "",
+  },
+  "rightNode": NumberNode {
+    "numberNode": Token {
+      "html": null,
+      "text": "8",
+      "type": "NUMBER",
+      "value": null,
+      "whitespace": "",
+    },
+  },
+}
+`;
+
+exports[`Parser #parse happy path "=sum(5)" 1`] = `
+FuncOp {
+  "argNodes": Array [
+    NumberNode {
+      "numberNode": Token {
+        "html": null,
+        "text": "5",
+        "type": "NUMBER",
+        "value": null,
+        "whitespace": "",
+      },
+    },
+  ],
+  "funcNode": Token {
+    "html": null,
+    "text": "sum",
+    "type": "FUNCTION",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path "=sum(5, SUM(7,6) ,  (10+5/7))" 1`] = `
+FuncOp {
+  "argNodes": Array [
+    NumberNode {
+      "numberNode": Token {
+        "html": null,
+        "text": "5",
+        "type": "NUMBER",
+        "value": null,
+        "whitespace": "",
+      },
+    },
+    FuncOp {
+      "argNodes": Array [
+        NumberNode {
+          "numberNode": Token {
+            "html": null,
+            "text": "7",
+            "type": "NUMBER",
+            "value": null,
+            "whitespace": "",
+          },
+        },
+        NumberNode {
+          "numberNode": Token {
+            "html": null,
+            "text": "6",
+            "type": "NUMBER",
+            "value": null,
+            "whitespace": "",
+          },
+        },
+      ],
+      "funcNode": Token {
+        "html": null,
+        "text": "SUM",
+        "type": "FUNCTION",
+        "value": null,
+        "whitespace": " ",
+      },
+    },
+    BinaryOp {
+      "leftNode": NumberNode {
+        "numberNode": Token {
+          "html": null,
+          "text": "10",
+          "type": "NUMBER",
+          "value": null,
+          "whitespace": "",
+        },
+      },
+      "opNode": Token {
+        "html": null,
+        "text": "+",
+        "type": "PLUS",
+        "value": null,
+        "whitespace": "",
+      },
+      "rightNode": BinaryOp {
+        "leftNode": NumberNode {
+          "numberNode": Token {
+            "html": null,
+            "text": "5",
+            "type": "NUMBER",
+            "value": null,
+            "whitespace": "",
+          },
+        },
+        "opNode": Token {
+          "html": null,
+          "text": "/",
+          "type": "DIV",
+          "value": null,
+          "whitespace": "",
+        },
+        "rightNode": NumberNode {
+          "numberNode": Token {
+            "html": null,
+            "text": "7",
+            "type": "NUMBER",
+            "value": null,
+            "whitespace": "",
+          },
+        },
+      },
+    },
+  ],
+  "funcNode": Token {
+    "html": null,
+    "text": "sum",
+    "type": "FUNCTION",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path "=sum(5,6,7)" 1`] = `
+FuncOp {
+  "argNodes": Array [
+    NumberNode {
+      "numberNode": Token {
+        "html": null,
+        "text": "5",
+        "type": "NUMBER",
+        "value": null,
+        "whitespace": "",
+      },
+    },
+    NumberNode {
+      "numberNode": Token {
+        "html": null,
+        "text": "6",
+        "type": "NUMBER",
+        "value": null,
+        "whitespace": "",
+      },
+    },
+    NumberNode {
+      "numberNode": Token {
+        "html": null,
+        "text": "7",
+        "type": "NUMBER",
+        "value": null,
+        "whitespace": "",
+      },
+    },
+  ],
+  "funcNode": Token {
+    "html": null,
+    "text": "sum",
+    "type": "FUNCTION",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
