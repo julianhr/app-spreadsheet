@@ -2,8 +2,11 @@
 
 exports[`Parser #parse happy path "=(2+3)*5" 1`] = `
 BinaryOp {
+  "_name": "BinaryOp",
   "leftNode": BinaryOp {
+    "_name": "BinaryOp",
     "leftNode": NumberNode {
+      "_name": "NumberNode",
       "numberNode": Token {
         "html": null,
         "text": "2",
@@ -20,6 +23,7 @@ BinaryOp {
       "whitespace": "",
     },
     "rightNode": NumberNode {
+      "_name": "NumberNode",
       "numberNode": Token {
         "html": null,
         "text": "3",
@@ -37,6 +41,7 @@ BinaryOp {
     "whitespace": "",
   },
   "rightNode": NumberNode {
+    "_name": "NumberNode",
     "numberNode": Token {
       "html": null,
       "text": "5",
@@ -50,6 +55,7 @@ BinaryOp {
 
 exports[`Parser #parse happy path "=2" 1`] = `
 NumberNode {
+  "_name": "NumberNode",
   "numberNode": Token {
     "html": null,
     "text": "2",
@@ -62,7 +68,9 @@ NumberNode {
 
 exports[`Parser #parse happy path "=2+-3" 1`] = `
 BinaryOp {
+  "_name": "BinaryOp",
   "leftNode": NumberNode {
+    "_name": "NumberNode",
     "numberNode": Token {
       "html": null,
       "text": "2",
@@ -79,7 +87,9 @@ BinaryOp {
     "whitespace": "",
   },
   "rightNode": UnaryOp {
+    "_name": "UnaryOp",
     "expr": NumberNode {
+      "_name": "NumberNode",
       "numberNode": Token {
         "html": null,
         "text": "3",
@@ -101,7 +111,9 @@ BinaryOp {
 
 exports[`Parser #parse happy path "=2+3" 1`] = `
 BinaryOp {
+  "_name": "BinaryOp",
   "leftNode": NumberNode {
+    "_name": "NumberNode",
     "numberNode": Token {
       "html": null,
       "text": "2",
@@ -118,6 +130,7 @@ BinaryOp {
     "whitespace": "",
   },
   "rightNode": NumberNode {
+    "_name": "NumberNode",
     "numberNode": Token {
       "html": null,
       "text": "3",
@@ -131,8 +144,11 @@ BinaryOp {
 
 exports[`Parser #parse happy path "=2+3/10+8" 1`] = `
 BinaryOp {
+  "_name": "BinaryOp",
   "leftNode": BinaryOp {
+    "_name": "BinaryOp",
     "leftNode": NumberNode {
+      "_name": "NumberNode",
       "numberNode": Token {
         "html": null,
         "text": "2",
@@ -149,7 +165,9 @@ BinaryOp {
       "whitespace": "",
     },
     "rightNode": BinaryOp {
+      "_name": "BinaryOp",
       "leftNode": NumberNode {
+        "_name": "NumberNode",
         "numberNode": Token {
           "html": null,
           "text": "3",
@@ -166,6 +184,7 @@ BinaryOp {
         "whitespace": "",
       },
       "rightNode": NumberNode {
+        "_name": "NumberNode",
         "numberNode": Token {
           "html": null,
           "text": "10",
@@ -184,6 +203,7 @@ BinaryOp {
     "whitespace": "",
   },
   "rightNode": NumberNode {
+    "_name": "NumberNode",
     "numberNode": Token {
       "html": null,
       "text": "8",
@@ -197,8 +217,10 @@ BinaryOp {
 
 exports[`Parser #parse happy path "=sum(5)" 1`] = `
 FuncOp {
+  "_name": "FuncOp",
   "argNodes": Array [
     NumberNode {
+      "_name": "NumberNode",
       "numberNode": Token {
         "html": null,
         "text": "5",
@@ -220,8 +242,10 @@ FuncOp {
 
 exports[`Parser #parse happy path "=sum(5, SUM(7,6) ,  (10+5/7))" 1`] = `
 FuncOp {
+  "_name": "FuncOp",
   "argNodes": Array [
     NumberNode {
+      "_name": "NumberNode",
       "numberNode": Token {
         "html": null,
         "text": "5",
@@ -231,8 +255,10 @@ FuncOp {
       },
     },
     FuncOp {
+      "_name": "FuncOp",
       "argNodes": Array [
         NumberNode {
+          "_name": "NumberNode",
           "numberNode": Token {
             "html": null,
             "text": "7",
@@ -242,6 +268,7 @@ FuncOp {
           },
         },
         NumberNode {
+          "_name": "NumberNode",
           "numberNode": Token {
             "html": null,
             "text": "6",
@@ -260,7 +287,9 @@ FuncOp {
       },
     },
     BinaryOp {
+      "_name": "BinaryOp",
       "leftNode": NumberNode {
+        "_name": "NumberNode",
         "numberNode": Token {
           "html": null,
           "text": "10",
@@ -277,7 +306,9 @@ FuncOp {
         "whitespace": "",
       },
       "rightNode": BinaryOp {
+        "_name": "BinaryOp",
         "leftNode": NumberNode {
+          "_name": "NumberNode",
           "numberNode": Token {
             "html": null,
             "text": "5",
@@ -294,6 +325,7 @@ FuncOp {
           "whitespace": "",
         },
         "rightNode": NumberNode {
+          "_name": "NumberNode",
           "numberNode": Token {
             "html": null,
             "text": "7",
@@ -317,8 +349,10 @@ FuncOp {
 
 exports[`Parser #parse happy path "=sum(5,6,7)" 1`] = `
 FuncOp {
+  "_name": "FuncOp",
   "argNodes": Array [
     NumberNode {
+      "_name": "NumberNode",
       "numberNode": Token {
         "html": null,
         "text": "5",
@@ -328,6 +362,7 @@ FuncOp {
       },
     },
     NumberNode {
+      "_name": "NumberNode",
       "numberNode": Token {
         "html": null,
         "text": "6",
@@ -337,6 +372,7 @@ FuncOp {
       },
     },
     NumberNode {
+      "_name": "NumberNode",
       "numberNode": Token {
         "html": null,
         "text": "7",
