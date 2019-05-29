@@ -4,7 +4,11 @@ import styled from '@emotion/styled'
 import { connect }  from 'react-redux'
 
 import { setCellValue, clearCellValue } from '~/actions/tableActions'
+import Interpreter from '~/formulas'
 
+
+const ERR_DIV_BY_ZERO = '#DIV/0!'
+const ERR_GENERIC = '#ERROR!'
 
 const Input = styled.input`
   display: flex;
@@ -67,12 +71,24 @@ export class InputData extends React.PureComponent {
     }
 
     const isFormula = value[0] === '='
-    cellValue.text = isFormula ? this.evaluateFormula() : value
+    cellValue.value = isFormula ? this.evaluateFormula(value) : value
     this.props.setCellValue(cellValue)
   }
 
-  evaluateFormula() {
-    return 'pending evaluateFormula'
+  evaluateFormula(input) {
+    const interpreter = new Interpreter(input)
+    const result = interpreter.interpret()
+    const { error } = interpreter
+
+    if (!error) {
+      return result
+    } else {
+      if (error.message.match(/division by zero/i)) {
+        return ERR_DIV_BY_ZERO
+      } else {
+        return ERR_GENERIC
+      }
+    }
   }
 
   handleOnKeyDown(event) {
@@ -116,3 +132,7 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = { setCellValue, clearCellValue }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputData)
+export {
+  ERR_DIV_BY_ZERO,
+  ERR_GENERIC,
+}
