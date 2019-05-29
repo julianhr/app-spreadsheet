@@ -44,6 +44,24 @@ class NumberNode extends AST {
   }
 }
 
+class UnaryOp extends AST {
+  constructor(opNode, expr) {
+    super()
+    this.opNode = opNode
+    this.expr = expr
+  }
+
+  eval(evaluatedExpr) {
+    if (this.opNode.type === t.PLUS) {
+      return evaluatedExpr
+    } else if (this.opNode.type === t.MINUS) {
+      return -evaluatedExpr
+    } else {
+      throw new Error('Unary operator is not "+" or "-"')
+    }
+  }
+}
+
 class FuncOp extends AST {
   constructor(funcNode, argNodes) {
     super()
@@ -98,5 +116,6 @@ class BinaryOp extends AST {
 export {
   NumberNode,
   BinaryOp,
+  UnaryOp,
   FuncOp,
 }
