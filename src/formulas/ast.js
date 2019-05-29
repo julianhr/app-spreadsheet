@@ -11,6 +11,7 @@ class AST {
 class NumberNode extends AST {
   constructor(numberNode) {
     super()
+    this._name = 'NumberNode'
     this.numberNode = numberNode
   }
 
@@ -47,6 +48,7 @@ class NumberNode extends AST {
 class UnaryOp extends AST {
   constructor(opNode, expr) {
     super()
+    this._name = 'UnaryOp'
     this.opNode = opNode
     this.expr = expr
   }
@@ -65,6 +67,7 @@ class UnaryOp extends AST {
 class FuncOp extends AST {
   constructor(funcNode, argNodes) {
     super()
+    this._name = 'FuncOp'
     this.funcNode = funcNode
     this.argNodes = argNodes
   }
@@ -88,6 +91,7 @@ class FuncOp extends AST {
 class BinaryOp extends AST {
   constructor(leftNode, opNode, rightNode) {
     super()
+    this._name = 'BinaryOp'
     this.leftNode = leftNode
     this.opNode = opNode
     this.rightNode = rightNode

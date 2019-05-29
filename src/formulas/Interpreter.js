@@ -27,7 +27,7 @@ class Interpreter {
   }
 
   visit(node) {
-    switch (node.constructor.name) {
+    switch (node._name) {
       case 'NumberNode':
         return this.NumberNode(node)
       case 'FuncOp':
@@ -37,7 +37,8 @@ class Interpreter {
       case 'UnaryOp':
           return this.UnaryOp(node)
       default:
-        throw new Error(`Unrecognized AST node ${node.constructor.name}`)
+        const nodeName = node._name || (node.constructor || {}).name
+        throw new Error(`Unrecognized AST node ${nodeName}`)
     }
   }
 
