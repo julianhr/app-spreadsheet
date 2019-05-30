@@ -1,6 +1,8 @@
+/* @jsx jsx */
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
 import { clearCellValue } from '~/actions/tableActions'
@@ -12,9 +14,10 @@ const DataTag = styled.div`
   align-items: center;
   outline: none;
   border: 2px solid transparent;
-  width: 100%;
+  line-height: 1.1em;
   height: 100%;
-  padding: 0 2px;
+  width: 100%;
+  padding: 2px;
 
   :focus {
     border: 2px solid salmon;
@@ -68,10 +71,24 @@ export class EvaluatedData extends React.PureComponent {
     }
   }
 
+  getStyle() {
+    let style = {}
+
+    if (typeof this.props.value === 'number') {
+      style = {
+        whiteSpace: 'nowrap',
+        textOverflow: 'clip',
+      }
+    }
+
+    return style
+  }
+
   render() {
     return (
       <DataTag
         ref={this.refDataTag}
+        css={this.getStyle()}
         id={`t-${this.props.location}`}
         tabIndex='0'
         onKeyDown={this.handleOnKeyDown}

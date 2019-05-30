@@ -10,11 +10,9 @@ import EvaluatedData from './EvaluatedData'
 
 const Wrapper = styled.div`
   cursor: cell;
-  width: 100%;
-  height: 100%;
   font-size: 13px;
-  border-right: 1px solid #dfdfdf;
-  border-bottom: 1px solid #dfdfdf;
+  border-right: 1px solid ${props => props.theme.colors.cell.border};
+  border-bottom: 1px solid ${props => props.theme.colors.cell.border};
 `
 class CellData extends React.PureComponent {
   static propTypes = {
@@ -86,9 +84,13 @@ class CellData extends React.PureComponent {
 
   render() {
     return (
-      <Wrapper>
-        {this.renderData()}
-      </Wrapper>
+      <td>
+        <Wrapper
+          className='row-label-height col-label-width'
+        >
+          {this.renderData()}
+        </Wrapper>
+      </td>
     )
   }
 }

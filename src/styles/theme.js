@@ -1,7 +1,9 @@
 const colors = {
   text: '#3D3D3D',
   cell: {
-    border: 'lightgray'
+    border: '#dfdfdf',
+    borderDark: '#CCC',
+    labelBkg: '#F5F5F5'
   },
   primary: {
     strong: '#E10D75'
