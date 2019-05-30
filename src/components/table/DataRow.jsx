@@ -1,9 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
 
 import RowLabel from '../cells/RowLabel'
 import CellData from '../cells/CellData'
 
+
+const Row = styled.div`
+  display: flex;
+  width: fit-content;
+`
 
 function DataRow({ rowNumber, colLabels, activeCell }) {
   const dataCells = () => (
@@ -21,12 +27,14 @@ function DataRow({ rowNumber, colLabels, activeCell }) {
   )
 
   return (
-    <tr>
+    <Row
+      data-row={rowNumber}
+    >
       <RowLabel
         label={rowNumber}
       />
       {dataCells()}
-    </tr>
+    </Row>
   )
 }
 

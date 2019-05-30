@@ -10,7 +10,10 @@ import { getColumnNames } from '~/library/utils'
 import getKeyboardNavMachine from './keyboardNavMachine'
 
 
-const RootTable = styled.table`
+const Grid = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
   border-top: 2px solid ${props => props.theme.colors.cell.borderDark};
   border-left: 2px solid ${props => props.theme.colors.cell.borderDark};
   border-right: 1px solid ${props => props.theme.colors.cell.borderDark};
@@ -25,7 +28,7 @@ const RootTable = styled.table`
   }
 
   .row-label-height {
-    height: 28px;
+    min-height: 28px;
   }
 
   .col-label-width {
@@ -33,7 +36,7 @@ const RootTable = styled.table`
   }
 
   .col-label-height {
-    height: 26px;
+    min-height: 26px;
   }
 `
 
@@ -108,14 +111,13 @@ export class Table extends React.PureComponent {
 
   render() {
     return (
-      <RootTable
+      <Grid
+        data-table='app'
         onClick={this.handleTableOnClick}
         onKeyDown={this.handleTableOnKeyDown}
       >
-        <tbody>
-          {this.renderRows()}
-        </tbody>
-      </RootTable>
+        {this.renderRows()}
+      </Grid>
     )
   }
 }

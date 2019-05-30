@@ -28,7 +28,7 @@ describe('ColLabel', () => {
     }
 
     renderApp(props)
-    const el = document.querySelector('td')
+    const el = document.querySelector('[data-col="A"]')
     expect(el).toMatchSnapshot()
   })
 })

@@ -2,98 +2,86 @@
 
 exports[`CellData functional tests lifecycle snapshots: 1. initial text tag 1`] = `
 <DocumentFragment>
-  <td>
+  <div
+    class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+  >
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
-    >
-      <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-B-2"
-        tabindex="0"
-      />
-    </div>
-  </td>
+      class="css-16d5k2m-DataTag e1snbou80"
+      id="t-B-2"
+      tabindex="0"
+    />
+  </div>
 </DocumentFragment>
 `;
 
 exports[`CellData functional tests lifecycle snapshots: 2. initial input tag 1`] = `
 <DocumentFragment>
-  <td>
-    <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
-    >
-      <input
-        class="col-label-width row-label-height css-1adgg3x-Input ep2oxkq0"
-        id="f-B-2"
-        value=""
-      />
-    </div>
-  </td>
+  <div
+    class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+  >
+    <input
+      class="css-p19rxp-Input ep2oxkq0"
+      id="f-B-2"
+      value=""
+    />
+  </div>
 </DocumentFragment>
 `;
 
 exports[`CellData functional tests lifecycle snapshots: 3. text tag has text 1`] = `
 <DocumentFragment>
-  <td>
+  <div
+    class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+  >
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+      class="css-11zzl5v-DataTag e1snbou80"
+      id="t-B-2"
+      tabindex="0"
     >
-      <div
-        class="css-1tbw9om-DataTag e1snbou80"
-        id="t-B-2"
-        tabindex="0"
-      >
-        9
-      </div>
+      9
     </div>
-  </td>
+  </div>
 </DocumentFragment>
 `;
 
 exports[`CellData functional tests lifecycle snapshots: 4. input tag has formula 1`] = `
 <DocumentFragment>
-  <td>
-    <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
-    >
-      <input
-        class="col-label-width row-label-height css-1adgg3x-Input ep2oxkq0"
-        id="f-B-2"
-        value="=2+3+4"
-      />
-    </div>
-  </td>
+  <div
+    class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+  >
+    <input
+      class="css-p19rxp-Input ep2oxkq0"
+      id="f-B-2"
+      value="=2+3+4"
+    />
+  </div>
 </DocumentFragment>
 `;
 
 exports[`CellData functional tests lifecycle snapshots: 5. cell value deleted with Backspace 1`] = `
 <DocumentFragment>
-  <td>
+  <div
+    class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+  >
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
-    >
-      <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-B-2"
-        tabindex="0"
-      />
-    </div>
-  </td>
+      class="css-16d5k2m-DataTag e1snbou80"
+      id="t-B-2"
+      tabindex="0"
+    />
+  </div>
 </DocumentFragment>
 `;
 
 exports[`CellData functional tests lifecycle snapshots: 6. key down "a" on text tag 1`] = `
 <DocumentFragment>
-  <td>
-    <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
-    >
-      <input
-        class="col-label-width row-label-height css-1adgg3x-Input ep2oxkq0"
-        id="f-B-2"
-        value=""
-      />
-    </div>
-  </td>
+  <div
+    class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+  >
+    <input
+      class="css-p19rxp-Input ep2oxkq0"
+      id="f-B-2"
+      value=""
+    />
+  </div>
 </DocumentFragment>
 `;

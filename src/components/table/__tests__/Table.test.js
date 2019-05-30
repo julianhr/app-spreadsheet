@@ -9,8 +9,8 @@ import { sleep } from '~/library/utils'
 
 
 const requiredProps = {
-  rows: 6,
-  columns: 6,
+  rows: 3,
+  columns: 2,
 }
 
 const testProps = {
@@ -20,8 +20,8 @@ const testProps = {
 
 const createApp = (props) => create(<MockApp><Table {...props} /></MockApp>)
 
-const renderApp = (props) => {
-  const store = appStoreGen()
+const renderApp = (props, customStore) => {
+  const store = customStore || appStoreGen()
   const wrapper = render(
     <MockApp customStore={store}>
       <ConnectedTable {...props} />
@@ -123,8 +123,13 @@ describe('Table', () => {
 
   describe('functional tests', () => {
     it('matches snapshot', () => {
-      const [wrapper, _] = renderApp(testProps)
-      expect(wrapper.asFragment()).toMatchSnapshot()
+      const store = appStoreGen()
+      const { global } = store.getState()
+      global.rows = 2
+      global.columns = 3
+      renderApp(testProps, store)
+      const el = document.querySelector('[data-table="app"]')
+      expect(el).toMatchSnapshot()
     })
   })
 })

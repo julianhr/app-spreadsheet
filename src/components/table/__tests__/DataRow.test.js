@@ -28,7 +28,7 @@ describe('DataRow', () => {
       activeCell: 'B-2'
     }
     renderApp(props)
-    const el = document.querySelector('tr')
+    const el = document.querySelector('[data-row="2"]')
     expect(el).toMatchSnapshot()
   })
 })

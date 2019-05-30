@@ -14,13 +14,11 @@ const Input = styled.input`
   display: flex;
   align-items: center;
   outline: none;
-  border: 2px solid transparent;
-  padding: 0 2px;
-  line-height: 1em;
-
-  :focus {
-    border: 2px solid salmon;
-  }
+  height: 100%;
+  width: 100%;
+  border: 2px solid salmon;
+  padding: 2px;
+  box-sizing: border-box;
 `
 
 export class InputData extends React.PureComponent {
@@ -113,7 +111,6 @@ export class InputData extends React.PureComponent {
     return (
       <Input
         ref={this.refInput}
-        className='col-label-width row-label-height'
         id={`f-${this.props.location}`}
         defaultValue={defaultValue}
         onKeyDown={this.handleOnKeyDown}

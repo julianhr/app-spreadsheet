@@ -78,6 +78,7 @@ export class EvaluatedData extends React.PureComponent {
       style = {
         whiteSpace: 'nowrap',
         textOverflow: 'clip',
+        overflow: 'hidden',
       }
     }
 
