@@ -84,13 +84,11 @@ class CellData extends React.PureComponent {
 
   render() {
     return (
-      <td>
-        <Wrapper
-          className='row-label-height col-label-width'
-        >
-          {this.renderData()}
-        </Wrapper>
-      </td>
+      <Wrapper
+        className='row-label-height col-label-width'
+      >
+        {this.renderData()}
+      </Wrapper>
     )
   }
 }

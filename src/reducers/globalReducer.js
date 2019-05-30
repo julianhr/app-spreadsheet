@@ -2,8 +2,8 @@ import { createReducer } from 'redux-starter-kit'
 
 export const INITIAL_STATE = {
   activeCell: null,
-  rows: 3,
-  columns: 4,
+  rows: 14,
+  columns: 6,
 }
 
 export default createReducer(INITIAL_STATE, {

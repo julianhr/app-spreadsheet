@@ -28,7 +28,7 @@ describe('RowLabel', () => {
     }
 
     renderApp(props)
-    const el = document.querySelector('td')
+    const el = document.querySelector('[data-row="1"]')
     expect(el).toMatchSnapshot()
   })
 })

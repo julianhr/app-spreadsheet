@@ -1,35 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DataRow matches snapshot 1`] = `
-<tr>
-  <td>
+<div
+  class="css-g0yt5d-Row exk1gay0"
+  data-row="2"
+>
+  <div
+    class="row-label-width row-label-height css-1cj8orw-Wrapper ewfjn6o0"
+    data-row="2"
+  >
+    2
+  </div>
+  <div
+    class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+  >
     <div
-      class="row-label-width row-label-height css-1cj8orw-Wrapper ewfjn6o0"
-    >
-      2
-    </div>
-  </td>
-  <td>
+      class="css-16d5k2m-DataTag e1snbou80"
+      id="t-A-2"
+      tabindex="0"
+    />
+  </div>
+  <div
+    class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+  >
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
-    >
-      <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-A-2"
-        tabindex="0"
-      />
-    </div>
-  </td>
-  <td>
-    <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
-    >
-      <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-B-2"
-        tabindex="0"
-      />
-    </div>
-  </td>
-</tr>
+      class="css-16d5k2m-DataTag e1snbou80"
+      id="t-B-2"
+      tabindex="0"
+    />
+  </div>
+</div>
 `;

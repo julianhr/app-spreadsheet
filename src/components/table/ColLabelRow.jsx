@@ -5,11 +5,15 @@ import styled from '@emotion/styled'
 import ColLabel from '../cells/ColLabel'
 
 
+const Row = styled.div`
+  display: flex;
+  width: fit-content;
+`
+
 const InnerBorder = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
   border-right: 1px solid ${props => props.theme.colors.cell.borderDark};
   border-bottom: 1px solid ${props => props.theme.colors.cell.borderDark};
   background: ${props => props.theme.colors.cell.labelBkg};
@@ -17,11 +21,9 @@ const InnerBorder = styled.div`
 
 function ColLabelRow({ colLabels }) {
   const renderCornerCell = () => (
-    <td>
-      <InnerBorder
-        className='row-label-width col-label-height'
-      />
-    </td>
+    <InnerBorder
+      className='row-label-width col-label-height'
+    />
   )
 
   const renderLabelCells = () => (
@@ -34,10 +36,12 @@ function ColLabelRow({ colLabels }) {
   ))
 
   return (
-    <tr>
+    <Row
+      data-row='header'
+    >
       {renderCornerCell()}
       {renderLabelCells()}
-    </tr>
+    </Row>
   )
 }
 

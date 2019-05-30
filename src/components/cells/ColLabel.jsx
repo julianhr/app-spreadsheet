@@ -15,13 +15,12 @@ const InnerBorder = styled.div`
 
 function ColLabel({ label }) {
   return (
-    <td>
-      <InnerBorder
-        className='col-label-width col-label-height'
-      >
-        {label}
-      </InnerBorder>
-    </td>
+    <InnerBorder
+      data-col={label}
+      className='col-label-width col-label-height'
+    >
+      {label}
+    </InnerBorder>
   )
 }
 

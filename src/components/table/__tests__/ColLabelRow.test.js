@@ -24,7 +24,7 @@ describe('ColLabelRow', () => {
     const colLabels = ['A', 'B']
     const props = { colLabels }
     renderApp(props)
-    const el = document.querySelector('tr')
+    const el = document.querySelector('[data-row="header"]')
     expect(el).toMatchSnapshot()
   })
 })

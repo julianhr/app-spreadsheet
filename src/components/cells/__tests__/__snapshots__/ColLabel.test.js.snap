@@ -1,11 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ColLabel matches snapshot 1`] = `
-<td>
-  <div
-    class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
-  >
-    A
-  </div>
-</td>
+<div
+  class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+  data-col="A"
+>
+  A
+</div>
 `;

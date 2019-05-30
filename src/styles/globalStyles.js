@@ -8,6 +8,7 @@ const globalStyles = css`
   body {
     color: ${theme.colors.text};
     line-height: 1.3em;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
   table, th, td {

@@ -15,13 +15,12 @@ const Wrapper = styled.div`
 
 function RowLabel({ label }) {
   return (
-    <td>
-      <Wrapper
-        className='row-label-width row-label-height'
-      >
-        {label}
-      </Wrapper>
-    </td>
+    <Wrapper
+      data-row={label}
+      className='row-label-width row-label-height'
+    >
+      {label}
+    </Wrapper>
   )
 }
 
