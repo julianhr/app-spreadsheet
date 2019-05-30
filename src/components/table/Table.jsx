@@ -4,21 +4,37 @@ import styled from '@emotion/styled'
 import { connect } from 'react-redux'
 import { interpret } from 'xstate'
 
-import CellData from '../cell/CellData'
+import ColLabelRow from './ColLabelRow'
+import DataRow from './DataRow'
 import { getColumnNames } from '~/library/utils'
 import getKeyboardNavMachine from './keyboardNavMachine'
 
 
 const RootTable = styled.table`
-  border-top: 2px solid ${props => props.theme.colors.cell.border};
-  border-left: 2px solid ${props => props.theme.colors.cell.border};
-  border-right: 1px solid ${props => props.theme.colors.cell.border};
-  border-bottom: 1px solid ${props => props.theme.colors.cell.border};
-`
+  border-top: 2px solid ${props => props.theme.colors.cell.borderDark};
+  border-left: 2px solid ${props => props.theme.colors.cell.borderDark};
+  border-right: 1px solid ${props => props.theme.colors.cell.borderDark};
+  border-bottom: 1px solid ${props => props.theme.colors.cell.borderDark};
 
-const Td = styled.td`
-  width: 130px;
-  height: 26px;
+  * {
+    box-sizing: border-box;
+  }
+
+  .row-label-width {
+    width: 34px;
+  }
+
+  .row-label-height {
+    height: 28px;
+  }
+
+  .col-label-width {
+    width: 140px;
+  }
+
+  .col-label-height {
+    height: 26px;
+  }
 `
 
 export class Table extends React.PureComponent {
@@ -32,7 +48,7 @@ export class Table extends React.PureComponent {
     super(props)
     this.handleTableOnClick = this.handleTableOnClick.bind(this)
     this.handleTableOnKeyDown = this.handleTableOnKeyDown.bind(this)
-    this.columnNames = getColumnNames(props.columns)
+    this.colLabels = getColumnNames(props.columns)
   }
 
   keyboardNavMachine = getKeyboardNavMachine(this.props.rows, this.props.columns)
@@ -59,30 +75,34 @@ export class Table extends React.PureComponent {
     this.focusService.send({ type: 'MOVE_FOCUS', key, location })
   }
 
-  renderDataCells(rowNumber) {
-    return new Array(this.props.columns).fill(0).map((_, i) => {
-      const location = `${this.columnNames[i]}-${rowNumber}`
+  renderColLabelRow(i) {
+    return (
+      <ColLabelRow
+        key={i}
+        rows={this.props.rows}
+        colLabels={this.colLabels}
+      />
+    )
+  }
 
-      return (
-        <Td
-          key={location}
-        >
-          <CellData
-            isActive={this.props.activeCell === location}
-            location={location}
-          />
-        </Td>
-      )
-    })
+  renderDataRows(rowNumber) {
+    return (
+      <DataRow
+      key={rowNumber}
+        rowNumber={rowNumber}
+        colLabels={this.colLabels}
+        activeCell={this.props.activeCell}
+      />
+    )
   }
 
   renderRows() {
-    return new Array(this.props.rows).fill(0).map((_, i) => {
-      return (
-        <tr key={i}>
-          {this.renderDataCells(i + 1)}
-        </tr>
-      )
+    return new Array(this.props.rows + 1).fill(0).map((_, i) => {
+      if (i === 0) {
+        return this.renderColLabelRow(i)
+      } else {
+        return this.renderDataRows(i)
+      }
     })
   }
 

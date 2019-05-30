@@ -1,6 +1,7 @@
 import React from 'react'
 import { create } from 'react-test-renderer'
 import { render, fireEvent, cleanup } from 'react-testing-library'
+import emotionSerializer from 'jest-emotion'
 
 import ConnectedEvaluatedData, { EvaluatedData } from '../EvaluatedData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
@@ -27,7 +28,11 @@ const testProps = {
 
 const createApp = (props) => {
   jest.spyOn(EvaluatedData.prototype, 'focusDataTag').mockReturnValueOnce(null)
-  const wrapper = create(<MockApp><EvaluatedData {...props} /></MockApp>)
+  const wrapper = create(
+    <MockApp>
+      <EvaluatedData {...props} />
+    </MockApp>
+  )
 
   const cell = wrapper.root.findByType(EvaluatedData).instance
   cell.refDataTag.current = document.createElement('div')
@@ -138,9 +143,19 @@ describe('EvaluatedData', () => {
   })
 
   describe('functional tests', () => {
-    it('matches snapshot', () => {
-      const [wrapper, _] = renderApp(testProps)
-      expect(wrapper.asFragment()).toMatchSnapshot()
+    it('snapshot with value as string', () => {
+      expect.addSnapshotSerializer(emotionSerializer)
+      render(<MockApp><EvaluatedData {...testProps} /></MockApp>)
+      const el = document.querySelector(`#t-${testProps.location}`)
+      expect(el).toMatchSnapshot()
+    })
+
+    it('snapshot with value as number', () => {
+      expect.addSnapshotSerializer(emotionSerializer)
+      const props = {  ...testProps, value: 5 }
+      render(<MockApp><EvaluatedData {...props} /></MockApp>)
+      const el = document.querySelector(`#t-${props.location}`)
+      expect(el).toMatchSnapshot()
     })
   })
 })

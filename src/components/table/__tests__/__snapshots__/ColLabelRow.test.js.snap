@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColLabelRow matches snapshot 1`] = `
+<tr>
+  <td>
+    <div
+      class="row-label-width col-label-height css-1csmun8-InnerBorder e1ia7370"
+    />
+  </td>
+  <td>
+    <div
+      class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+    >
+      A
+    </div>
+  </td>
+  <td>
+    <div
+      class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+    >
+      B
+    </div>
+  </td>
+</tr>
+`;

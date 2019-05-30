@@ -3,339 +3,198 @@
 exports[`Table functional tests matches snapshot 1`] = `
 <DocumentFragment>
   <table
-    class="css-x9fnjs-RootTable e1tmjcr20"
+    class="css-8o9nr5-RootTable e1tmjcr20"
   >
     <tbody>
       <tr>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-width col-label-height css-1csmun8-InnerBorder e1ia7370"
+          />
+        </td>
+        <td>
+          <div
+            class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+          >
+            A
+          </div>
+        </td>
+        <td>
+          <div
+            class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+          >
+            B
+          </div>
+        </td>
+        <td>
+          <div
+            class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+          >
+            C
+          </div>
+        </td>
+        <td>
+          <div
+            class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+          >
+            D
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div
+            class="row-label-width row-label-height css-1cj8orw-Wrapper ewfjn6o0"
+          >
+            1
+          </div>
+        </td>
+        <td>
+          <div
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-A-1"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-B-1"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-C-1"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-D-1"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-E-1"
-              tabindex="0"
-            />
-          </div>
-        </td>
       </tr>
       <tr>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-width row-label-height css-1cj8orw-Wrapper ewfjn6o0"
+          >
+            2
+          </div>
+        </td>
+        <td>
+          <div
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-A-2"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-B-2"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-C-2"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-D-2"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-E-2"
-              tabindex="0"
-            />
-          </div>
-        </td>
       </tr>
       <tr>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-width row-label-height css-1cj8orw-Wrapper ewfjn6o0"
+          >
+            3
+          </div>
+        </td>
+        <td>
+          <div
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-A-3"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-B-3"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-C-3"
               tabindex="0"
             />
           </div>
         </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
+        <td>
           <div
-            class="css-meb6x1-Wrapper eoyj2860"
+            class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
           >
             <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
+              class="css-16d5k2m-DataTag e1snbou80"
               id="t-D-3"
-              tabindex="0"
-            />
-          </div>
-        </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-E-3"
-              tabindex="0"
-            />
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-A-4"
-              tabindex="0"
-            />
-          </div>
-        </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-B-4"
-              tabindex="0"
-            />
-          </div>
-        </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-C-4"
-              tabindex="0"
-            />
-          </div>
-        </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-D-4"
-              tabindex="0"
-            />
-          </div>
-        </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-E-4"
-              tabindex="0"
-            />
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-A-5"
-              tabindex="0"
-            />
-          </div>
-        </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-B-5"
-              tabindex="0"
-            />
-          </div>
-        </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-C-5"
-              tabindex="0"
-            />
-          </div>
-        </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-D-5"
-              tabindex="0"
-            />
-          </div>
-        </td>
-        <td
-          class="css-vmxvgu-Td e1tmjcr21"
-        >
-          <div
-            class="css-meb6x1-Wrapper eoyj2860"
-          >
-            <div
-              class="css-1c8e41e-DataTag e1dfe2wz0"
-              id="t-E-5"
               tabindex="0"
             />
           </div>

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RowLabel matches snapshot 1`] = `
+<td>
+  <div
+    class="row-label-width row-label-height css-1cj8orw-Wrapper ewfjn6o0"
+  >
+    1
+  </div>
+</td>
+`;
