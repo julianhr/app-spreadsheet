@@ -59,10 +59,8 @@ export function getCellNames(rows, cols) {
   return names
 }
 
-export function getColumnPosition(label) {
-  const [col, _] = label.split('-')
-  const letters = col.split('')
-  // const basePoint = 'A'.codePointAt(0)
+export function getColumnPosition(colLabel) {
+  const letters = colLabel.split('')
   const oneBase = letters.reduce((prev, letter) => (
     prev * 26 + letter.charCodeAt(0) - BASE_CODE_POINT + 1
   ), 0)
@@ -89,10 +87,20 @@ export function getColumnLabel(num) {
 }
 
 export function parseLocation(location) {
-  let [_, c, r] = location.split('-')
-  const col = getColumnPosition(c)
-  const row = +r - 1
+  let [col, row] = location.split('-')
+  const colIndex = getColumnPosition(col)
+  const rowIndex = +row - 1
 
-  return [col, row]
+  return [colIndex, rowIndex]
+}
+
+export function isNumber(numStr) {
+  const isPeriodsAndDigits = Boolean(numStr.match(/^[.\d]+$/))
+  const periodCount = (numStr.match(/\./g) || []).length
+
+  if (!isPeriodsAndDigits) { return false }
+  if (periodCount > 1) { return false }
+  if (numStr.length === 1 && numStr[0] === '.') { return false }
+  return true
 }
 

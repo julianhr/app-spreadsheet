@@ -1,5 +1,6 @@
 import { TOKENS as t } from './Lexer'
 import formulaFn from './formulaFunctions'
+import { isNumber } from '~/library/utils'
 
 
 class AST {
@@ -20,16 +21,10 @@ class NumberNode extends AST {
   }
 
   eval() {
-    this.testPeriodCount()
-    this.setTokenValue()
-    return this.value
-  }
-
-  testPeriodCount() {
-    const { text } = this.numberNode
-    const periodCount = (text.match(/\./g) || []).length
-
-    if (periodCount >= 2 || (periodCount === 1 && text.length === 1)) {
+    if (isNumber(this.numberNode.text)) {
+      this.setTokenValue()
+      return this.value
+    } else {
       throw new Error(`Invalid number "${this.numberNode.text}"`)
     }
   }
@@ -61,6 +56,14 @@ class UnaryOp extends AST {
     } else {
       throw new Error('Unary operator is not "+" or "-"')
     }
+  }
+}
+
+class CellNode extends AST {
+  constructor(cell) {
+    super()
+    this._name= 'CellNode'
+    this.cell = cell
   }
 }
 
@@ -119,6 +122,7 @@ class BinaryOp extends AST {
 
 export {
   NumberNode,
+  CellNode,
   BinaryOp,
   UnaryOp,
   FuncOp,

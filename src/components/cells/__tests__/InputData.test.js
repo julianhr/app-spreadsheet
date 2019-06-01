@@ -1,15 +1,16 @@
 import React from 'react'
 import { create } from 'react-test-renderer'
-import { render, fireEvent, cleanup, waitForElement } from 'react-testing-library'
+import { render, fireEvent, cleanup } from 'react-testing-library'
 
-import ConnectedInputData, {
-  InputData,
-  ERR_DIV_BY_ZERO,
-  ERR_GENERIC,
-} from '../InputData'
+import ConnectedInputData, { InputData } from '../InputData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import appStoreGen from '~/reducers'
-import { setCellValue } from '~/actions/tableActions'
+import { setCellData } from '~/actions/tableActions'
+import {
+  ERR_DIVISION_BY_ZERO,
+  ERR_CIRCULAR_REFERENCE,
+  ERR_GENERIC,
+} from '~/formulas/Interpreter'
 
 
 const requiredProps = {
@@ -19,14 +20,14 @@ const requiredProps = {
   onEscape: jest.fn(),
   onCommit: jest.fn(),
   // redux
-  clearCellValue: jest.fn(),
-  setCellValue: jest.fn(),
+  clearCellData: jest.fn(),
+  setCellData: jest.fn(),
 }
 
 const testProps = {
   ...requiredProps,
   // props
-  formula: 'test formula',
+  entered: 'test entered',
 }
 
 const createApp = (props) => {
@@ -84,92 +85,36 @@ describe('InputData', () => {
   describe('#setNewValue', () => {
     it('if string is empty the current value is deleted', async () => {
       const appStore = appStoreGen()
-      const saved = { location: testProps.location, value: 'test string', formula: 'formula string' }
-      await appStore.dispatch(setCellValue(saved))
-      expect(appStore.getState().table[saved.location]).toBeTruthy()
+      const location = testProps.location
+      const isEnteredValid = true
+      let entered, result
 
-      const [wrapper, _] = renderApp(testProps, appStore)
-      const input = wrapper.getByDisplayValue(saved.formula)
+      entered = 'test string'
+      result = entered
+      await appStore.dispatch(setCellData(location, entered, isEnteredValid, result))
+      expect(appStore.getState().table[location]).toBeTruthy()
 
+      renderApp(testProps, appStore)
+      const input = document.querySelector(`[data-location="${location}"]`)
       input.value = ''
       fireEvent.keyDown(input, { key: 'Enter' })
-      expect(appStore.getState().table[saved.location]).toBeUndefined()
-    })
-
-    it('saves trimmed value if string is valid', () => {
-      const appStore = appStoreGen()
-      const saved = { location: testProps.location, value: 'test string', formula: 'formula string' }
-      expect(appStore.getState().table[saved.location]).toBeUndefined()
-
-      const [wrapper, _] = renderApp(testProps, appStore)
-      const input = wrapper.getByDisplayValue('')
-      const value = ' test value\n'
-
-      input.value = value
-      fireEvent.keyDown(input, { key: 'Enter' })
-      expect(appStore.getState().table[saved.location].formula).toBe(value.trim())
-    })
-
-    it('calls #evaluateFormula if value starts with "="', () => {
-      const [wrapper, _] = renderApp(testProps)
-      const input = wrapper.getByDisplayValue('')
-      const formula = '=2+3'
-
-      jest.spyOn(InputData.prototype, 'evaluateFormula')
-      input.value = formula
-      fireEvent.keyDown(input, { key: 'Enter' })
-      expect(InputData.prototype.evaluateFormula).toHaveBeenCalledTimes(1)
-    })
-  })
-
-  describe('#evaluateFormula', () => {
-    it('returns interpreted result if formula is valid', () => {
-      const [_, store] = renderApp(testProps)
-      const input = document.querySelector('#f-B-2')
-      const formula = '=2+3'
-      const cellData = { value: 5, formula }
-
-      input.value = formula
-      fireEvent.keyDown(input, { key: 'Enter' })
-      expect(store.getState().table[testProps.location]).toEqual(cellData)
-    })
-
-    it('returns error if dividing by zero', () => {
-      const [_, store] = renderApp(testProps)
-      const input = document.querySelector('#f-B-2')
-      const formula = '=3/0'
-      const cellData = { value: ERR_DIV_BY_ZERO, formula }
-
-      input.value = formula
-      fireEvent.keyDown(input, { key: 'Enter' })
-      expect(store.getState().table[testProps.location]).toEqual(cellData)
-    })
-
-    it('returns error if formula cannot be interpreted', () => {
-      const [_, store] = renderApp(testProps)
-      const input = document.querySelector('#f-B-2')
-      const formula = '=3+5)'
-      const cellData = { value: ERR_GENERIC, formula }
-
-      input.value = formula
-      fireEvent.keyDown(input, { key: 'Enter' })
-      expect(store.getState().table[testProps.location]).toEqual(cellData)
+      expect(appStore.getState().table[location]).toBeUndefined()
     })
   })
 
   describe('#handleOnKeyDown', () => {
     test('sequence of events if key is "Escape"', () => {
       testProps.onEscape.mockReset()
-      const [wrapper, _] = renderApp(testProps)
-      const input = wrapper.getByDisplayValue('')
+      renderApp(testProps)
+      const input = document.querySelector('[data-cell="input"]')
       fireEvent.keyDown(input, { key: 'Escape' })
       expect(testProps.onEscape).toHaveBeenCalledTimes(1)
     })
 
     test('sequence of event if key is "Enter', () => {
       testProps.onCommit.mockReset()
-      const [wrapper, _] = renderApp(testProps)
-      const input = wrapper.getByDisplayValue('')
+      renderApp(testProps)
+      const input = document.querySelector('[data-cell="input"]')
       fireEvent.keyDown(input, { key: 'Enter' })
       expect(testProps.onCommit).toHaveBeenCalledTimes(1)
     })
@@ -185,7 +130,7 @@ describe('InputData', () => {
           </Listener>
         </MockApp>
       )
-      const input = document.querySelector('input')
+      const input = document.querySelector('[data-cell="input"]')
 
       events.forEach(key => fireEvent.keyDown(input, { key }))
       expect(spyKeyDown).toHaveBeenCalledTimes(2)
@@ -195,12 +140,12 @@ describe('InputData', () => {
   describe('#handleOnBlur', () => {
     test('stores value and calls #onCommit', () => {
       const [_, store] = renderApp(testProps)
-      const formula = 'test value'
-      const cellData = { value: formula, formula }
+      const entered = 'test value'
+      const cellData = { entered, result: entered, isEnteredValid: true }
 
       testProps.onCommit.mockReset()
-      const input = document.querySelector('input')
-      input.value = formula
+      const input = document.querySelector('[data-cell="input"]')
+      input.value = entered
       fireEvent.blur(input)
 
       expect(store.getState().table[testProps.location]).toEqual(cellData)
@@ -218,33 +163,31 @@ describe('InputData', () => {
     }
 
     it('displays default value if replaceValue is false', async () => {
-      const cellData = {
-        location: funcProps.location,
-        value: 'test text',
-        formula: 'test formula'
-      }
+      const { location } = testProps
+      const entered = 'test entered'
+      const result = 'test result'
       const store = appStoreGen()
-      await store.dispatch(setCellValue(cellData))
+      await store.dispatch(setCellData(location, entered, true, result))
       const props = {...funcProps}
       props.replaceValue = false
-      const [wrapper, _] = renderApp(props, store)
+      renderApp(props, store)
+      const el = document.querySelector(`[data-location="${location}"]`)
 
-      expect(wrapper.asFragment()).toMatchSnapshot()
+      expect(el).toMatchSnapshot()
     })
 
     it('will not display default value if replaceValue is true', async () => {
-      const cellData = {
-        location: funcProps.location,
-        value: 'test text',
-        formula: 'test formula'
-      }
+      const { location } = testProps
+      const entered = 'test entered'
+      const result = 'test result'
       const store = appStoreGen()
-      await store.dispatch(setCellValue(cellData))
+      await store.dispatch(setCellData(location, entered, true, result))
       const props = {...funcProps}
       props.replaceValue = true
-      const [wrapper, _] = renderApp(props, store)
+      renderApp(props, store)
+      const el = document.querySelector(`[data-location="${location}"]`)
 
-      expect(wrapper.asFragment()).toMatchSnapshot()
+      expect(el).toMatchSnapshot()
     })
   })
 })

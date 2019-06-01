@@ -15,7 +15,7 @@ const requiredProps = {
 
 const testProps = {
   ...requiredProps,
-  activeCell: '#t-B-2',
+  activeCell: '[data-location="B-2"]',
 }
 
 const createApp = (props) => create(<MockApp><Table {...props} /></MockApp>)
@@ -60,7 +60,7 @@ describe('Table', () => {
         </MockApp>
       )
 
-      const cell = document.querySelector('#t-B-2')
+      const cell = document.querySelector('[data-location="B-2"]')
       fireEvent.click(cell)
       expect(onClickFn).not.toHaveBeenCalled()
     })
@@ -79,20 +79,20 @@ describe('Table', () => {
         </MockApp>
       )
 
-      const cell = document.querySelector('#t-B-2')
+      const cell = document.querySelector('[data-location="B-2"]')
       fireEvent.keyDown(cell, { key: 'a' })
       expect(onKeyDownFn).not.toHaveBeenCalled()
     })
 
     it('moves focus using keyboard', async () => {
       renderApp(testProps)
-      let cell = document.querySelector('#t-B-2')
+      let cell = document.querySelector('[data-location="B-2"]')
       fireEvent.select(cell)
       expect(document.activeElement).toBe(cell)
 
       fireEvent.keyDown(cell, { key: 'ArrowUp' })
       await sleep(0)
-      cell = document.querySelector('#t-B-1')
+      cell = document.querySelector('[data-location="B-1"]')
       expect(document.activeElement).toBe(cell)
     })
   })
@@ -101,12 +101,12 @@ describe('Table', () => {
     it('moves focus using keyboard', async (done) => {
       renderApp(testProps)
       const tests = [
-        ['ArrowDown', '#t-A-2'],
-        ['ArrowRight', '#t-B-2'],
-        ['Enter', '#t-B-3'],
-        ['ArrowLeft', '#t-A-3'],
+        ['ArrowDown', '[data-location="A-2"]'],
+        ['ArrowRight', '[data-location="B-2"]'],
+        ['Enter', '[data-location="B-3"]'],
+        ['ArrowLeft', '[data-location="A-3"]'],
       ]
-      let cell = document.querySelector('#t-A-1')
+      let cell = document.querySelector('[data-location="A-1"]')
       fireEvent.select(cell)
       expect(document.activeElement).toBe(cell)
 

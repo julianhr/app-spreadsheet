@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
-import { clearCellValue } from '~/actions/tableActions'
+import { clearCellData } from '~/actions/tableActions'
 import { setActiveCell } from '~/actions/globalActions'
 
 
@@ -24,7 +24,7 @@ const DataTag = styled.div`
   }
 `
 
-export class EvaluatedData extends React.PureComponent {
+export class ResultData extends React.PureComponent {
   static propTypes = {
     // props
     isFocused: PropTypes.bool,
@@ -32,9 +32,9 @@ export class EvaluatedData extends React.PureComponent {
     onDoubleClick: PropTypes.func.isRequired,
     onKeyDownEditable: PropTypes.func.isRequired,
     // redux
-    clearCellValue: PropTypes.func.isRequired,
+    clearCellData: PropTypes.func.isRequired,
     setActiveCell: PropTypes.func.isRequired,
-    value: PropTypes.oneOfType([
+    result: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
     ]).isRequired,
@@ -59,10 +59,10 @@ export class EvaluatedData extends React.PureComponent {
     this.props.setActiveCell(this.props.location)
 
     if (['Delete', 'Backspace'].includes(key)) {
-      const valueStr = '' + this.props.value
+      const valueStr = '' + this.props.result
 
       if (valueStr.length > 0) {
-        this.props.clearCellValue(this.props.location)
+        this.props.clearCellData(this.props.location)
       }
       // key pressed is a printable symbol, ex: 'a', '1', ','
       // can be further refined, but for now it's fine
@@ -74,7 +74,7 @@ export class EvaluatedData extends React.PureComponent {
   getStyle() {
     let style = {}
 
-    if (typeof this.props.value === 'number') {
+    if (typeof this.props.result === 'number') {
       style = {
         whiteSpace: 'nowrap',
         textOverflow: 'clip',
@@ -89,13 +89,14 @@ export class EvaluatedData extends React.PureComponent {
     return (
       <DataTag
         ref={this.refDataTag}
+        data-cell='result'
+        data-location={this.props.location}
         css={this.getStyle()}
-        id={`t-${this.props.location}`}
         tabIndex='0'
         onKeyDown={this.handleOnKeyDown}
         onDoubleClick={this.props.onDoubleClick}
       >
-        {this.props.value}
+        {this.props.result}
       </DataTag>
     )
   }
@@ -103,10 +104,10 @@ export class EvaluatedData extends React.PureComponent {
 
 function mapStateToProps(state, ownProps) {
   const cell = state.table[ownProps.location]
-  const value = cell ? cell.value : ''
-  return { value }
+  const result = cell ? cell.result : ''
+  return { result }
 }
 
-const mapDispatchToProps = { clearCellValue, setActiveCell }
+const mapDispatchToProps = { clearCellData, setActiveCell }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EvaluatedData)
+export default connect(mapStateToProps, mapDispatchToProps)(ResultData)

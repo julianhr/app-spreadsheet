@@ -28,3 +28,6 @@ function Root() {
 }
 
 export default Root
+export { 
+  APP_STORE
+}

@@ -1,21 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`InputData functional tests displays default value if replaceValue is false 1`] = `
-<DocumentFragment>
-  <input
-    class="css-p19rxp-Input ep2oxkq0"
-    id="f-B-2"
-    value="test formula"
-  />
-</DocumentFragment>
+<input
+  class="css-p19rxp-Input ep2oxkq0"
+  data-cell="input"
+  data-location="B-2"
+  value="test entered"
+/>
 `;
 
 exports[`InputData functional tests will not display default value if replaceValue is true 1`] = `
-<DocumentFragment>
-  <input
-    class="css-p19rxp-Input ep2oxkq0"
-    id="f-B-2"
-    value=""
-  />
-</DocumentFragment>
+<input
+  class="css-p19rxp-Input ep2oxkq0"
+  data-cell="input"
+  data-location="B-2"
+  value=""
+/>
 `;

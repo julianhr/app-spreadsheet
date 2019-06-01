@@ -3,7 +3,7 @@ import { create } from 'react-test-renderer'
 import { render, fireEvent, cleanup } from 'react-testing-library'
 import * as xstate from 'xstate'
 
-import { setCellValue } from '~/actions/tableActions'
+import { setCellData } from '~/actions/tableActions'
 import appStoreGen from '~/reducers'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import CellData from '../CellData'
@@ -46,30 +46,38 @@ describe('CellData', () => {
   })
 
   describe('#evaluatedOnDoubleClick', () => {
-    it('displays input tag with current formula value when text tag is double-clicked', async () => {
-      const value = 'test value'
-      const cell = { location: testProps.location, value: value, formula: value }
+    it('displays input field with current result value result tag is double-clicked', async () => {
+      const { location } = testProps
+      const entered = '5'
+      const result = 5
       const store = appStoreGen()
-      await store.dispatch(setCellValue(cell))
+      await store.dispatch(setCellData(location, entered, true, result))
       renderApp(testProps, store)
-      const tag = document.querySelector(`#t-${testProps.location}`)
+      const resultTag = document.querySelector(`[data-location="${testProps.location}"]`)
 
-      fireEvent.doubleClick(tag)
-      expect(document.querySelector('input').value).toEqual(value)
+      fireEvent.doubleClick(resultTag)
+      const inputTag = document.querySelector(
+        `[data-cell="input"][data-location="${testProps.location}"]`
+        )
+      expect(inputTag.value).toEqual(entered)
     })
   })
 
   describe('#evaluatedOnKeyDownEditable', () => {
-    it('displays input tag with empty field', async () => {
-      const value = 'test value'
-      const cell = { location: testProps.location, value: value, formula: value }
+    it('displays input field with empty field', async () => {
+      const { location } = testProps
+      const entered = 'test entered'
+      const result = 'test result'
       const store = appStoreGen()
-      await store.dispatch(setCellValue(cell))
+      await store.dispatch(setCellData(location, entered, true, result))
       renderApp(testProps, store)
-      const tag = document.querySelector(`#t-${testProps.location}`)
+      const tag = document.querySelector(`[data-location="${testProps.location}"]`)
 
       fireEvent.keyDown(tag, { key: 'l' })
-      expect(document.querySelector('input').value).toEqual('')
+      const inputTag = document.querySelector(
+        `[data-cell="input"][data-location="${testProps.location}"]`
+      )
+      expect(inputTag.value).toEqual('')
     })
   })
 
@@ -77,31 +85,35 @@ describe('CellData', () => {
     it('dispalys focused text tag when escaping from input tag', () => {
       renderApp(testProps)
 
-      const tag = document.querySelector(`#t-${testProps.location}`)
-      fireEvent.doubleClick(tag)
-      const input = document.querySelector(`#f-${testProps.location}`)
+      const resultTag = document.querySelector(`[data-location="${testProps.location}"]`)
+      fireEvent.doubleClick(resultTag)
+      const inputTag = document.querySelector(
+        `[data-cell="input"][data-location="${testProps.location}"]`
+      )
 
-      expect(document.activeElement).toBe(input)
-      fireEvent.keyDown(input, { key: 'Escape' })
-      expect(document.activeElement).toEqual(tag)
+      expect(document.activeElement).toBe(inputTag)
+      fireEvent.keyDown(inputTag, { key: 'Escape' })
+      expect(document.activeElement).toEqual(resultTag)
     })
   })
 
   describe('#inputTagOnCommit', () => {
     it('displays text tag with current text value and is not focused', () => {
       const value = 'test value'
-      let tag
+      let resultTag
       renderApp(testProps)
 
-      tag = document.querySelector(`#t-${testProps.location}`)
-      fireEvent.doubleClick(tag)
-      const input = document.querySelector(`#f-${testProps.location}`)
+      resultTag = document.querySelector(`[data-location="${testProps.location}"]`)
+      fireEvent.doubleClick(resultTag)
+      const inputTag = document.querySelector(
+        `[data-cell="input"][data-location="${testProps.location}"]`
+      )
 
-      input.value = value
-      fireEvent.keyDown(input, { key: 'Enter' })
-      tag = document.querySelector(`#t-${testProps.location}`)
-      expect(tag.innerHTML).toEqual(value)
-      expect(document.activeElement).not.toBe(tag)
+      inputTag.value = value
+      fireEvent.keyDown(inputTag, { key: 'Enter' })
+      resultTag = document.querySelector(`[data-location="${testProps.location}"]`)
+      expect(resultTag.innerHTML).toEqual(value)
+      expect(document.activeElement).not.toBe(resultTag)
     })
   })
 
@@ -120,31 +132,37 @@ describe('CellData', () => {
     })
 
     test('lifecycle snapshots', () => {
-      let tag, input
+      let resultTag, inputTag
       const [wrapper, _] = renderApp(testProps)
       expect(wrapper.asFragment()).toMatchSnapshot('1. initial text tag')
 
-      tag = document.querySelector(`#t-${testProps.location}`)
-      fireEvent.doubleClick(tag)
+      resultTag = document.querySelector(`[data-location="${testProps.location}"]`)
+      fireEvent.doubleClick(resultTag)
       expect(wrapper.asFragment()).toMatchSnapshot('2. initial input tag')
 
-      input = document.querySelector(`#f-${testProps.location}`)
-      input.value = '=2+3+4'
-      fireEvent.keyDown(input, { key: 'Enter' })
+      inputTag = document.querySelector(
+        `[data-cell="input"][data-location="${testProps.location}"]`
+      )
+      inputTag.value = '=2+3+4'
+      fireEvent.keyDown(inputTag, { key: 'Enter' })
       expect(wrapper.asFragment()).toMatchSnapshot('3. text tag has text')
 
-      tag = document.querySelector(`#t-${testProps.location}`)
-      fireEvent.doubleClick(tag)
+      resultTag = document.querySelector(`[data-location="${testProps.location}"]`)
+      fireEvent.doubleClick(resultTag)
       expect(wrapper.asFragment()).toMatchSnapshot('4. input tag has formula')
 
-      input = document.querySelector(`#f-${testProps.location}`)
-      fireEvent.keyDown(input, { key: 'Escape' })
-      tag = document.querySelector(`#t-${testProps.location}`)
-      fireEvent.keyDown(tag, { key: 'Backspace' })
+      inputTag = document.querySelector(
+        `[data-cell="input"][data-location="${testProps.location}"]`
+      )
+      fireEvent.keyDown(inputTag, { key: 'Escape' })
+      resultTag = document.querySelector(`[data-location="${testProps.location}"]`)
+      fireEvent.keyDown(resultTag, { key: 'Backspace' })
       expect(wrapper.asFragment()).toMatchSnapshot('5. cell value deleted with Backspace')
 
-      fireEvent.keyDown(tag, { key: 'a' })
-      input = document.querySelector(`#f-${testProps.location}`)
+      fireEvent.keyDown(resultTag, { key: 'a' })
+      inputTag = document.querySelector(
+        `[data-cell="input"][data-location="${testProps.location}"]`
+      )
       expect(wrapper.asFragment()).toMatchSnapshot('6. key down "a" on text tag')
     })
   })

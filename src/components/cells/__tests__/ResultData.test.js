@@ -3,10 +3,10 @@ import { create } from 'react-test-renderer'
 import { render, fireEvent, cleanup } from 'react-testing-library'
 import emotionSerializer from 'jest-emotion'
 
-import ConnectedEvaluatedData, { EvaluatedData } from '../EvaluatedData'
+import ConnectedResultData, { ResultData } from '../ResultData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import appStoreGen from '~/reducers'
-import { setCellValue } from '~/actions/tableActions'
+import { setCellData } from '~/actions/tableActions'
 
 
 const requiredProps = {
@@ -15,9 +15,9 @@ const requiredProps = {
   onDoubleClick: jest.fn(),
   onKeyDownEditable: jest.fn(),
   // redux
-  clearCellValue: jest.fn(),
+  clearCellData: jest.fn(),
   setActiveCell: jest.fn(),
-  value: 'test string',
+  result: 'test result',
 }
 
 const testProps = {
@@ -27,14 +27,14 @@ const testProps = {
 }
 
 const createApp = (props) => {
-  jest.spyOn(EvaluatedData.prototype, 'focusDataTag').mockReturnValueOnce(null)
+  jest.spyOn(ResultData.prototype, 'focusDataTag').mockReturnValueOnce(null)
   const wrapper = create(
     <MockApp>
-      <EvaluatedData {...props} />
+      <ResultData {...props} />
     </MockApp>
   )
 
-  const cell = wrapper.root.findByType(EvaluatedData).instance
+  const cell = wrapper.root.findByType(ResultData).instance
   cell.refDataTag.current = document.createElement('div')
   return wrapper
 }
@@ -43,13 +43,13 @@ const renderApp = (props, customStore) => {
   const store = customStore || appStoreGen()
   const wrapper = render(
     <MockApp customStore={store}>
-      <ConnectedEvaluatedData {...props} />
+      <ConnectedResultData {...props} />
     </MockApp>
   )
   return [wrapper, store]
 }
 
-describe('EvaluatedData', () => {
+describe('ResultData', () => {
   afterEach(cleanup)
 
   describe('props', () => {
@@ -72,7 +72,7 @@ describe('EvaluatedData', () => {
       props.isFocused = true
       renderApp(props)
 
-      const tag = document.querySelector(`#t-${props.location}`)
+      const tag = document.querySelector(`[data-location="${props.location}"`)
       expect(document.activeElement).toBe(tag)
     })
 
@@ -81,7 +81,7 @@ describe('EvaluatedData', () => {
       props.isFocused = false
       renderApp(props)
 
-      const tag = document.querySelector(`#t-${props.location}`)
+      const tag = document.querySelector(`[data-location="${props.location}"`)
       expect(document.activeElement).not.toBe(tag)
     })
   })
@@ -92,19 +92,17 @@ describe('EvaluatedData', () => {
       expect(store.getState().global.activeCell).toBeNull()
 
       renderApp(testProps, store)
-      const tag = document.querySelector(`#t-${testProps.location}`)
+      const tag = document.querySelector(`[data-location="${testProps.location}"]`)
       fireEvent.keyDown(tag, { key: 'a' })
       expect(store.getState().global.activeCell).toEqual(testProps.location)
     })
 
     it('clears value if key pressed is Backspace or Delete', async () => {
       const store = appStoreGen()
-      const text = 'test text'
-      const value = {
-        location: testProps.location,
-        text,
-        formula: text
-      }
+      const { location } = testProps
+      const entered = 'test entered'
+      const result = entered
+
       const keys = [
         ['Backspace', false],
         ['Delete', false],
@@ -113,10 +111,10 @@ describe('EvaluatedData', () => {
         [',', true]
       ]
       renderApp(testProps, store)
-      const tag = document.querySelector(`#t-${testProps.location}`)
+      const tag = document.querySelector(`[data-location="${testProps.location}"]`)
 
       for (let [key, expected] of keys) {
-        await store.dispatch(setCellValue(value))
+        await store.dispatch(setCellData(location, entered, true, result))
         fireEvent.keyDown(tag, { key })
         const hasValue = Boolean(store.getState().table[testProps.location])
         expect(hasValue).toEqual(expected)
@@ -133,7 +131,7 @@ describe('EvaluatedData', () => {
       ]
       testProps.onKeyDownEditable.mockReset()
       renderApp(testProps)
-      const tag = document.querySelector(`#t-${testProps.location}`)
+      const tag = document.querySelector(`[data-location="${testProps.location}"]`)
 
       for (let [key, times] of keys) {
         fireEvent.keyDown(tag, { key })
@@ -145,16 +143,16 @@ describe('EvaluatedData', () => {
   describe('functional tests', () => {
     it('snapshot with value as string', () => {
       expect.addSnapshotSerializer(emotionSerializer)
-      render(<MockApp><EvaluatedData {...testProps} /></MockApp>)
-      const el = document.querySelector(`#t-${testProps.location}`)
+      render(<MockApp><ResultData {...testProps} /></MockApp>)
+      const el = document.querySelector(`[data-location="${testProps.location}"]`)
       expect(el).toMatchSnapshot()
     })
 
     it('snapshot with value as number', () => {
       expect.addSnapshotSerializer(emotionSerializer)
-      const props = {  ...testProps, value: 5 }
-      render(<MockApp><EvaluatedData {...props} /></MockApp>)
-      const el = document.querySelector(`#t-${props.location}`)
+      const props = {  ...testProps, result: 5 }
+      render(<MockApp><ResultData {...props} /></MockApp>)
+      const el = document.querySelector(`[data-location="${props.location}"`)
       expect(el).toMatchSnapshot()
     })
   })

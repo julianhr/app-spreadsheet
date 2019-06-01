@@ -3,57 +3,37 @@ import * as actions from '~/actions/tableActions'
 
 
 describe('tableActions', () => {
-  describe('#setCellValue', () => {
+  describe('#setCellData', () => {
     it('sets currently active cell', async () => {
       const cell = 'B-2'
-      const args = {
-        location: cell,
-        value: 'test value',
-        formula: 'test formula'
-      }
+      const location = cell
+      const entered = 5
+      const isEnteredValid = true
+      const result = 5
       const appStore = appStoreGen()
 
       expect(appStore.getState().table[cell]).toBeUndefined()
-      await appStore.dispatch(actions.setCellValue(args))
-      expect(appStore.getState().table[cell]).toEqual({ value: args.value, formula: args.formula })
+      await appStore.dispatch(actions.setCellData(location, entered, isEnteredValid, result))
+      expect(appStore.getState().table[cell]).toEqual({ entered, isEnteredValid, result })
     })
   })
 
-  describe('#clearCellValue', () => {
+  describe('#clearCellData', () => {
     it('deletes value from store', async () => {
       const cell = 'B-2'
-      const args = {
-        location: cell,
-        value: 'test value',
-        formula: 'test formula'
-      }
+      const location = cell
+      const entered = 5
+      const isEnteredValid = true
+      const result = 5
       const appStore = appStoreGen()
 
       expect(appStore.getState().table[cell]).toBeUndefined()
 
-      appStore.dispatch(actions.setCellValue(args))
-      expect(appStore.getState().table[cell]).toEqual({ value: args.value, formula: args.formula })
+      appStore.dispatch(actions.setCellData(location, entered, isEnteredValid, result))
+      expect(appStore.getState().table[cell]).toEqual({ entered, isEnteredValid, result })
 
-      await appStore.dispatch(actions.clearCellValue(cell))
+      await appStore.dispatch(actions.clearCellData(cell))
       expect(appStore.getState().table[cell]).toBeUndefined()
-    })
-
-    it('dispatches action only if there is a value', async () => {
-      const cell = 'B-2'
-      const args = {
-        location: cell,
-        value: 'test value',
-        formula: 'test formula'
-      }
-      const appStore = appStoreGen()
-      let res
-
-      appStore.dispatch(actions.setCellValue(args))
-      res = await appStore.dispatch(actions.clearCellValue(cell))
-      expect(res).toBeTruthy()
-
-      res = await appStore.dispatch(actions.clearCellValue(cell))
-      expect(res).toBeFalsy()
     })
   })
 })

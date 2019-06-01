@@ -71,7 +71,7 @@ export class Table extends React.PureComponent {
 
   handleTableOnKeyDown(event) {
     event.stopPropagation()
-    this.moveFocus(event.key, event.target.id)
+    this.moveFocus(event.key, event.target.dataset.location)
   }
 
   moveFocus(key, location) {

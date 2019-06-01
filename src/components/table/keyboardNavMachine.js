@@ -25,7 +25,7 @@ function getTargetLocation({ rows, columns, rowIndex, colIndex, key }) {
   const colLabel = getColumnLabel(colIndex)
   const rowLabel = '' + (rowIndex + 1)
 
-  return `t-${colLabel}-${rowLabel}`
+  return `${colLabel}-${rowLabel}`
 }
 
 function focusTargetCell(ctx) {
@@ -33,7 +33,7 @@ function focusTargetCell(ctx) {
 
   return new Promise(resolve => {
     setTimeout(() => {
-      const id = `#${ctx.endLocation}`
+      const id = `[data-location="${ctx.endLocation}"]`
       const cell = document.querySelector(id)
       if (cell) { cell.focus() }
       resolve(true)

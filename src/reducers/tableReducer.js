@@ -5,11 +5,11 @@ const INITIAL_STATE = {}
 
 export default createReducer(INITIAL_STATE, {
   'SET_CELL_VALUE': (state, { payload }) => {
-    const { location, value, formula } = payload
-    state[location] = { value, formula }
+    const { location, data } = payload
+    state[location] = data
   },
 
-  'DELETE_CELL_VALUE': (state, { payload }) => {
+  'DELETE_CELL_DATA': (state, { payload }) => {
     delete state[payload]
   }
 })

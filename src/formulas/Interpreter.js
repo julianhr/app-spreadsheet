@@ -2,18 +2,26 @@ import { Lexer, GRAMMAR } from './Lexer'
 import Parser from './Parser'
 
 
+const ERR_DIVISION_BY_ZERO = '#DIV/0!'
+const ERR_CIRCULAR_REFERENCE = '#REF!'
+const ERR_GENERIC = '#ERROR!'
+
 class Interpreter {
-  constructor(input) {
-    this.input = input
+  constructor(location) {
+    this.location = location
     this.tokens = null
     this.ast = null
     this.result = null
     this.error = null
   }
 
-  interpret() {
+  interpret(input) {
+    if (input === undefined) {
+      throw new Error('Missing input argument')
+    }
+
     try {
-      const lexer = new Lexer(this.input, GRAMMAR)
+      const lexer = new Lexer(input, GRAMMAR)
       this.tokens = lexer.getTokens()
       const parser = new Parser(this.tokens)
       this.ast = parser.parse()
@@ -22,7 +30,19 @@ class Interpreter {
     } catch (error) {
       this.result = null
       this.error = error
-      return null
+      return this.errorResponse()
+    }
+  }
+
+  errorResponse() {
+    const { message: errorMsg } = this.error
+
+    if (errorMsg.match(/division by zero/i)) {
+      return ERR_DIVISION_BY_ZERO
+    } else if (errorMsg.match(/cirular reference/i)) {
+      return ERR_CIRCULAR_REFERENCE
+    } else {
+      return ERR_GENERIC
     }
   }
 
@@ -70,3 +90,8 @@ class Interpreter {
 }
 
 export default Interpreter
+export {
+  ERR_DIVISION_BY_ZERO,
+  ERR_CIRCULAR_REFERENCE,
+  ERR_GENERIC,
+}
