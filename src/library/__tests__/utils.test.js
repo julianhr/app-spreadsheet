@@ -1,8 +1,9 @@
 import {
-  getColumnNames,
   getCellNames,
-  getColumnPosition,
   getColumnLabel,
+  getColumnNames,
+  getColumnPosition,
+  isNumber,
   parseLocation,
   sleep,
 } from '../utils'
@@ -56,10 +57,10 @@ describe('#getColumnLabel', () => {
 describe('#parseLocation', () => {
   it('returns an array of row and column as digits', () => {
     const tests = [
-      ['t-A-2', 0, 1],
-      ['f-Z-5', 25, 4],
-      ['t-AA-250', 26, 249],
-      ['f-BC-353', 54, 352],
+      ['A-2', 0, 1],
+      ['Z-5', 25, 4],
+      ['AA-250', 26, 249],
+      ['BC-353', 54, 352],
     ]
 
     tests.forEach(([ location, row, col ]) => {
@@ -67,4 +68,21 @@ describe('#parseLocation', () => {
       expect(position).toEqual([row, col])
     })
   })
+})
+
+test('#isNumber', () => {
+  expect(isNumber('')).toBe(false)
+  expect(isNumber('a')).toBe(false)
+  expect(isNumber('?')).toBe(false)
+  expect(isNumber('.')).toBe(false)
+  expect(isNumber('5.5.')).toBe(false)
+  expect(isNumber('5.5.5')).toBe(false)
+  expect(isNumber('.5.5')).toBe(false)
+  expect(isNumber('.5.')).toBe(false)
+  expect(isNumber('1')).toBe(true)
+  expect(isNumber('000')).toBe(true)
+  expect(isNumber('0005')).toBe(true)
+  expect(isNumber('5.')).toBe(true)
+  expect(isNumber('5.5')).toBe(true)
+  expect(isNumber('.5')).toBe(true)
 })

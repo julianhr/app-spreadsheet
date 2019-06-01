@@ -5,7 +5,7 @@ import { interpret } from 'xstate'
 
 import displayMachine from './displayMachine'
 import InputData from './InputData'
-import EvaluatedData from './EvaluatedData'
+import ResultData from './ResultData'
 
 
 const Wrapper = styled.div`
@@ -21,8 +21,8 @@ class CellData extends React.PureComponent {
 
   constructor() {
     super()
-    this.evaluatedOnDoubleClick = this.evaluatedOnDoubleClick.bind(this)
-    this.evaluatedOnKeyDownEditable = this.evaluatedOnKeyDownEditable.bind(this)
+    this.resultOnDoubleClick = this.resultOnDoubleClick.bind(this)
+    this.resultOnKeyDownEditable = this.resultOnKeyDownEditable.bind(this)
     this.inputOnEscape = this.inputOnEscape.bind(this)
     this.inputOnCommit = this.inputOnCommit.bind(this)
   }
@@ -42,11 +42,11 @@ class CellData extends React.PureComponent {
     this.displayService.stop()
   }
   
-  evaluatedOnDoubleClick() {
+  resultOnDoubleClick() {
     this.displayService.send('EDITABLE_MODIFY')
   }
 
-  evaluatedOnKeyDownEditable() {
+  resultOnKeyDownEditable() {
     this.displayService.send('EDITABLE_REPLACE')
   }
 
@@ -72,10 +72,10 @@ class CellData extends React.PureComponent {
       )
     } else {
       return (
-        <EvaluatedData
+        <ResultData
           location={this.props.location}
-          onDoubleClick={this.evaluatedOnDoubleClick}
-          onKeyDownEditable={this.evaluatedOnKeyDownEditable}
+          onDoubleClick={this.resultOnDoubleClick}
+          onKeyDownEditable={this.resultOnKeyDownEditable}
           isFocused={displayState.matches('static.focused')}
         />
       )

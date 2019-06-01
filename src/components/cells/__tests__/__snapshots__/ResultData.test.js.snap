@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EvaluatedData functional tests snapshot with value as number 1`] = `
+exports[`ResultData functional tests snapshot with value as number 1`] = `
 .emotion-0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -27,14 +27,15 @@ exports[`EvaluatedData functional tests snapshot with value as number 1`] = `
 
 <div
   class="emotion-0 emotion-1"
-  id="t-B-2"
+  data-cell="result"
+  data-location="B-2"
   tabindex="0"
 >
   5
 </div>
 `;
 
-exports[`EvaluatedData functional tests snapshot with value as string 1`] = `
+exports[`ResultData functional tests snapshot with value as string 1`] = `
 .emotion-0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -58,9 +59,10 @@ exports[`EvaluatedData functional tests snapshot with value as string 1`] = `
 
 <div
   class="emotion-0 emotion-1"
-  id="t-B-2"
+  data-cell="result"
+  data-location="B-2"
   tabindex="0"
 >
-  test string
+  test result
 </div>
 `;

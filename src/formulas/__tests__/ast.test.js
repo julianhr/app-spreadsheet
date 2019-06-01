@@ -4,56 +4,6 @@ import Token from '../Token'
 
 
 describe('NumberNode', () => {
-  describe('#testPeriodCount', () => {
-    test('125', () => {
-      const token = new Token(t.NUMBER, '125')
-      const node = new NumberNode(token)
-      expect(() => node.testPeriodCount()).not.toThrow()
-    })
-
-    test('.25', () => {
-      const token = new Token(t.NUMBER, '.25')
-      const node = new NumberNode(token)
-      expect(() => node.testPeriodCount()).not.toThrow()
-    })
-
-    test('0.25', () => {
-      const token = new Token(t.NUMBER, '0.25')
-      const node = new NumberNode(token)
-      expect(() => node.testPeriodCount()).not.toThrow()
-    })
-
-    test('25.', () => {
-      const token = new Token(t.NUMBER, '25.')
-      const node = new NumberNode(token)
-      expect(() => node.testPeriodCount()).not.toThrow()
-    })
-
-    test('.', () => {
-      const token = new Token(t.NUMBER, '.')
-      const node = new NumberNode(token)
-      expect(() => node.testPeriodCount()).toThrow()
-    })
-
-    test('.25.', () => {
-      const token = new Token(t.NUMBER, '.25.')
-      const node = new NumberNode(token)
-      expect(() => node.testPeriodCount()).toThrow()
-    })
-
-    test('2.5.3', () => {
-      const token = new Token(t.NUMBER, '2.5.3')
-      const node = new NumberNode(token)
-      expect(() => node.testPeriodCount()).toThrow()
-    })
-
-    test('2.0.', () => {
-      const token = new Token(t.NUMBER, '2.0.')
-      const node = new NumberNode(token)
-      expect(() => node.testPeriodCount()).toThrow()
-    })
-  })
-
   describe('#setTokenValue', () => {
     it('sets parsed number in token node', () => {
       const token = new Token(t.NUMBER, '5')
@@ -72,11 +22,9 @@ describe('NumberNode', () => {
   test('#eval', () => {
     const token = new Token(t.NUMBER, '5')
     const node = new NumberNode(token)
-    jest.spyOn(node, 'testPeriodCount')
     jest.spyOn(node, 'setTokenValue')
 
     expect(node.eval()).toBe(5)
-    expect(node.testPeriodCount).toHaveBeenCalledTimes(1)
     expect(node.setTokenValue).toHaveBeenCalledTimes(1)
   })
 })

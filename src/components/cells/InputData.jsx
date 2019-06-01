@@ -3,12 +3,10 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { connect }  from 'react-redux'
 
-import { setCellValue, clearCellValue } from '~/actions/tableActions'
 import Interpreter from '~/formulas'
+import { setCellData, clearCellData } from '~/actions/tableActions'
+import { isNumber } from '~/library/utils'
 
-
-const ERR_DIV_BY_ZERO = '#DIV/0!'
-const ERR_GENERIC = '#ERROR!'
 
 const Input = styled.input`
   display: flex;
@@ -29,9 +27,9 @@ export class InputData extends React.PureComponent {
     onEscape: PropTypes.func.isRequired,
     onCommit: PropTypes.func.isRequired,
     // redux
-    clearCellValue: PropTypes.func.isRequired,
-    formula: PropTypes.string,
-    setCellValue: PropTypes.func.isRequired,
+    clearCellData: PropTypes.func.isRequired,
+    entered: PropTypes.string,
+    setCellData: PropTypes.func.isRequired,
   }
 
   constructor() {
@@ -52,39 +50,30 @@ export class InputData extends React.PureComponent {
     input.scrollLeft = input.scrollWidth
   }
 
-  setNewValue(rawValue) {
-    const value = rawValue.trim()
+  setNewValue(rawInputValue) {
+    const inputValue = rawInputValue.trim()
     const { location } = this.props
+    let isFormula, result
+    let isEnteredValid = true
 
-    if (value.length === 0) {
-      this.props.clearCellValue(location)
+    if (inputValue.length === 0) {
+      this.props.clearCellData(location)
       return
     }
 
-    const cellValue = {
-      location,
-      formula: value
-    }
+    isFormula = inputValue[0] === '='
 
-    const isFormula = value[0] === '='
-    cellValue.value = isFormula ? this.evaluateFormula(value) : value
-    this.props.setCellValue(cellValue)
-  }
-
-  evaluateFormula(input) {
-    const interpreter = new Interpreter(input)
-    const result = interpreter.interpret()
-    const { error } = interpreter
-
-    if (!error) {
-      return result
+    if (isFormula) {
+      const interpreter = new Interpreter(this.props.location)
+      result = interpreter.interpret(inputValue)
+      isEnteredValid = interpreter.errors !== null
+    } else if (isNumber(inputValue)) {
+      result = parseFloat(inputValue)
     } else {
-      if (error.message.match(/division by zero/i)) {
-        return ERR_DIV_BY_ZERO
-      } else {
-        return ERR_GENERIC
-      }
+      result = inputValue
     }
+
+    this.props.setCellData(location, inputValue, isEnteredValid, result)
   }
 
   handleOnKeyDown(event) {
@@ -105,13 +94,14 @@ export class InputData extends React.PureComponent {
     this.props.onCommit()
   }
 
-  render () {
-    const defaultValue = this.props.replaceValue ? null : this.props.formula
+  render() {
+    const defaultValue = this.props.replaceValue ? null : this.props.entered
 
     return (
       <Input
         ref={this.refInput}
-        id={`f-${this.props.location}`}
+        data-cell='input'
+        data-location={this.props.location}
         defaultValue={defaultValue}
         onKeyDown={this.handleOnKeyDown}
         onBlur={this.handleOnBlur}
@@ -122,13 +112,9 @@ export class InputData extends React.PureComponent {
 
 function mapStateToProps(state, ownProps) {
   const cell = state.table[ownProps.location]
-  const formula = cell ? cell.formula : ''
-  return { formula }
+  const entered = cell ? cell.entered : ''
+  return { entered }
 }
-const mapDispatchToProps = { setCellValue, clearCellValue }
+const mapDispatchToProps = { setCellData, clearCellData }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputData)
-export {
-  ERR_DIV_BY_ZERO,
-  ERR_GENERIC,
-}

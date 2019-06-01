@@ -45,8 +45,9 @@ exports[`Table functional tests matches snapshot 1`] = `
       class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
     >
       <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-A-1"
+        class="css-16d5k2m-DataTag e137pts60"
+        data-cell="result"
+        data-location="A-1"
         tabindex="0"
       />
     </div>
@@ -54,8 +55,9 @@ exports[`Table functional tests matches snapshot 1`] = `
       class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
     >
       <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-B-1"
+        class="css-16d5k2m-DataTag e137pts60"
+        data-cell="result"
+        data-location="B-1"
         tabindex="0"
       />
     </div>
@@ -63,8 +65,9 @@ exports[`Table functional tests matches snapshot 1`] = `
       class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
     >
       <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-C-1"
+        class="css-16d5k2m-DataTag e137pts60"
+        data-cell="result"
+        data-location="C-1"
         tabindex="0"
       />
     </div>
@@ -83,8 +86,9 @@ exports[`Table functional tests matches snapshot 1`] = `
       class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
     >
       <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-A-2"
+        class="css-16d5k2m-DataTag e137pts60"
+        data-cell="result"
+        data-location="A-2"
         tabindex="0"
       />
     </div>
@@ -92,8 +96,9 @@ exports[`Table functional tests matches snapshot 1`] = `
       class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
     >
       <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-B-2"
+        class="css-16d5k2m-DataTag e137pts60"
+        data-cell="result"
+        data-location="B-2"
         tabindex="0"
       />
     </div>
@@ -101,8 +106,9 @@ exports[`Table functional tests matches snapshot 1`] = `
       class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
     >
       <div
-        class="css-16d5k2m-DataTag e1snbou80"
-        id="t-C-2"
+        class="css-16d5k2m-DataTag e137pts60"
+        data-cell="result"
+        data-location="C-2"
         tabindex="0"
       />
     </div>

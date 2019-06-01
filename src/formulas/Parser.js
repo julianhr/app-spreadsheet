@@ -1,5 +1,5 @@
 import { TOKENS as t } from './Lexer'
-import { BinaryOp, UnaryOp, FuncOp, NumberNode } from './ast'
+import { NumberNode, BinaryOp, UnaryOp, FuncOp } from './ast'
 
 
 class Parser {
@@ -56,7 +56,8 @@ class Parser {
   }
 
   factor() {
-    // factor : ( PLUS | MINUS ) NUMBER | LPAREN expr RPAREN | FUNCTION LPAREN list RPAREN
+    // factor : LPAREN expr RPAREN
+    //          | FUNCTION LPAREN list RPAREN
     switch (this.peekType()) {
       case t.PLUS:
       case t.MINUS:
@@ -102,18 +103,16 @@ class Parser {
   }
 
   func() {
-    let func, args
-
-    if (this.peekType() === t.FUNCTION) {
-      func = this.curr
-      this.consume()
-      this.lparen()
-      args = this.args()
-      this.rparen()
-      return new FuncOp(func, args)
-    } else {
+    if (this.peekType() !== t.FUNCTION) {
       throw new Error('Missing function')
     }
+
+    const func = this.curr
+    this.consume()
+    this.lparen()
+    const args = this.args()
+    this.rparen()
+    return new FuncOp(func, args)
   }
 
   args() {
@@ -132,40 +131,40 @@ class Parser {
   }
 
   equals() {
-    if (this.peekType() === t.EQUALS) {
-      this.consume()
-    } else {
+    if (this.peekType() !== t.EQUALS) {
       throw new Error('Missing equals sign')
     }
+
+    this.consume()
   }
 
   lparen() {
-    if (this.peekType() === t.LPAREN) {
-      this.depth += 1
-      this.consume()
-    } else {
+    if (this.peekType() !== t.LPAREN) {
       throw new Error('Missing left parenthesis')
     }
+
+    this.depth += 1
+    this.consume()
   }
 
   rparen() {
-    if (this.peekType() === t.RPAREN) {
-      this.depth -= 1
-      this.consume()
-    } else {
+    if (this.peekType() !== t.RPAREN) {
       throw new Error('Missing right parenthesis')
     }
+
+    this.depth -= 1
+    this.consume()
   }
 
   unaryOp() {
-    if ([t.PLUS, t.MINUS].includes(this.peekType())) {
-      const curr = this.curr
-      this.consume()
-      const node = new UnaryOp(curr, this.factor())
-      return node
-    } else {
+    if (![t.PLUS, t.MINUS].includes(this.peekType())) {
       throw new Error('Missing unary operator')
     }
+
+    const curr = this.curr
+    this.consume()
+    const node = new UnaryOp(curr, this.factor())
+    return node
   }
 
   consume() {
