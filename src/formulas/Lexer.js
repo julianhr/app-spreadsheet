@@ -1,4 +1,6 @@
 import Token from './Token'
+import { isNumber } from '~/library/utils'
+
 
 const TOKENS = {
   // internal
@@ -19,6 +21,7 @@ const TOKENS = {
   NUMBER: 'NUMBER',
   CELL: 'CELL',
   FUNCTION: 'FUNCTION',
+  TEXT: 'TEXT',
 }
 
 const t = TOKENS
@@ -59,11 +62,10 @@ const GRAMMAR = [
 
 
 class Lexer {
-  constructor(input, grammar) {
+  constructor(input) {
     this.input = input
-    this.grammar = grammar
     this.index = 0
-    this.char = input[this.index]
+    this.char = this.initChar(input)
     this.markers = []
     this.tokens = []
   }
@@ -82,11 +84,14 @@ class Lexer {
       return new Token(t.EOF, t.EOF)
     }
 
-    // console.log('before whitespace', this.char, this.index)
+    if (!this.isFormula()) {
+      return this.tokenTEXTorNUMBER()
+    }
+
     const whitespace = this.getWhitespace()
     let token
 
-    for (let rule of this.grammar) {
+    for (let rule of GRAMMAR) {
       rule.setIndex(this.index)
       const match = rule.test(this.input)
 
@@ -106,6 +111,14 @@ class Lexer {
     return token
   }
 
+  initChar(input) {
+    if (this.input.length === 0) {
+      this.input = '0'
+    }
+
+    return input[this.index]
+  }
+
   tokenUNKNOWN(whitespace) {
     const chars = []
 
@@ -113,9 +126,23 @@ class Lexer {
       chars.push(this.char)
       this.consume()
     }
-    
-    const word = chars.join('')
-    return new Token(t.UNKNOWN, word, whitespace)
+
+    const text = chars.join('')
+    return new Token(t.UNKNOWN, text, whitespace)
+  }
+
+  tokenTEXTorNUMBER() {
+    let token
+
+    if (isNumber(this.input)) {
+      token = new Token(t.NUMBER, this.input)
+    } else {
+      token = new Token(t.TEXT, this.input)
+    }
+
+    this.index = this.input.length - 1
+    this.consume()
+    return token
   }
 
   consume() {
@@ -128,6 +155,10 @@ class Lexer {
     }
   }
 
+  isFormula() {
+    return this.input[0] === '='
+  }
+
   isEOF() {
     return this.char === t.EOF
   }
@@ -137,7 +168,7 @@ class Lexer {
   }
 
   isSeparator() {
-    return !this.isEOF() && Boolean(this.char.match(/[()+-/*]{1}/))
+    return Boolean(this.char.match(/[\(\)\+\-\/\*]/)) // eslint-disable-line
   }
 
   getWhitespace() {
