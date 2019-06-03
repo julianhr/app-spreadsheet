@@ -3,6 +3,7 @@ import Interpreter, {
   ERR_CIRCULAR_REFERENCE,
   ERR_GENERIC,
 } from '../Interpreter'
+import graph from '../graph'
 
 
 
@@ -39,19 +40,26 @@ describe('Interpreter', () => {
   })
 
   describe('#interpret', () => {
-    describe('happy path', () => {
+    describe('happy path no cell references', () => {
+      test('  testing ', () => {
+        const input = '  testing '
+        const interpreter = new Interpreter(location)
+        const result = interpreter.interpret(input)
+        expect(result).toBe(input)
+      })
+
+      test('  5 ', () => {
+        const input = '  5 '
+        const interpreter = new Interpreter(location)
+        const result = interpreter.interpret(input)
+        expect(result).toBe(input)
+      })
+
       test('=5', () => {
         const input = '=5'
         const interpreter = new Interpreter(location)
         const result = interpreter.interpret(input)
         expect(result).toBe(5)
-      })
-  
-      test('=5+ 2', () => {
-        const input = '=5+ 2'
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
-        expect(result).toBe(7)
       })
 
       test('=5 + -4 * (3 + -1)', () => {
@@ -83,7 +91,12 @@ describe('Interpreter', () => {
       })
     })
 
-    describe('error path', () => {
+    describe('error path no cell references', () => {
+      it('throws error if no input is passed', () => {
+        const interpreter = new Interpreter(location)
+        expect(() => interpreter.interpret()).toThrow()
+      })
+
       test('=5/0', () => {
         const input = '=5/0'
         const interpreter = new Interpreter(location)
@@ -107,6 +120,9 @@ describe('Interpreter', () => {
         expect(result).toBe(ERR_GENERIC)
         expect(interpreter.error).toBeTruthy()
       })
+    })
+
+    xdescribe('happy path cell references', () => {
     })
   })
 })
