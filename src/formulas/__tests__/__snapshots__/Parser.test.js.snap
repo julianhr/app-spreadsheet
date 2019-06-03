@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Parser #parse happy path "=(2+3)*5" 1`] = `
+exports[`Parser #parse happy path arithmitic "=(2+3)*5" 1`] = `
 BinaryOp {
   "_name": "BinaryOp",
   "leftNode": BinaryOp {
@@ -53,7 +53,7 @@ BinaryOp {
 }
 `;
 
-exports[`Parser #parse happy path "=2" 1`] = `
+exports[`Parser #parse happy path arithmitic "=2" 1`] = `
 NumberNode {
   "_name": "NumberNode",
   "numberNode": Token {
@@ -66,7 +66,7 @@ NumberNode {
 }
 `;
 
-exports[`Parser #parse happy path "=2+-3" 1`] = `
+exports[`Parser #parse happy path arithmitic "=2+-3" 1`] = `
 BinaryOp {
   "_name": "BinaryOp",
   "leftNode": NumberNode {
@@ -109,7 +109,7 @@ BinaryOp {
 }
 `;
 
-exports[`Parser #parse happy path "=2+3" 1`] = `
+exports[`Parser #parse happy path arithmitic "=2+3" 1`] = `
 BinaryOp {
   "_name": "BinaryOp",
   "leftNode": NumberNode {
@@ -142,7 +142,7 @@ BinaryOp {
 }
 `;
 
-exports[`Parser #parse happy path "=2+3/10+8" 1`] = `
+exports[`Parser #parse happy path arithmitic "=2+3/10+8" 1`] = `
 BinaryOp {
   "_name": "BinaryOp",
   "leftNode": BinaryOp {
@@ -215,7 +215,86 @@ BinaryOp {
 }
 `;
 
-exports[`Parser #parse happy path "=sum(5)" 1`] = `
+exports[`Parser #parse happy path cells "= A1 +5" 1`] = `
+BinaryOp {
+  "_name": "BinaryOp",
+  "leftNode": CellNode {
+    "_name": "CellNode",
+    "cell": Token {
+      "html": null,
+      "text": "A1",
+      "type": "CELL",
+      "value": null,
+      "whitespace": " ",
+    },
+  },
+  "opNode": Token {
+    "html": null,
+    "text": "+",
+    "type": "PLUS",
+    "value": null,
+    "whitespace": " ",
+  },
+  "rightNode": NumberNode {
+    "_name": "NumberNode",
+    "numberNode": Token {
+      "html": null,
+      "text": "5",
+      "type": "NUMBER",
+      "value": null,
+      "whitespace": "",
+    },
+  },
+}
+`;
+
+exports[`Parser #parse happy path cells "=A1" 1`] = `
+CellNode {
+  "_name": "CellNode",
+  "cell": Token {
+    "html": null,
+    "text": "A1",
+    "type": "CELL",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path cells "=A1+ B2" 1`] = `
+BinaryOp {
+  "_name": "BinaryOp",
+  "leftNode": CellNode {
+    "_name": "CellNode",
+    "cell": Token {
+      "html": null,
+      "text": "A1",
+      "type": "CELL",
+      "value": null,
+      "whitespace": "",
+    },
+  },
+  "opNode": Token {
+    "html": null,
+    "text": "+",
+    "type": "PLUS",
+    "value": null,
+    "whitespace": "",
+  },
+  "rightNode": CellNode {
+    "_name": "CellNode",
+    "cell": Token {
+      "html": null,
+      "text": "B2",
+      "type": "CELL",
+      "value": null,
+      "whitespace": " ",
+    },
+  },
+}
+`;
+
+exports[`Parser #parse happy path formulas "=sum(5)" 1`] = `
 FuncOp {
   "_name": "FuncOp",
   "argNodes": Array [
@@ -240,7 +319,7 @@ FuncOp {
 }
 `;
 
-exports[`Parser #parse happy path "=sum(5, SUM(7,6) ,  (10+5/7))" 1`] = `
+exports[`Parser #parse happy path formulas "=sum(5, SUM(7,6) ,  (10+5/7))" 1`] = `
 FuncOp {
   "_name": "FuncOp",
   "argNodes": Array [
@@ -347,7 +426,7 @@ FuncOp {
 }
 `;
 
-exports[`Parser #parse happy path "=sum(5,6,7)" 1`] = `
+exports[`Parser #parse happy path formulas "=sum(5,6,7)" 1`] = `
 FuncOp {
   "_name": "FuncOp",
   "argNodes": Array [
@@ -386,6 +465,84 @@ FuncOp {
     "html": null,
     "text": "sum",
     "type": "FUNCTION",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path strings "  2" 1`] = `
+TextNode {
+  "_name": "TextNode",
+  "textNode": Token {
+    "html": null,
+    "text": "  2",
+    "type": "TEXT",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path strings "  2+" 1`] = `
+TextNode {
+  "_name": "TextNode",
+  "textNode": Token {
+    "html": null,
+    "text": "  2+",
+    "type": "TEXT",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path strings "  2+3" 1`] = `
+TextNode {
+  "_name": "TextNode",
+  "textNode": Token {
+    "html": null,
+    "text": "  2+3",
+    "type": "TEXT",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path strings "  text" 1`] = `
+TextNode {
+  "_name": "TextNode",
+  "textNode": Token {
+    "html": null,
+    "text": "  text",
+    "type": "TEXT",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path strings " " 1`] = `
+TextNode {
+  "_name": "TextNode",
+  "textNode": Token {
+    "html": null,
+    "text": " ",
+    "type": "TEXT",
+    "value": null,
+    "whitespace": "",
+  },
+}
+`;
+
+exports[`Parser #parse happy path strings "" 1`] = `
+NumberNode {
+  "_name": "NumberNode",
+  "numberNode": Token {
+    "html": null,
+    "text": "0",
+    "type": "NUMBER",
     "value": null,
     "whitespace": "",
   },

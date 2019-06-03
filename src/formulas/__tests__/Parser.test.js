@@ -20,7 +20,7 @@ const toThrowWithMsg = {
 }
 
 function getParser(input) {
-  const lexer = new Lexer(input, GRAMMAR)
+  const lexer = new Lexer(input)
   const tokens = lexer.getTokens()
   return new Parser(tokens)
 }
@@ -28,60 +28,131 @@ function getParser(input) {
 describe('Parser', () => {
   describe('#parse', () => {
     describe('happy path', () => {
-      test('"=2"', () => {
-        const input = '=2'
-        const parser = getParser(input)
-        const ast = parser.parse()
-        expect(ast).toMatchSnapshot()
-      })
+      describe('strings', () => {
+        test('""', () => {
+          const input = ''
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
   
-      test('"=2+3"', () => {
-        const input = '=2+3'
-        const parser = getParser(input)
-        const ast = parser.parse()
-        expect(ast).toMatchSnapshot()
+        test('" "', () => {
+          const input = ' '
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+  
+        test('"  text"', () => {
+          const input = '  text'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+  
+        test('"  2"', () => {
+          const input = '  2'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+  
+        test('"  2+"', () => {
+          const input = '  2+'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+  
+        test('"  2+3"', () => {
+          const input = '  2+3'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
       })
 
-      test('"=2+-3"', () => {
-        const input = '=2+-3'
-        const parser = getParser(input)
-        const ast = parser.parse()
-        expect(ast).toMatchSnapshot()
+      describe('arithmitic', () => {
+        test('"=2"', () => {
+          const input = '=2'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+  
+        test('"=2+3"', () => {
+          const input = '=2+3'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+  
+        test('"=2+-3"', () => {
+          const input = '=2+-3'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+  
+        test('"=2+3/10+8"', () => {
+          const input = '=2+3/10+8'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+    
+        test('"=(2+3)*5"', () => {
+          const input = '=(2+3)*5'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
       })
 
-      test('"=2+3/10+8"', () => {
-        const input = '=2+3/10+8'
-        const parser = getParser(input)
-        const ast = parser.parse()
-        expect(ast).toMatchSnapshot()
-      })
+      describe('cells', () => {
+        test('"=A1"', () => {
+          const input = '=A1'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
   
-      test('"=(2+3)*5"', () => {
-        const input = '=(2+3)*5'
-        const parser = getParser(input)
-        const ast = parser.parse()
-        expect(ast).toMatchSnapshot()
-      })
+        test('"=A1+ B2"', () => {
+          const input = '=A1+ B2'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
   
-      test('"=sum(5)"', () => {
-        const input = '=sum(5)'
-        const parser = getParser(input)
-        const ast = parser.parse()
-        expect(ast).toMatchSnapshot()
+        test('"= A1 +5"', () => {
+          const input = '= A1 +5'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
       })
+
+      describe('formulas', () => {
+        test('"=sum(5)"', () => {
+          const input = '=sum(5)'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
   
-      test('"=sum(5,6,7)"', () => {
-        const input = '=sum(5,6,7)'
-        const parser = getParser(input)
-        const ast = parser.parse()
-        expect(ast).toMatchSnapshot()
-      })
+        test('"=sum(5,6,7)"', () => {
+          const input = '=sum(5,6,7)'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
   
-      test('"=sum(5, SUM(7,6) ,  (10+5/7))"', () => {
-        const input = '=sum(5, SUM(7,6) ,  (10+5/7))'
-        const parser = getParser(input)
-        const ast = parser.parse()
-        expect(ast).toMatchSnapshot()
+        test('"=sum(5, SUM(7,6) ,  (10+5/7))"', () => {
+          const input = '=sum(5, SUM(7,6) ,  (10+5/7))'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
       })
     })
 
