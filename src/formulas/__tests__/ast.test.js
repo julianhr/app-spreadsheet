@@ -1,7 +1,23 @@
-import { NumberNode, FuncOp, BinaryOp } from '../ast'
+import {
+  TextNode,
+  NumberNode,
+  CellNode,
+  FuncOp,
+  BinaryOp,
+  UnaryOp
+} from '../ast'
 import { TOKENS as t } from '../Lexer'
 import Token from '../Token'
 
+
+describe('TextNode', () => {
+  test('#eval', () => {
+    const input = 'testing'
+    const token = new Token(t.TEXT, input)
+    const node = new TextNode(token)
+    expect(node.eval()).toBe(input)
+  })
+})
 
 describe('NumberNode', () => {
   describe('#setTokenValue', () => {
@@ -11,21 +27,30 @@ describe('NumberNode', () => {
       node.setTokenValue()
       expect(node.numberNode.value).toBe(5)
     })
-
-    it('throws error if number is invalid', () => {
-      const token = new Token(t.NUMBER, '?')
-      const node = new NumberNode(token)
-      expect(() => node.setTokenValue()).toThrow()
-    })
   })
 
-  test('#eval', () => {
+  test('#eval happy path', () => {
     const token = new Token(t.NUMBER, '5')
     const node = new NumberNode(token)
     jest.spyOn(node, 'setTokenValue')
 
     expect(node.eval()).toBe(5)
     expect(node.setTokenValue).toHaveBeenCalledTimes(1)
+  })
+
+  test('#eval throws error if number is invalid', () => {
+    const token = new Token(t.NUMBER, '?')
+    const node = new NumberNode(token)
+    expect(() => node.eval()).toThrow()
+  })
+})
+
+xdescribe('CellNode', () => {
+  test('#eval', () => {
+    const input = 'A1'
+    const token = new Token(t.CELL, input)
+    const node = new CellNode(token)
+    expect(node.eval()).toBe(input)
   })
 })
 
@@ -52,6 +77,20 @@ describe('FuncOp', () => {
 
     expect(node.eval(args)).toBe(10)
     expect(node.getFunction).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('UnaryOp', () => {
+  test('#eval', () => {
+    let token, node
+
+    token = new Token(t.PLUS, '+')
+    node = new UnaryOp(token)
+    expect(node.eval(5)).toBe(5)
+
+    token = new Token(t.MINUS, '-')
+    node = new UnaryOp(token)
+    expect(node.eval(5)).toBe(-5)
   })
 })
 
@@ -95,6 +134,14 @@ describe('BinaryOp', () => {
       const right = jest.fn()
       const node = new BinaryOp(left, operator, right)
       expect(node.eval(10, 5)).toBe(50)
+    })
+
+    it('throws error if token is not recognized', () => {
+      const operator = new Token(t.TEXT, 'test')
+      const left = jest.fn()
+      const right = jest.fn()
+      const node = new BinaryOp(left, operator, right)
+      expect(() => node.eval(10, 5)).toThrow()
     })
   })
 })

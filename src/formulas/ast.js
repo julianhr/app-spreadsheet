@@ -4,15 +4,29 @@ import { isNumber } from '~/library/utils'
 
 
 class AST {
+  constructor(name) {
+    this._name = name
+  }
+
   eval() {
     throw new Error('Implement method.')
   }
 }
 
+class TextNode extends AST {
+  constructor(textNode) {
+    super('TextNode')
+    this.textNode = textNode
+  }
+
+  eval() {
+    return this.textNode.text
+  }
+}
+
 class NumberNode extends AST {
   constructor(numberNode) {
-    super()
-    this._name = 'NumberNode'
+    super('NumberNode')
     this.numberNode = numberNode
   }
 
@@ -31,19 +45,24 @@ class NumberNode extends AST {
 
   setTokenValue() {
     const value = parseFloat(this.numberNode.text)
+    this.numberNode.value = value
+  }
+}
 
-    if (isNaN(value)) {
-      throw new Error(`Invalid number "${this.numberNode.text}"`)
-    } else {
-      this.numberNode.value = value
-    }
+class CellNode extends AST {
+  constructor(cell) {
+    super('CellNode')
+    this.cell = cell
+  }
+
+  eval() {
+    throw new Error('Not yet implemented')
   }
 }
 
 class UnaryOp extends AST {
   constructor(opNode, expr) {
-    super()
-    this._name = 'UnaryOp'
+    super('UnaryOp')
     this.opNode = opNode
     this.expr = expr
   }
@@ -53,24 +72,13 @@ class UnaryOp extends AST {
       return evaluatedExpr
     } else if (this.opNode.type === t.MINUS) {
       return -evaluatedExpr
-    } else {
-      throw new Error('Unary operator is not "+" or "-"')
     }
-  }
-}
-
-class CellNode extends AST {
-  constructor(cell) {
-    super()
-    this._name= 'CellNode'
-    this.cell = cell
   }
 }
 
 class FuncOp extends AST {
   constructor(funcNode, argNodes) {
-    super()
-    this._name = 'FuncOp'
+    super('FuncOp')
     this.funcNode = funcNode
     this.argNodes = argNodes
   }
@@ -93,8 +101,7 @@ class FuncOp extends AST {
 
 class BinaryOp extends AST {
   constructor(leftNode, opNode, rightNode) {
-    super()
-    this._name = 'BinaryOp'
+    super('BinaryOp')
     this.leftNode = leftNode
     this.opNode = opNode
     this.rightNode = rightNode
@@ -121,6 +128,7 @@ class BinaryOp extends AST {
 }
 
 export {
+  TextNode,
   NumberNode,
   CellNode,
   BinaryOp,

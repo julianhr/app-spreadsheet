@@ -43,14 +43,14 @@ describe('Rule', () => {
 describe('Lexer', () => {
   describe('#consume', () => {
     it('increases index if index < input length and sets char', () => {
-      const lexer = new Lexer('test', GRAMMAR)
+      const lexer = new Lexer('test')
       lexer.consume()
       expect(lexer.index).toBe(1)
       expect(lexer.char).toBe('e')
     })
 
     it('sets EOF if index reaches end of input', () => {
-      const lexer = new Lexer('hi', GRAMMAR)
+      const lexer = new Lexer('hi')
       lexer.consume()
       lexer.consume()
       expect(lexer.index).toBe(2)
@@ -63,19 +63,26 @@ describe('Lexer', () => {
   })
 
   test('#isEOF', () => {
-    const input = '=5'
-    const lexer = new Lexer(input, GRAMMAR)
+    let input, lexer
 
+    input = '=5'
+    lexer = new Lexer(input)
     expect(lexer.isEOF()).toBe(false)
     Array(2).fill('').forEach( _ => lexer.consume() ) // consume all tokens
     expect(lexer.isEOF()).toBe(true)
     lexer.nextToken()
     expect(lexer.isEOF()).toBe(true)
+    
+    input = ''
+    lexer = new Lexer(input)
+    Array(1).fill('').forEach( _ => lexer.consume() ) // consume all tokens
+    expect(lexer.nextToken().type).toBe(t.EOF)
+    expect(lexer.isEOF()).toBe(true)
   })
 
   test('#isWhitespace', () => {
     const input = '=5 + 10 '
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     const cases = [
       false, // =
       false, // 5
@@ -103,7 +110,7 @@ describe('Lexer', () => {
 
   test('#isSeparator', () => {
     const input = '=5+(8)+P4/3-8*7 +suM(4)'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     const cases = [
       false, // =
       false, // 5
@@ -146,7 +153,7 @@ describe('Lexer', () => {
 
   test('#getWhitespace', () => {
     const input = '= 5  +10 '
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
 
     lexer.consume()
     expect(lexer.getWhitespace()).toBe(' ')
@@ -158,7 +165,7 @@ describe('Lexer', () => {
 
   test('token EOF', () => {
     const input = '=5'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     let token, expected
 
     Array(2).fill('').forEach(_ => lexer.nextToken() ) // consume all tokens
@@ -172,7 +179,7 @@ describe('Lexer', () => {
 
   test('token UNKNOWN', () => {
     const input = '=ñu /( ?invalid)'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     let token, expected
 
     Array(1).fill('').forEach(_ => lexer.nextToken() ) // consume all tokens
@@ -186,15 +193,37 @@ describe('Lexer', () => {
     expect(token._repr()).toEqual(expected)
   })
 
-  test('token EQUALS', () => {
+  test('token TEXT', () => {
     const cases = [
-      ['=5+8', ''],
-      ['  = 5 +8 ', '  '],
+      '  ',
+      '.',
+      'hi',
+      ' hi  ',
+      '+1',
+      ' 1',
+      ' =2',
+      ' =2+3',
     ]
 
-    cases.forEach(([input, whitespace]) => {
-      let lexer = new Lexer(input, GRAMMAR)
-      const expected = { type: t.EQUALS, text: '=', whitespace }
+    for (let input of cases) {
+      const lexer = new Lexer(input)
+      const expected = { type: t.TEXT, text: input, whitespace: '' }
+      const tokens = lexer.getTokens()
+
+      expect(tokens.length).toBe(1)
+      expect(tokens[0]._repr()).toEqual(expected)
+    }
+  })
+
+  test('token EQUALS', () => {
+    const cases = [
+      '=5+8',
+      '= 5 +8 ',
+    ]
+
+    cases.forEach(input => {
+      let lexer = new Lexer(input)
+      const expected = { type: t.EQUALS, text: '=', whitespace: '' }
       const token = lexer.nextToken()
       expect(token._repr()).toEqual(expected)
     })
@@ -203,7 +232,7 @@ describe('Lexer', () => {
   test('token COMMA', () => {
     let token, expected
     const input = '=SUM(5  ,6 ,7,8)'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
 
     Array(4).fill('').forEach(_ => lexer.nextToken() ) // skip to token
     token = lexer.nextToken()
@@ -224,7 +253,7 @@ describe('Lexer', () => {
   test('token LPAREN', () => {
     let token, expected
     const input = '=SUM(5) + (6+  (7))'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
 
     Array(2).fill('').forEach(_ => lexer.nextToken() ) // skip to token
     token = lexer.nextToken()
@@ -244,7 +273,7 @@ describe('Lexer', () => {
 
   test('token RPAREN', () => {
     const input = '=(5) + 8+(5  ) +8'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     let token, expected
 
     Array(3).fill('').forEach(_ => lexer.nextToken() ) // skip to token
@@ -261,7 +290,7 @@ describe('Lexer', () => {
   test('token COLON', () => {
     let token, expected
     const input = '=SUM(B2:D4)*sum(BC45  : Z5)'
-    let lexer = new Lexer(input, GRAMMAR)
+    let lexer = new Lexer(input)
 
     Array(4).fill('').forEach(_ => lexer.nextToken() ) // skip to token
     token = lexer.nextToken()
@@ -276,7 +305,7 @@ describe('Lexer', () => {
 
   test('token PLUS', () => {
     const input = '=5+3  + 3'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     let token, expected
 
     Array(2).fill('').forEach(_ => lexer.nextToken() ) // skip to token
@@ -292,7 +321,7 @@ describe('Lexer', () => {
 
   test('token MINUS', () => {
     const input = '=5-3  - 7'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     let token, expected
 
     Array(2).fill('').forEach(_ => lexer.nextToken() ) // skip to token
@@ -308,7 +337,7 @@ describe('Lexer', () => {
 
   test('token DIV', () => {
     const input = '=5/3  / 7'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     let token, expected
 
     Array(2).fill('').forEach(_ => lexer.nextToken() ) // skip to token
@@ -324,7 +353,7 @@ describe('Lexer', () => {
 
   test('token MULT', () => {
     const input = '=5*3  * 8'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     let token, expected
 
     Array(2).fill('').forEach(_ => lexer.nextToken() ) // skip to token
@@ -339,9 +368,23 @@ describe('Lexer', () => {
   })
 
   describe('token NUMBER', () => {
+    it('returns 0 if string is empty', () => {
+      const input = ''
+      const lexer = new Lexer(input)
+      const expected = { type: t.NUMBER, text: '0', whitespace: '' }
+      expect(lexer.nextToken()._repr()).toEqual(expected)
+    })
+
+    it('returns digit if string is a number', () => {
+      const input = '47'
+      const lexer = new Lexer(input)
+      const expected = { type: t.NUMBER, text: '47', whitespace: '' }
+      expect(lexer.nextToken()._repr()).toEqual(expected)
+    })
+
     it('parses integers', () => {
       const input = '=5 + 58 /(  23)'
-      const lexer = new Lexer(input, GRAMMAR)
+      const lexer = new Lexer(input)
       let expected
 
       Array(1).fill('').forEach(_ => lexer.nextToken() ) // skip to token
@@ -359,8 +402,8 @@ describe('Lexer', () => {
 
     it('parses floats', () => {
       let expected
-      const input = '=5. + 58.3 /(  .23)/ 0.13.2.6'
-      const lexer = new Lexer(input, GRAMMAR)
+      const input = '=5. + 58.3 /(  .23)'
+      const lexer = new Lexer(input)
       Array(1).fill('').forEach(_ => lexer.nextToken() ) // skip to token
       expected = { type: t.NUMBER, text: '5.', whitespace: '' }
       expect(lexer.nextToken()._repr()).toEqual(expected)
@@ -372,16 +415,34 @@ describe('Lexer', () => {
       Array(2).fill('').forEach(_ => lexer.nextToken() ) // skip to token
       expected = { type: t.NUMBER, text: '.23', whitespace: '  ' }
       expect(lexer.nextToken()._repr()).toEqual(expected)
+    })
 
-      Array(2).fill('').forEach(_ => lexer.nextToken() ) // skip to token
-      expected = { type: t.NUMBER, text: '0.13.2.6', whitespace: ' ' }
+    it('includes malformed float numbers', () => {
+      let expected
+      const input = '=0.13.2.6+.9.+..5'
+      const lexer = new Lexer(input)
+
+      Array(1).fill('').forEach(_ => lexer.nextToken() ) // skip to token
+      expected = { type: t.NUMBER, text: '0.13.2.6', whitespace: '' }
+      expect(lexer.nextToken()._repr()).toEqual(expected)
+
+      expected = { type: t.PLUS, text: '+', whitespace: '' }
+      expect(lexer.nextToken()._repr()).toEqual(expected)
+
+      expected = { type: t.NUMBER, text: '.9.', whitespace: '' }
+      expect(lexer.nextToken()._repr()).toEqual(expected)
+
+      expected = { type: t.PLUS, text: '+', whitespace: '' }
+      expect(lexer.nextToken()._repr()).toEqual(expected)
+
+      expected = { type: t.NUMBER, text: '..5', whitespace: '' }
       expect(lexer.nextToken()._repr()).toEqual(expected)
     })
   })
 
   test('token CELL', () => {
     const input = '=5+B2 +  c3/(P3* cA25)'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     let expected, token
 
     Array(3).fill('').forEach(_ => lexer.nextToken() ) // skip to token
@@ -407,7 +468,7 @@ describe('Lexer', () => {
 
   test('token FUNCTION', () => {
     const input = '=5+SUM( sUm( 5)/  sum(5,8,9))'
-    const lexer = new Lexer(input, GRAMMAR)
+    const lexer = new Lexer(input)
     let expected, token
 
     Array(3).fill('').forEach(_ => lexer.nextToken()) // skip to token
@@ -427,9 +488,19 @@ describe('Lexer', () => {
   })
 
   describe('#getTokens', () => {
+    test('', () => {
+      const input = ''
+      const lexer = new Lexer(input)
+      const tokens = lexer.getTokens()
+      const token = new Token(t.NUMBER, '0', '')
+
+      expect(tokens.length).toBe(1)
+      expect(tokens[0]._repr()).toEqual(token._repr())
+    })
+
     test('=2', () => {
       const input = '=2'
-      const lexer = new Lexer(input, GRAMMAR)
+      const lexer = new Lexer(input)
       const tokens = lexer.getTokens()
       const expected = [
         new Token(t.EQUALS, '=', ''),
@@ -437,13 +508,13 @@ describe('Lexer', () => {
       ]
 
       expected.forEach((token, i) => {
-        expect(token._repr()).toEqual(tokens[i]._repr())
+        expect(tokens[i]._repr()).toEqual(token._repr())
       })
     })
 
     test('=2 *  (4+5 )', () => {
       const input = '=2 *  (4+5 ) '
-      const lexer = new Lexer(input, GRAMMAR)
+      const lexer = new Lexer(input)
       const tokens = lexer.getTokens()
       const expected = [
         new Token(t.EQUALS, '=', ''),
@@ -461,36 +532,32 @@ describe('Lexer', () => {
       })
     })
 
-    test('=5+P7 /  SUM(  6,7, 8) * ( 125.2 / 58.45.4)', () => {
-      const input = '=5+P7 /  SUM(  6,7, 8) * ( 125.2 / 58.45.4)'
-      const lexer = new Lexer(input, GRAMMAR)
+    test('=5+ 2.5/(9.25.)+sum( .84.5, 4)', () => {
+      const input = '=5+ 2.5/(9.25.)+sum( .84.5, 4)'
+      const lexer = new Lexer(input)
       const expected = [
         new Token(t.EQUALS, '=', ''),
         new Token(t.NUMBER, '5', ''),
         new Token(t.PLUS, '+', ''),
-        new Token(t.CELL, 'P7', ''),
-        new Token(t.DIV, '/', ' '),
-        new Token(t.FUNCTION, 'SUM', '  '),
+        new Token(t.NUMBER, '2.5', ' '),
+        new Token(t.DIV, '/', ''),
         new Token(t.LPAREN, '(', ''),
-        new Token(t.NUMBER, '6', '  '),
-        new Token(t.COMMA, ',', ''),
-        new Token(t.NUMBER, '7', ''),
-        new Token(t.COMMA, ',', ''),
-        new Token(t.NUMBER, '8', ' '),
+        new Token(t.NUMBER, '9.25.', ''),
         new Token(t.RPAREN, ')', ''),
-        new Token(t.MULT, '*', ' '),
-        new Token(t.LPAREN, '(', ' '),
-        new Token(t.NUMBER, '125.2', ' '),
-        new Token(t.DIV, '/', ' '),
-        new Token(t.NUMBER, '58.45.4', ' '),
+        new Token(t.PLUS, '+', ''),
+        new Token(t.FUNCTION, 'sum', ''),
+        new Token(t.LPAREN, '(', ''),
+        new Token(t.NUMBER, '.84.5', ' '),
+        new Token(t.COMMA, ',', ''),
+        new Token(t.NUMBER, '4', ' '),
         new Token(t.RPAREN, ')', ''),
       ]
       const tokens = lexer.getTokens()
-  
+
       expect(tokens.length).toEqual(expected.length)
-  
+
       expected.forEach((token, i) => {
-        expect(token._repr()).toEqual(tokens[i]._repr())
+        expect(tokens[i]._repr()).toEqual(token._repr())
       })
     })
   })

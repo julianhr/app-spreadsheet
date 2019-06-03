@@ -1,28 +1,34 @@
 import { TOKENS as t } from './Lexer'
-import { NumberNode, BinaryOp, UnaryOp, FuncOp } from './ast'
+import { TextNode, NumberNode, CellNode, BinaryOp, UnaryOp, FuncOp } from './ast'
 
 
 class Parser {
   constructor(tokens) {
     this.index = 0
     this.tokens = tokens
-    this.curr = tokens[this.index]
-    this.depth = 0
+    this.curr = this.tokens[0]
+    this.ast = null
   }
 
   parse() {
-    this.equals()
-    const root = this.expr()
+    switch (this.peekType()) {
+      case t.TEXT:
+        this.ast = this.text()
+        break
+      case t.NUMBER:
+        this.ast = this.number()
+        break
+      default:
+        this.equals()
+        this.ast = this.expr()
+        break
+    }
 
     if (this.curr !== null) {
       throw new Error(`Unexpected term at index ${this.index}: "${this.curr.text}"`)
     }
 
-    if (this.depth !== 0) {
-      throw new Error('Unbalanced expression')
-    }
-
-    return root
+    return this.ast
   }
 
   expr() {
@@ -56,7 +62,8 @@ class Parser {
   }
 
   factor() {
-    // factor : LPAREN expr RPAREN
+    // factor : ( PLUS | MINUS ) ( NUMBER | CELL )
+    //          | LPAREN expr RPAREN
     //          | FUNCTION LPAREN list RPAREN
     switch (this.peekType()) {
       case t.PLUS:
@@ -64,6 +71,8 @@ class Parser {
         return this.unaryOp()
       case t.NUMBER:
         return this.number()
+      case t.CELL:
+        return this.cell()
       case t.LPAREN:
         return this.enclosedExpr()
       case t.FUNCTION:
@@ -73,6 +82,18 @@ class Parser {
       default:
         throw new Error('Missing factor')
     }
+  }
+
+  text() {
+    let node
+
+    if (this.peekType() !== t.TEXT) {
+      throw new Error('Missing string')
+    }
+
+    node = new TextNode(this.curr)
+    this.consume()
+    return node
   }
 
   number() {
@@ -99,6 +120,16 @@ class Parser {
     this.lparen()
     const node = this.expr()
     this.rparen()
+    return node
+  }
+
+  cell() {
+    if (this.peekType() !== t.CELL) {
+      throw new Error('Missing cell node')
+    }
+
+    const node = new CellNode(this.curr)
+    this.consume()
     return node
   }
 
@@ -143,7 +174,6 @@ class Parser {
       throw new Error('Missing left parenthesis')
     }
 
-    this.depth += 1
     this.consume()
   }
 
@@ -152,7 +182,6 @@ class Parser {
       throw new Error('Missing right parenthesis')
     }
 
-    this.depth -= 1
     this.consume()
   }
 
@@ -174,10 +203,6 @@ class Parser {
     } else {
       this.curr = null
     }
-  }
-
-  isUnbalanced() {
-    return !(this.index === this.tokens.length && this.depth === 0)
   }
 
   peekType() {
