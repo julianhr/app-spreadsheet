@@ -1,36 +1,36 @@
-import { APP_STORE } from '~/Root'
+import appStore from '~/reducers/'
+import { clearCellData, replaceCellData } from '~/actions/tableActions'
 
 
 class ReduxConnect {
-  constructor() {
-    this.state = APP_STORE.getState()
-    this.table = this.state.table
-    this.global = this.state.global
+  constructor(store=appStore) {
+    const { global: globalState } = store.getState()
+    this.store = store
+    this.rows = globalState.rows
+    this.columns = globalState.columns
   }
 
-  get rows() {
-    return this.global.rows
+  get table() {
+    return this.store.getState().table
   }
 
-  get columns() {
-    return this.global.columns
+  get locations() {
+    return Object.keys(this.table)
   }
 
-  getCellFormulaRefs(location) {
-    return this.table[location].cellRefs
+  getCellResult(location) {
+    const data = this.table[location]
+    return data && data.result
   }
 
-  getCellFormula(location) {
-    return this.table[location].formula
+  replaceCellData(location, entered, result) {
+    this.store.dispatch(replaceCellData(location, entered, result))
   }
 
-  getCellValue(location) {
-    return this.table[location].value
-  }
-
-  getCellIsFormulaValid(location) {
-    return this.table[location].isFormulaValid
+  clearCell(location) {
+    this.store.dispatch(clearCellData(location))
   }
 }
 
 export default ReduxConnect
+export { appStore }

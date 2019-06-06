@@ -4,7 +4,7 @@ import { render, fireEvent, cleanup } from 'react-testing-library'
 
 import ConnectedInputData, { InputData } from '../InputData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
-import appStoreGen from '~/reducers'
+import { appStoreGen } from '~/reducers'
 import { setCellData } from '~/actions/tableActions'
 import {
   ERR_DIVISION_BY_ZERO,
@@ -141,7 +141,7 @@ describe('InputData', () => {
     test('stores value and calls #onCommit', () => {
       const [_, store] = renderApp(testProps)
       const entered = 'test value'
-      const cellData = { entered, result: entered, isEnteredValid: true }
+      const cellData = { entered, result: entered }
 
       testProps.onCommit.mockReset()
       const input = document.querySelector('[data-cell="input"]')

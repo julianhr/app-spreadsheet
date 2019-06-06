@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { connect }  from 'react-redux'
+import { connect } from 'react-redux'
 
-import Interpreter from '~/formulas'
 import { setCellData, clearCellData } from '~/actions/tableActions'
-import { isNumber } from '~/library/utils'
 
 
 const Input = styled.input`
@@ -50,30 +48,15 @@ export class InputData extends React.PureComponent {
     input.scrollLeft = input.scrollWidth
   }
 
-  setNewValue(rawInputValue) {
-    const inputValue = rawInputValue.trim()
+  setNewValue(inputValue) {
     const { location } = this.props
-    let isFormula, result
-    let isEnteredValid = true
 
-    if (inputValue.length === 0) {
+    if (this.isWhitespace(inputValue)) {
       this.props.clearCellData(location)
       return
     }
 
-    isFormula = inputValue[0] === '='
-
-    if (isFormula) {
-      const interpreter = new Interpreter(this.props.location)
-      result = interpreter.interpret(inputValue)
-      isEnteredValid = interpreter.errors !== null
-    } else if (isNumber(inputValue)) {
-      result = parseFloat(inputValue)
-    } else {
-      result = inputValue
-    }
-
-    this.props.setCellData(location, inputValue, isEnteredValid, result)
+    this.props.setCellData(location, inputValue)
   }
 
   handleOnKeyDown(event) {
@@ -92,6 +75,10 @@ export class InputData extends React.PureComponent {
   handleOnBlur(event) {
     this.setNewValue(event.target.value)
     this.props.onCommit()
+  }
+
+  isWhitespace(text) {
+    return text.length === 0 || Boolean(text.match(/^\s+$/))
   }
 
   render() {
@@ -115,6 +102,7 @@ function mapStateToProps(state, ownProps) {
   const entered = cell ? cell.entered : ''
   return { entered }
 }
+
 const mapDispatchToProps = { setCellData, clearCellData }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputData)

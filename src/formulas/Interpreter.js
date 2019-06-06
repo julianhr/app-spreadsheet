@@ -1,8 +1,8 @@
 import { Lexer } from './Lexer'
-import Parser from './Parser'
 import { parseLocation } from '~/library/utils'
-import ReduxConnect from './ReduxConnect'
 import graph from '~/formulas/graph'
+import Parser from './Parser'
+import ReduxConnect from './ReduxConnect'
 
 
 const ERR_DIVISION_BY_ZERO = '#DIV/0!'
@@ -12,63 +12,53 @@ const ERR_GENERIC = '#ERROR!'
 class Interpreter {
   constructor(location) {
     this.location = location
-    this.inNodes = new Set()
-    this.state = new ReduxConnect()
-    this.tokens = null
-    this.ast = null
-    this.result = null
     this.error = null
     this.cache = {}
+    this.result = null
+    this.state = new ReduxConnect()
   }
 
   interpret(input) {
-    let vertexData
+    const vertex = graph.addVertex(this.location, input)
+    let lexer, parser
 
-    if (input === undefined) {
-      throw new Error('Missing input argument')
+    try {
+      lexer = new Lexer(input)
+      parser = new Parser( lexer.getTokens() )
+      vertex.ast = parser.parse()
+      graph.recalculate(this.location)
+      this.result = vertex.result
+    } catch (error) {
+      this.error = vertex.error = error
+      this.result = vertex.result = this.errorResponse()
+      return this.result
     }
 
-    vertexData = {
-      hasError: false,
-      inNodes: new Set(),
+    this.error = vertex.error
+    return this.result
+  }
+
+  visit(location) {
+    const vertex = graph.getVertex(location)
+
+    if (graph.isResolved(location)) {
+      return vertex.result
+    }
+
+    graph.markVisited(location)
+
+    if (!vertex.ast) {
+      return vertex.result
     }
 
     try {
-      const lexer = new Lexer(input)
-      this.tokens = lexer.getTokens()
-      const parser = new Parser(this.tokens)
-      this.ast = vertexData.ast = parser.parse()
-      this.result = vertexData.result = this._visit(this.ast)
-      graph.addVertex(this.location, vertexData)
+      this.result = vertex.result = this._visit(vertex.ast)
     } catch (error) {
-      this.result = null
-      this.error = error
-      vertexData.hasError = true
-      graph.addVertex(this.location, vertexData)
+      this.error = vertex.error = error
+      this.result = vertex.result = this.errorResponse()
+      throw error
     }
 
-    if (this.error) {
-      return this.errorResponse()
-    } else {
-      return this.result
-    }
-  }
-
-  errorResponse() {
-    const { message: errorMsg } = this.error
-
-    if (errorMsg.match(/division by zero/i)) {
-      return ERR_DIVISION_BY_ZERO
-    } else if (errorMsg.match(/cirular reference/i)) {
-      return ERR_CIRCULAR_REFERENCE
-    } else {
-      return ERR_GENERIC
-    }
-  }
-
-  visit(ast) {
-    this.ast = ast
-    this.result = this._visit(ast)
     return this.result
   }
 
@@ -78,14 +68,14 @@ class Interpreter {
         return this.NumberNode(node)
       case 'CellNode':
         return this.CellNode(node)
+      case 'TextNode':
+        return this.TextNode(node)
       case 'FuncOp':
         return this.FuncOp(node)
       case 'BinaryOp':
         return this.BinaryOp(node)
       case 'UnaryOp':
         return this.UnaryOp(node)
-      case 'TextNode':
-        return this.TextNode(node)
       default:
         const nodeName = node._name || (node.constructor || {}).name
         throw new Error(`Unrecognized AST node ${nodeName}`)
@@ -101,25 +91,23 @@ class Interpreter {
   }
 
   CellNode(node) {
-    const { text: location } = node.cell
-    let interpreter, ast, result
+    const otherLocation = node.location
+    let result
 
-    if (location === this.location) {
-      throw new Error('Circular reference')
-    }
-
-    if (!this.isLocationValid(location)) {
+    if (!this.isLocationValid(otherLocation)) {
       throw new Error('Location out of bounds')
     }
 
-    if (this.cache[location] !== undefined) {
-      return this.cache[location]
+    if (this.cache[otherLocation] !== undefined) {
+      return this.cache[otherLocation]
     }
 
-    interpreter = new Interpreter(location)
-    ast = graph[location].ast
-    result = interpreter.visit(ast)
-    this.cache[location] = result
+    if (graph.isVisited(otherLocation)) {
+      throw new Error('Circular reference')
+    }
+
+    result = this.dfsCellVisit(otherLocation)
+    this.cache[otherLocation] = result
     return result
   }
 
@@ -152,6 +140,30 @@ class Interpreter {
     if (colIndex >= this.state.columns) { return false }
     if (rowIndex >= this.state.rows) { return false }
     return true
+  }
+
+  dfsCellVisit(otherLocation) {
+    const interpreter = new Interpreter(otherLocation)
+    let result = 0
+
+    // cell has a value
+    if (graph.hasVertex(otherLocation)) {
+      result = interpreter.visit(otherLocation)
+    }
+
+    return result
+  }
+
+  errorResponse() {
+    const { message: errorMsg } = this.error
+
+    if (errorMsg.match(/division by zero/i)) {
+      return ERR_DIVISION_BY_ZERO
+    } else if (errorMsg.match(/circular reference/i)) {
+      return ERR_CIRCULAR_REFERENCE
+    } else {
+      return ERR_GENERIC
+    }
   }
 }
 

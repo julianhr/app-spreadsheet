@@ -1,4 +1,4 @@
-import appStoreGen from '~/reducers/'
+import { appStoreGen } from '~/reducers/'
 import * as actions from '~/actions/globalActions'
 
 

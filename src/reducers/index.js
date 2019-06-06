@@ -4,7 +4,7 @@ import globalReducer from './globalReducer'
 import tableReducer from './tableReducer'
 
 
-const appStoreFn = () => (
+const appStoreGen = () => (
   configureStore({
     reducer: {
       global: globalReducer,
@@ -13,5 +13,8 @@ const appStoreFn = () => (
   })
 )
 
+const appStore = appStoreGen()
 
-export default appStoreFn
+
+export default appStore
+export { appStoreGen }

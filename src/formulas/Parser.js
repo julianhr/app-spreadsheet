@@ -8,6 +8,7 @@ class Parser {
     this.tokens = tokens
     this.curr = this.tokens[0]
     this.ast = null
+    this.hasCellRefs = false
   }
 
   parse() {
@@ -129,6 +130,7 @@ class Parser {
     }
 
     const node = new CellNode(this.curr)
+    this.hasCellRefs = true
     this.consume()
     return node
   }

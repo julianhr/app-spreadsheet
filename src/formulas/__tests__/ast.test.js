@@ -45,12 +45,12 @@ describe('NumberNode', () => {
   })
 })
 
-xdescribe('CellNode', () => {
-  test('#eval', () => {
+describe('CellNode', () => {
+  test('get #location', () => {
     const input = 'A1'
     const token = new Token(t.CELL, input)
     const node = new CellNode(token)
-    expect(node.eval()).toBe(input)
+    expect(node.location).toBe('A-1')
   })
 })
 
