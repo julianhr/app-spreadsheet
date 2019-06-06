@@ -4,7 +4,7 @@ import { render, fireEvent, cleanup } from 'react-testing-library'
 import * as xstate from 'xstate'
 
 import { setCellData } from '~/actions/tableActions'
-import appStoreGen from '~/reducers'
+import { appStoreGen } from '~/reducers'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import CellData from '../CellData'
 
@@ -19,7 +19,11 @@ const testProps = {
 
 function createApp(props) {
   const appStore = appStoreGen()
-  const wrapper = create(<MockApp customStore={appStore}><CellData {...props} /></MockApp>)
+  const wrapper = create(
+    <MockApp customStore={appStore}>
+      <CellData {...props} />
+    </MockApp>
+  )
   const instance = wrapper.root.findByType(CellData).instance
   return [wrapper, instance]
 }
@@ -49,9 +53,8 @@ describe('CellData', () => {
     it('displays input field with current result value result tag is double-clicked', async () => {
       const { location } = testProps
       const entered = '5'
-      const result = 5
       const store = appStoreGen()
-      await store.dispatch(setCellData(location, entered, true, result))
+      await store.dispatch(setCellData(location, entered))
       renderApp(testProps, store)
       const resultTag = document.querySelector(`[data-location="${testProps.location}"]`)
 
@@ -67,9 +70,8 @@ describe('CellData', () => {
     it('displays input field with empty field', async () => {
       const { location } = testProps
       const entered = 'test entered'
-      const result = 'test result'
       const store = appStoreGen()
-      await store.dispatch(setCellData(location, entered, true, result))
+      await store.dispatch(setCellData(location, entered))
       renderApp(testProps, store)
       const tag = document.querySelector(`[data-location="${testProps.location}"]`)
 

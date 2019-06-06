@@ -4,7 +4,7 @@ import { render, fireEvent, cleanup } from 'react-testing-library'
 
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import ConnectedTable, { Table } from '../Table'
-import appStoreGen from '~/reducers'
+import { appStoreGen } from '~/reducers'
 import { sleep } from '~/library/utils'
 
 

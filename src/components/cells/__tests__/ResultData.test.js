@@ -5,7 +5,7 @@ import emotionSerializer from 'jest-emotion'
 
 import ConnectedResultData, { ResultData } from '../ResultData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
-import appStoreGen from '~/reducers'
+import { appStoreGen } from '~/reducers'
 import { setCellData } from '~/actions/tableActions'
 
 
