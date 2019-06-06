@@ -50,13 +50,22 @@ class NumberNode extends AST {
 }
 
 class CellNode extends AST {
-  constructor(cell) {
+  constructor(token) {
     super('CellNode')
-    this.cell = cell
+    token.value = this.getCellLabel(token)
+    this.cell = token
   }
 
-  eval() {
-    throw new Error('Not yet implemented')
+  get location() {
+    return this.cell.value
+  }
+
+  getCellLabel(token) {
+    const { text } = token
+    const { index } = text.match(/\d+/)
+    const col = text.slice(0, index).toUpperCase()
+    const row = text.slice(index)
+    return `${col}-${row}`
   }
 }
 
