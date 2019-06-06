@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReduxConnect #replaceCellData 1`] = `
+Object {
+  "B-2": Object {
+    "entered": "=A1+3",
+    "result": 3,
+  },
+}
+`;
+
+exports[`ReduxConnect #replaceCellData 2`] = `
+Object {
+  "B-2": Object {
+    "entered": "=c5/7",
+    "result": 0,
+  },
+}
+`;
+
+exports[`ReduxConnect get #table 1`] = `
+Object {
+  "A-1": Object {
+    "entered": "7",
+    "result": 7,
+  },
+  "B-2": Object {
+    "entered": "=A1+3",
+    "result": 10,
+  },
+}
+`;
+
+exports[`ReduxConnect instantiation 1`] = `
+ReduxConnect {
+  "columns": 6,
+  "rows": 14,
+  "store": Object {
+    "dispatch": [Function],
+    "getState": [Function],
+    "replaceReducer": [Function],
+    "subscribe": [Function],
+    Symbol(observable): [Function],
+  },
+}
+`;
