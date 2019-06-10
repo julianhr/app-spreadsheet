@@ -2,7 +2,7 @@
 
 exports[`InputData functional tests displays default value if replaceValue is false 1`] = `
 <input
-  class="css-p19rxp-Input ep2oxkq0"
+  class="css-1obixtf-Input ep2oxkq0"
   data-cell="input"
   data-location="B-2"
   value="test entered"
@@ -11,7 +11,7 @@ exports[`InputData functional tests displays default value if replaceValue is fa
 
 exports[`InputData functional tests will not display default value if replaceValue is true 1`] = `
 <input
-  class="css-p19rxp-Input ep2oxkq0"
+  class="css-1obixtf-Input ep2oxkq0"
   data-cell="input"
   data-location="B-2"
   value=""

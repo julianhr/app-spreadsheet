@@ -32,7 +32,11 @@ const testProps = {
 
 const createApp = (props) => {
   jest.spyOn(InputData.prototype, 'componentDidMount').mockReturnValueOnce('mocked cdm')
-  const wrapper = create(<MockApp><InputData {...props} /></MockApp>)
+  const wrapper = create(
+    <MockApp>
+      <InputData {...props} />
+    </MockApp>
+  )
   const { instance } = wrapper.root.findByType(InputData)
   return [wrapper, instance]
 }
@@ -119,21 +123,46 @@ describe('InputData', () => {
       expect(testProps.onCommit).toHaveBeenCalledTimes(1)
     })
 
-    test('keydown event does not bubble unless key is "Enter" or "Escape"', () => {
-      const events = 'b Enter 2 , t Escape E s 5'.split(' ')
-      const spyKeyDown = jest.fn()
-      const Listener = ({ children }) => <div onKeyDown={spyKeyDown}>{children}</div>
-      render(
-        <MockApp>
-          <Listener>
-            <InputData {...testProps}  />
-          </Listener>
-        </MockApp>
-      )
-      const input = document.querySelector('[data-cell="input"]')
+    describe('bubbling', () => {
+      describe('Function suggestions not displayed', () => {
+        test('only if key is "Enter" or "Escape"', () => {
+          const events = 'b Enter 2 , t Escape E s 5'.split(' ')
+          const spyKeyDown = jest.fn()
+          const Listener = ({ children }) => <div onKeyDown={spyKeyDown}>{children}</div>
+          render(
+            <MockApp>
+              <Listener>
+                <InputData {...testProps}  />
+              </Listener>
+            </MockApp>
+          )
+          const input = document.querySelector('[data-cell="input"]')
+    
+          events.forEach(key => fireEvent.keyDown(input, { key }))
+          expect(spyKeyDown).toHaveBeenCalledTimes(2)
+        })
+      })
+    })
 
-      events.forEach(key => fireEvent.keyDown(input, { key }))
-      expect(spyKeyDown).toHaveBeenCalledTimes(2)
+    describe('Function suggestions is displayed', () => {
+      xtest('only if key is "Enter" or "Escape"', () => {
+        const events = 'b Enter 2 , t Escape E s 5'.split(' ')
+        const spyKeyDown = jest.fn()
+        const Listener = ({ children }) => <div onKeyDown={spyKeyDown}>{children}</div>
+        render(
+          <MockApp>
+            <Listener>
+              <InputData {...testProps}  />
+            </Listener>
+          </MockApp>
+        )
+        const input = document.querySelector('[data-cell="input"]')
+        fireEvent.keyDown(input, { key: '=' })
+        fireEvent.keyDown(input, { key: 's' })
+  
+        events.forEach(key => fireEvent.keyDown(input, { key }))
+        expect(spyKeyDown).toHaveBeenCalledTimes(0)
+      })
     })
   })
 

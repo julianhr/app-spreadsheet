@@ -4,6 +4,9 @@ import styled from '@emotion/styled'
 import { connect } from 'react-redux'
 
 import { setCellData, clearCellData } from '~/actions/tableActions'
+import Lexer from '~/formulas/Lexer'
+import Suggestions from '../suggestions/Suggestions'
+import { InputContext } from './InputContext'
 
 
 const Input = styled.input`
@@ -15,9 +18,12 @@ const Input = styled.input`
   border: 2px solid salmon;
   padding: 2px;
   box-sizing: border-box;
+  font-size: 13px;
+  padding-right: 10px;
 `
 
 export class InputData extends React.PureComponent {
+
   static propTypes = {
     // props
     replaceValue: PropTypes.bool.isRequired,
@@ -34,12 +40,50 @@ export class InputData extends React.PureComponent {
     super()
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
     this.handleOnBlur = this.handleOnBlur.bind(this)
+    this.handleOnChange = this.handleOnChange.bind(this)
+    this.setIsFuncSelectorVisible = this.setIsFuncSelectorVisible.bind(this)
+    this.setInputValue = this.setInputValue.bind(this)
+  }
+
+  state = {
+    tokens: [],
+    isFuncSelectorVisible: false,
+    inputValue: '',
+    keyEvent: { key: '' },
   }
 
   refInput = React.createRef()
 
   componentDidMount() {
+    this.setInputValue(this.props.replaceValue ? '' : this.props.entered)
+    this.tokenizeInputValue(this.refInput.current.value, '')
     this.focusInputTag()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.keyEvent !== this.state.keyEvent) {
+      this.keyActions()
+    }
+  }
+
+  keyActions() {
+    switch (this.state.keyEvent.key) { // eslint-disable-line
+      case 'Escape':
+        this.props.onEscape()
+        break
+      case 'Enter':
+        if (!this.state.isFuncSelectorVisible) {
+          this.setNewValue()
+          this.props.onCommit()
+        }
+        break
+    }
+  }
+
+  tokenizeInputValue(entered) {
+    const lexer = new Lexer(entered)
+    const tokens = lexer.getTokens()
+    this.setState({ tokens })
   }
 
   focusInputTag() {
@@ -48,8 +92,9 @@ export class InputData extends React.PureComponent {
     input.scrollLeft = input.scrollWidth
   }
 
-  setNewValue(inputValue) {
+  setNewValue() {
     const { location } = this.props
+    const { inputValue } = this.state
 
     if (this.isWhitespace(inputValue)) {
       this.props.clearCellData(location)
@@ -59,40 +104,73 @@ export class InputData extends React.PureComponent {
     this.props.setCellData(location, inputValue)
   }
 
-  handleOnKeyDown(event) {
-    const { key } = event
-
-    if (key === 'Escape') {
-      this.props.onEscape()
-    } else if (key === 'Enter') {
-      this.setNewValue(event.target.value)
-      this.props.onCommit()
-    } else {
-      event.stopPropagation()
-    }
-  }
-
-  handleOnBlur(event) {
-    this.setNewValue(event.target.value)
-    this.props.onCommit()
-  }
-
   isWhitespace(text) {
     return text.length === 0 || Boolean(text.match(/^\s+$/))
   }
 
+  setIsFuncSelectorVisible(isFuncSelectorVisible) {
+    this.setState({ isFuncSelectorVisible })
+  }
+
+  setInputValue(inputValue) {
+    this.setState({ inputValue })
+    this.tokenizeInputValue(inputValue)
+  }
+
+  handleOnChange(event) {
+    const { target: { value } } = event
+    this.tokenizeInputValue(value)
+    this.setState({ inputValue: value })
+  }
+
+  handleOnKeyDown(event) {
+    const { key, target: { value } } = event
+
+    if (this.state.isFuncSelectorVisible) {
+      event.stopPropagation()
+    } else {
+      if (!['Enter', 'Escape'].includes(key)) {
+        event.stopPropagation()
+      }
+    }
+
+    this.setState({ keyEvent: { key }, inputValue: value })
+  }
+
+  handleOnBlur(event) {
+    this.setState({ inputValue: event.target.value }, () => {
+      this.setNewValue()
+      this.props.onCommit()
+    })
+  }
+
   render() {
-    const defaultValue = this.props.replaceValue ? null : this.props.entered
+    const inputEl = this.refInput.current
 
     return (
-      <Input
-        ref={this.refInput}
-        data-cell='input'
-        data-location={this.props.location}
-        defaultValue={defaultValue}
-        onKeyDown={this.handleOnKeyDown}
-        onBlur={this.handleOnBlur}
-      />
+      <InputContext.Provider
+        value={{
+          clientRect: inputEl && inputEl.getBoundingClientRect(),
+          setIsFuncSelectorVisible: this.setIsFuncSelectorVisible,
+          setInputValue: this.setInputValue,
+          keyEvent: this.state.keyEvent,
+          inputValue: this.state.inputValue,
+        }}
+      >
+        <Input
+          ref={this.refInput}
+          data-cell='input'
+          data-location={this.props.location}
+          value={this.state.inputValue}
+          onChange={this.handleOnChange}
+          onKeyDown={this.handleOnKeyDown}
+          onBlur={this.handleOnBlur}
+        />
+        <Suggestions
+          tokens={this.state.tokens}
+          cursorPos={inputEl && inputEl.selectionStart}
+        />
+      </InputContext.Provider>
     )
   }
 }
