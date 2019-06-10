@@ -5,12 +5,17 @@ const colors = {
     borderDark: '#CCC',
     labelBkg: '#F5F5F5'
   },
+  dropdown: {
+    normal: '#fafafa',
+    active: '#ebebeb',
+  },
   primary: {
     strong: '#E10D75'
   },
   field: {
     background: '#F0F0F0',
   },
+  shadow: '#939393',
 }
 
 const breaks = {
