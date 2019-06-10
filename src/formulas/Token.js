@@ -1,22 +1,12 @@
 class Token {
-  constructor(type, text, whitespace='') {
+  constructor(type, text, whitespace, category, index) {
     this.type = type
+    this.category = category
     this.text = text
+    this.whitespace = whitespace
+    this.index = index
     this.value = null
     this.html = null
-    this.whitespace = whitespace
-  }
-
-  _repr() {
-    return Object
-      .entries(this)
-      .reduce((prev, curr) => {
-        if (curr[1] !== null) {
-          prev[curr[0]] = curr[1]
-        }
-
-        return prev
-      }, {})
   }
 }
 
