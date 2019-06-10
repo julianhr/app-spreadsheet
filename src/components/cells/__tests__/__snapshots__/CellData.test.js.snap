@@ -21,7 +21,7 @@ exports[`CellData functional tests lifecycle snapshots: 2. initial input tag 1`]
     class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
   >
     <input
-      class="css-p19rxp-Input ep2oxkq0"
+      class="css-1obixtf-Input ep2oxkq0"
       data-cell="input"
       data-location="B-2"
       value=""
@@ -53,7 +53,7 @@ exports[`CellData functional tests lifecycle snapshots: 4. input tag has formula
     class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
   >
     <input
-      class="css-p19rxp-Input ep2oxkq0"
+      class="css-1obixtf-Input ep2oxkq0"
       data-cell="input"
       data-location="B-2"
       value="=2+3+4"
@@ -83,7 +83,7 @@ exports[`CellData functional tests lifecycle snapshots: 6. key down "a" on text 
     class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
   >
     <input
-      class="css-p19rxp-Input ep2oxkq0"
+      class="css-1obixtf-Input ep2oxkq0"
       data-cell="input"
       data-location="B-2"
       value=""

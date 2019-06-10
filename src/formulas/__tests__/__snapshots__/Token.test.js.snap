@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Token instantiates correctly 1`] = `
+Token {
+  "category": "entity",
+  "html": null,
+  "index": 0,
+  "text": "2",
+  "type": "NUMBER",
+  "value": null,
+  "whitespace": 1,
+}
+`;

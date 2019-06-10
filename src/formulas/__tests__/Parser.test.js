@@ -1,23 +1,6 @@
-import { Lexer, GRAMMAR } from '../Lexer'
+import { Lexer } from '../Lexer'
 import Parser from '../Parser'
 
-
-const toThrowWithMsg = {
-  toThrowWithMsg: (received) => {
-    try {
-      received.func()
-      return {
-        pass: false,
-        message: () => `received input "${received.input}" did not throw`
-      }
-    } catch (error) {
-      return {
-        pass: true,
-        message: () => `received input "${received.input}" threw error`
-      }
-    }
-  }
-}
 
 function getParser(input) {
   const lexer = new Lexer(input)
@@ -93,14 +76,14 @@ describe('Parser', () => {
           const ast = parser.parse()
           expect(ast).toMatchSnapshot()
         })
-  
+
         test('"=2+3/10+8"', () => {
           const input = '=2+3/10+8'
           const parser = getParser(input)
           const ast = parser.parse()
           expect(ast).toMatchSnapshot()
         })
-    
+
         test('"=(2+3)*5"', () => {
           const input = '=(2+3)*5'
           const parser = getParser(input)

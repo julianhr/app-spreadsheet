@@ -1,6 +1,4 @@
 import { TOKENS as t } from './Lexer'
-import formulaFn from './formulaFunctions'
-import { isNumber } from '~/library/utils'
 
 
 class AST {
@@ -35,37 +33,18 @@ class NumberNode extends AST {
   }
 
   eval() {
-    if (isNumber(this.numberNode.text)) {
-      this.setTokenValue()
-      return this.value
-    } else {
-      throw new Error(`Invalid number "${this.numberNode.text}"`)
-    }
-  }
-
-  setTokenValue() {
-    const value = parseFloat(this.numberNode.text)
-    this.numberNode.value = value
+    return this.value
   }
 }
 
 class CellNode extends AST {
   constructor(token) {
     super('CellNode')
-    token.value = this.getCellLabel(token)
     this.cell = token
   }
 
   get location() {
     return this.cell.value
-  }
-
-  getCellLabel(token) {
-    const { text } = token
-    const { index } = text.match(/\d+/)
-    const col = text.slice(0, index).toUpperCase()
-    const row = text.slice(index)
-    return `${col}-${row}`
   }
 }
 
@@ -93,18 +72,8 @@ class FuncOp extends AST {
   }
 
   eval(evaluatedArgs) {
-    const fn = this.getFunction()
+    const fn = this.funcNode.value
     return fn(...evaluatedArgs)
-  }
-
-  getFunction() {
-    const fn = formulaFn[this.funcNode.text.toUpperCase()]
-
-    if (!fn) {
-      throw new Error(`Formula ${this.funcNode.text} not found`)
-    } else {
-      return fn
-    }
   }
 }
 
