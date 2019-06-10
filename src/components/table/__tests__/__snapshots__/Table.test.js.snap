@@ -13,19 +13,19 @@ exports[`Table functional tests matches snapshot 1`] = `
       class="row-label-width col-label-height css-ql6bmv-InnerBorder e1ia7371"
     />
     <div
-      class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+      class="col-label-width col-label-height css-19eh4ji-InnerBorder etucg500"
       data-col="A"
     >
       A
     </div>
     <div
-      class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+      class="col-label-width col-label-height css-19eh4ji-InnerBorder etucg500"
       data-col="B"
     >
       B
     </div>
     <div
-      class="col-label-width col-label-height css-19eh4ji-InnerBorder e1al44mo0"
+      class="col-label-width col-label-height css-19eh4ji-InnerBorder etucg500"
       data-col="C"
     >
       C
@@ -36,36 +36,36 @@ exports[`Table functional tests matches snapshot 1`] = `
     data-row="1"
   >
     <div
-      class="row-label-width row-label-height css-1cj8orw-Wrapper ewfjn6o0"
+      class="row-label-width row-label-height css-1cj8orw-Wrapper e12nkt8n0"
       data-row="1"
     >
       1
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
     >
       <div
-        class="css-16d5k2m-DataTag e137pts60"
+        class="css-16d5k2m-DataTag ekht17d0"
         data-cell="result"
         data-location="A-1"
         tabindex="0"
       />
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
     >
       <div
-        class="css-16d5k2m-DataTag e137pts60"
+        class="css-16d5k2m-DataTag ekht17d0"
         data-cell="result"
         data-location="B-1"
         tabindex="0"
       />
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
     >
       <div
-        class="css-16d5k2m-DataTag e137pts60"
+        class="css-16d5k2m-DataTag ekht17d0"
         data-cell="result"
         data-location="C-1"
         tabindex="0"
@@ -77,36 +77,36 @@ exports[`Table functional tests matches snapshot 1`] = `
     data-row="2"
   >
     <div
-      class="row-label-width row-label-height css-1cj8orw-Wrapper ewfjn6o0"
+      class="row-label-width row-label-height css-1cj8orw-Wrapper e12nkt8n0"
       data-row="2"
     >
       2
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
     >
       <div
-        class="css-16d5k2m-DataTag e137pts60"
+        class="css-16d5k2m-DataTag ekht17d0"
         data-cell="result"
         data-location="A-2"
         tabindex="0"
       />
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
     >
       <div
-        class="css-16d5k2m-DataTag e137pts60"
+        class="css-16d5k2m-DataTag ekht17d0"
         data-cell="result"
         data-location="B-2"
         tabindex="0"
       />
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper e17nyd4f0"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
     >
       <div
-        class="css-16d5k2m-DataTag e137pts60"
+        class="css-16d5k2m-DataTag ekht17d0"
         data-cell="result"
         data-location="C-2"
         tabindex="0"

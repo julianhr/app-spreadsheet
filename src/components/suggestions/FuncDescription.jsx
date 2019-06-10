@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { jsx, css } from '@emotion/core'
 
 import formulaFuncs from '~/formulas/formulaFunctions'
-import { InputContext } from '../cells/InputContext'
+import { InputContext } from '../cell/InputContext'
 
 
 const Root = styled.div`
