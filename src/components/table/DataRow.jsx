@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-import RowLabel from '../cells/RowLabel'
-import CellData from '../cells/CellData'
+import RowLabel from '../cell/RowLabel'
+import CellData from '../cell/CellData'
 
 
 const Row = styled.div`

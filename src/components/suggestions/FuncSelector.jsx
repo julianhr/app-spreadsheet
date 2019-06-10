@@ -7,7 +7,7 @@ import { jsx, css } from '@emotion/core'
 import formulaFuncs from '~/formulas/formulaFunctions'
 import InteractiveList from '~/library/InteractiveList'
 import Token from '~/formulas/Token'
-import { InputContext } from '../cells/InputContext'
+import { InputContext } from '../cell/InputContext'
 import { withTheme } from 'emotion-theming'
 
 
