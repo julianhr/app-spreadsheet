@@ -10,4 +10,8 @@ export default createReducer(INITIAL_STATE, {
   'SET_ACTIVE_CELL': (state, { payload }) => {
     state.activeCell = payload
   },
+
+  'DISPLAY_INPUTTER': (state, { payload }) => {
+    state.displayInputter = payload
+  }
 })
