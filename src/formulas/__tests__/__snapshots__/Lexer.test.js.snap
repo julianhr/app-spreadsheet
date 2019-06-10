@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Lexer #getTokens  1`] = `
+Token {
+  "category": "entity",
+  "html": null,
+  "index": -1,
+  "text": "0",
+  "type": "NUMBER",
+  "value": 0,
+  "whitespace": 0,
+}
+`;
+
+exports[`Lexer token NUMBER includes malformed float numbers 1`] = `
+Token {
+  "category": "entity",
+  "html": null,
+  "index": 14,
+  "text": "..5",
+  "type": "TEXT",
+  "value": null,
+  "whitespace": 0,
+}
+`;
+
+exports[`Lexer token TEXT matches snapshot 1`] = `
+Token {
+  "category": "entity",
+  "html": null,
+  "index": 0,
+  "text": "test input",
+  "type": "TEXT",
+  "value": null,
+  "whitespace": 0,
+}
+`;

@@ -1,4 +1,6 @@
 import Token from './Token'
+import TokenSanitizer from './TokenSanitizer'
+import LexerRule from './LexerRule'
 import { isNumber } from '~/library/utils'
 
 
@@ -26,38 +28,22 @@ const TOKENS = {
 
 const t = TOKENS
 
-class Rule {
-  constructor(regex, groupIndex, token) {
-    this.regex = regex
-    this.groupIndex = groupIndex
-    this.token = token
-  }
-
-  setIndex(index) {
-    this.regex.lastIndex = index
-  }
-
-  test(input) {
-    return this.regex.exec(input)
-  }
-}
-
 const GRAMMAR = [
-  // internal
-  new Rule(/=/g, 0, t.EQUALS),
-  new Rule(/,/g, 0, t.COMMA),
-  new Rule(/:/g, 0, t.COLON),
-  new Rule(/\(/g, 0, t.LPAREN),
-  new Rule(/\)/g, 0, t.RPAREN),
+  // structure
+  new LexerRule(/=/g, 0, t.EQUALS, 'structure'),
+  new LexerRule(/,/g, 0, t.COMMA, 'structure'),
+  new LexerRule(/:/g, 0, t.COLON, 'structure'),
+  new LexerRule(/\(/g, 0, t.LPAREN, 'structure'),
+  new LexerRule(/\)/g, 0, t.RPAREN, 'structure'),
   // operators
-  new Rule(/\+/g, 0, t.PLUS),
-  new Rule(/\-/g, 0, t.MINUS), // eslint-disable-line
-  new Rule(/\*/g, 0, t.MULT),
-  new Rule(/\//g, 0, t.DIV),
+  new LexerRule(/\+/g, 0, t.PLUS, 'operator'),
+  new LexerRule(/\-/g, 0, t.MINUS, 'operator'), // eslint-disable-line
+  new LexerRule(/\*/g, 0, t.MULT, 'operator'),
+  new LexerRule(/\//g, 0, t.DIV, 'operator'),
   // multi-character
-  new Rule(/[\d\.]+/g, 0, t.NUMBER), // eslint-disable-line
-  new Rule(/[a-z]+[\d]+/gi, 0, t.CELL),
-  new Rule(/([a-z]+)\(/gi, 1, t.FUNCTION),
+  new LexerRule(/[\d\.]+/g, 0, t.NUMBER, 'entity'), // eslint-disable-line
+  new LexerRule(/[a-z]+[\d]+/gi, 0, t.CELL, 'entity'),
+  new LexerRule(/([a-z]+)\(/gi, 1, t.FUNCTION, 'entity'),
 ]
 
 
@@ -76,19 +62,21 @@ class Lexer {
       this.tokens.push(token)
     }
 
+    const sanitizer = new TokenSanitizer(this.tokens)
+    this.tokens = sanitizer.sanitize()
     return this.tokens
   }
 
   nextToken() {
     if (this.char === t.EOF) {
-      return new Token(t.EOF, t.EOF)
+      return new Token(t.EOF, t.EOF, 0, 'eof', this.index)
     }
 
     if (!this.isFormula()) {
       return this.tokenTEXTorNUMBER()
     }
 
-    const whitespace = this.getWhitespace()
+    const whitespaceLen = this.getWhitespaceLen()
     let token
 
     for (let rule of GRAMMAR) {
@@ -97,7 +85,7 @@ class Lexer {
 
       if (match && match.index === this.index) {
         const text = match[rule.groupIndex]
-        token = new Token(rule.token, text, whitespace)
+        token = new Token(rule.token, text, whitespaceLen, rule.category, this.index)
         this.index += text.length - 1
         this.consume()
         break
@@ -105,7 +93,7 @@ class Lexer {
     }
 
     if (!token) {
-      token = this.tokenUNKNOWN(whitespace)
+      token = this.tokenUNKNOWN(whitespaceLen)
     }
 
     return token
@@ -114,6 +102,7 @@ class Lexer {
   initChar(input) {
     if (this.input.length === 0) {
       this.input = '0'
+      this.index = -1
     }
 
     return input[this.index]
@@ -128,16 +117,16 @@ class Lexer {
     }
 
     const text = chars.join('')
-    return new Token(t.UNKNOWN, text, whitespace)
+    return new Token(t.UNKNOWN, text, whitespace, 'unknown', this.index - text.length)
   }
 
   tokenTEXTorNUMBER() {
     let token
 
     if (isNumber(this.input)) {
-      token = new Token(t.NUMBER, this.input)
+      token = new Token(t.NUMBER, this.input, 0, 'entity', this.index)
     } else {
-      token = new Token(t.TEXT, this.input)
+      token = new Token(t.TEXT, this.input, 0, 'entity', this.index)
     }
 
     this.index = this.input.length - 1
@@ -171,7 +160,7 @@ class Lexer {
     return Boolean(this.char.match(/[\(\)\+\-\/\*]/)) // eslint-disable-line
   }
 
-  getWhitespace() {
+  getWhitespaceLen() {
     let count = 0
 
     while (this.isWhitespace()) {
@@ -179,9 +168,9 @@ class Lexer {
       this.consume()
     }
 
-    return Array(count).fill(' ').join('')
+    return count
   }
 }
 
 export default Lexer
-export { Rule, GRAMMAR, TOKENS, Lexer }
+export { GRAMMAR, TOKENS, Lexer }
