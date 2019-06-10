@@ -6,141 +6,136 @@ import {
   BinaryOp,
   UnaryOp
 } from '../ast'
-import { TOKENS as t } from '../Lexer'
-import Token from '../Token'
+import Lexer, { TOKENS as t } from '../Lexer'
 
 
 describe('TextNode', () => {
   test('#eval', () => {
     const input = 'testing'
-    const token = new Token(t.TEXT, input)
+    const lexer = new Lexer('testing')
+    const tokens = lexer.getTokens()
+    const token = tokens[0]
     const node = new TextNode(token)
     expect(node.eval()).toBe(input)
   })
 })
 
 describe('NumberNode', () => {
-  describe('#setTokenValue', () => {
-    it('sets parsed number in token node', () => {
-      const token = new Token(t.NUMBER, '5')
-      const node = new NumberNode(token)
-      node.setTokenValue()
-      expect(node.numberNode.value).toBe(5)
-    })
-  })
-
-  test('#eval happy path', () => {
-    const token = new Token(t.NUMBER, '5')
+  test('#eval', () => {
+    const lexer = new Lexer('=5')
+    const tokens = lexer.getTokens()
+    const token = tokens[1]
     const node = new NumberNode(token)
-    jest.spyOn(node, 'setTokenValue')
-
     expect(node.eval()).toBe(5)
-    expect(node.setTokenValue).toHaveBeenCalledTimes(1)
   })
 
-  test('#eval throws error if number is invalid', () => {
-    const token = new Token(t.NUMBER, '?')
+  test('get #value', () => {
+    const lexer = new Lexer('=5')
+    const tokens = lexer.getTokens()
+    const token = tokens[1]
     const node = new NumberNode(token)
-    expect(() => node.eval()).toThrow()
+    expect(node.value).toBe(5)
   })
 })
 
 describe('CellNode', () => {
   test('get #location', () => {
-    const input = 'A1'
-    const token = new Token(t.CELL, input)
+    const lexer = new Lexer('=A1')
+    const tokens = lexer.getTokens()
+    const token = tokens[1]
     const node = new CellNode(token)
     expect(node.location).toBe('A-1')
   })
 })
 
-describe('FuncOp', () => {
-  describe('#getFunction', () => {
-    test('valid function', () => {
-      const token = new Token(t.FUNCTION, 'sum')
-      const node = new FuncOp(token)
-      expect(() => node.getFunction()).not.toThrow()
-    })
-
-    test('invalid function', () => {
-      const token = new Token(t.FUNCTION, 'summ')
-      const node = new FuncOp(token)
-      expect(() => node.getFunction()).toThrow()
-    })
+describe('UnaryOp', () => {
+  test('#eval negative', () => {
+    const lexer = new Lexer('=5-6')
+    const tokens = lexer.getTokens()
+    const node = new UnaryOp(tokens[2], jest.fn())
+    expect(node.eval(5)).toBe(-5)
+    expect(node.eval(7)).toBe(-7)
   })
 
-  test('#eval', () => {
-    const token = new Token(t.FUNCTION, 'sum')
-    const node = new FuncOp(token)
-    const args = [3,7]
-    jest.spyOn(node, 'getFunction')
-
-    expect(node.eval(args)).toBe(10)
-    expect(node.getFunction).toHaveBeenCalledTimes(1)
+  test('#eval positive', () => {
+    const lexer = new Lexer('=5+6')
+    const tokens = lexer.getTokens()
+    const node = new UnaryOp(tokens[2], jest.fn())
+    expect(node.eval(5)).toBe(5)
+    expect(node.eval(7)).toBe(7)
   })
 })
 
-describe('UnaryOp', () => {
+describe('FuncOp', () => {
   test('#eval', () => {
-    let token, node
-
-    token = new Token(t.PLUS, '+')
-    node = new UnaryOp(token)
-    expect(node.eval(5)).toBe(5)
-
-    token = new Token(t.MINUS, '-')
-    node = new UnaryOp(token)
-    expect(node.eval(5)).toBe(-5)
+    const lexer = new Lexer('=sum(5)')
+    const tokens = lexer.getTokens()
+    const token = tokens[1]
+    const node = new FuncOp(token, [])
+    const args = [3,7]
+    expect(node.eval(args)).toBe(10)
   })
 })
 
 describe('BinaryOp', () => {
   describe('#eval', () => {
     test('addition', () => {
-      const operator = new Token(t.PLUS, '+')
+      const lexer = new Lexer('=5+2')
+      const tokens = lexer.getTokens()
+      const opToken = tokens[2]
       const left = jest.fn()
       const right = jest.fn()
-      const node = new BinaryOp(left, operator, right)
+      const node = new BinaryOp(left, opToken, right)
       expect(node.eval(3, 7)).toBe(10)
     })
 
     test('subtraction', () => {
-      const operator = new Token(t.MINUS, '-')
+      const lexer = new Lexer('=5-2')
+      const tokens = lexer.getTokens()
+      const opToken = tokens[2]
       const left = jest.fn()
       const right = jest.fn()
-      const node = new BinaryOp(left, operator, right)
+      const node = new BinaryOp(left, opToken, right)
       expect(node.eval(3, 7)).toBe(-4)
     })
 
     test('division', () => {
-      const operator = new Token(t.DIV, '/')
+      const lexer = new Lexer('=5/2')
+      const tokens = lexer.getTokens()
+      const opToken = tokens[2]
       const left = jest.fn()
       const right = jest.fn()
-      const node = new BinaryOp(left, operator, right)
+      const node = new BinaryOp(left, opToken, right)
       expect(node.eval(10, 5)).toBe(2)
     })
 
     test('division by zero', () => {
-      const operator = new Token(t.DIV, '/')
+      const lexer = new Lexer('=5/0')
+      const tokens = lexer.getTokens()
+      const opToken = tokens[2]
       const left = jest.fn()
       const right = jest.fn()
-      const node = new BinaryOp(left, operator, right)
+      const node = new BinaryOp(left, opToken, right)
       expect(() => node.eval(10, 0)).toThrow(/Division by zero/)
     })
 
     test('multiplication', () => {
-      const operator = new Token(t.MULT, '*')
+      const lexer = new Lexer('=5*2')
+      const tokens = lexer.getTokens()
+      const opToken = tokens[2]
       const left = jest.fn()
       const right = jest.fn()
-      const node = new BinaryOp(left, operator, right)
+      const node = new BinaryOp(left, opToken, right)
       expect(node.eval(10, 5)).toBe(50)
     })
 
     it('throws error if token is not recognized', () => {
-      const operator = new Token(t.TEXT, 'test')
+      const lexer = new Lexer('text')
+      const tokens = lexer.getTokens()
+      const token = tokens[0]
       const left = jest.fn()
       const right = jest.fn()
-      const node = new BinaryOp(left, operator, right)
+      const node = new BinaryOp(left, token, right)
       expect(() => node.eval(10, 5)).toThrow()
     })
   })
