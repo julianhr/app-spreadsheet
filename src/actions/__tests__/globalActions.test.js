@@ -13,4 +13,15 @@ describe('globalActions', () => {
       expect(appStore.getState().global.activeCell).toEqual(value)
     })
   })
+
+  describe('#displayInputter', () => {
+    it('sets data for cell inputter', async () => {
+      const location = 'B-2'
+      const appStore = appStoreGen()
+
+      expect(appStore.getState().global.cellInputter).toBeNull()
+      await appStore.dispatch(actions.displayInputter({ testKey: 'test' }))
+      expect(appStore.getState().global.cellInputter.testKey).toEqual('test')
+    })
+  })
 })
