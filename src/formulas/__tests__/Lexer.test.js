@@ -144,20 +144,6 @@ describe('Lexer', () => {
     expect(lexer.nextToken().type).toBe(t.EOF)
   })
 
-  test('token UNKNOWN', () => {
-    const input = '=ñu /( ?invalid)'
-    const lexer = new Lexer(input)
-    let token
-
-    Array(1).fill('').forEach(_ => lexer.nextToken() ) // consume all tokens
-    token = lexer.nextToken()
-    expect(token.type).toBe(t.UNKNOWN)
-    
-    Array(2).fill('').forEach(_ => lexer.nextToken() ) // consume all tokens
-    token = lexer.nextToken()
-    expect(token.type).toBe(t.UNKNOWN)
-  })
-
   describe('token TEXT', () => {
     it('matches snapshot', () => {
       const input = 'test input'
