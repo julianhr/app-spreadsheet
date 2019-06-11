@@ -42,30 +42,30 @@ exports[`Table functional tests matches snapshot 1`] = `
       1
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper egobumn0"
     >
       <div
-        class="css-16d5k2m-DataTag ekht17d0"
+        class="css-17w7ktc-Cell egobumn1"
         data-cell="result"
         data-location="A-1"
         tabindex="0"
       />
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper egobumn0"
     >
       <div
-        class="css-16d5k2m-DataTag ekht17d0"
+        class="css-17w7ktc-Cell egobumn1"
         data-cell="result"
         data-location="B-1"
         tabindex="0"
       />
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper egobumn0"
     >
       <div
-        class="css-16d5k2m-DataTag ekht17d0"
+        class="css-17w7ktc-Cell egobumn1"
         data-cell="result"
         data-location="C-1"
         tabindex="0"
@@ -83,30 +83,30 @@ exports[`Table functional tests matches snapshot 1`] = `
       2
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper egobumn0"
     >
       <div
-        class="css-16d5k2m-DataTag ekht17d0"
+        class="css-17w7ktc-Cell egobumn1"
         data-cell="result"
         data-location="A-2"
         tabindex="0"
       />
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper egobumn0"
     >
       <div
-        class="css-16d5k2m-DataTag ekht17d0"
+        class="css-17w7ktc-Cell egobumn1"
         data-cell="result"
         data-location="B-2"
         tabindex="0"
       />
     </div>
     <div
-      class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+      class="row-label-height col-label-width css-1wpoxe-Wrapper egobumn0"
     >
       <div
-        class="css-16d5k2m-DataTag ekht17d0"
+        class="css-17w7ktc-Cell egobumn1"
         data-cell="result"
         data-location="C-2"
         tabindex="0"

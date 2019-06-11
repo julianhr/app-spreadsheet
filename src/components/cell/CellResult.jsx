@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
 import { clearCellData } from '~/actions/tableActions'
-import { displayInputter } from '~/actions/globalActions'
+import { displayInputter, setActiveCell } from '~/actions/globalActions'
 
 
 const Wrapper = styled.div`
@@ -26,7 +26,7 @@ const Cell = styled.div`
   width: 100%;
   padding: 2px;
 
-  :focus {
+  :focus, :focus-within {
     border: 2px solid salmon;
   }
 `
@@ -50,8 +50,10 @@ export class ResultCell extends React.PureComponent {
 
   constructor() {
     super()
-    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
-    this.handleOnDoubleClick = this.handleOnDoubleClick.bind(this)
+    this.handleCellOnKeyDown = this.handleCellOnKeyDown.bind(this)
+    this.handleCellOnDoubleClick = this.handleCellOnDoubleClick.bind(this)
+    this.handleCellOnClick = this.handleCellOnClick.bind(this)
+    this.handleWrapperOnClick = this.handleWrapperOnClick.bind(this)
   }
 
   refCell = React.createRef()
@@ -66,15 +68,18 @@ export class ResultCell extends React.PureComponent {
 
   displayInputter(willReplaceValue) {
     const { location } = this.props
+    const cellDomRect = this.refCell.current.getBoundingClientRect()
+    const cellRect = JSON.parse(JSON.stringify(cellDomRect))
 
     this.props.displayInputter({
       location,
       willReplaceValue,
+      cellRect,
     })
   }
 
-  handleOnKeyDown({ key }) {
-    // this.props.setActiveCell(this.props.location)
+  handleCellOnKeyDown({ key }) {
+    this.props.setActiveCell(this.props.location)
 
     if (['Delete', 'Backspace'].includes(key)) {
       const valueStr = '' + this.props.result
@@ -89,7 +94,7 @@ export class ResultCell extends React.PureComponent {
     }
   }
 
-  handleOnDoubleClick() {
+  handleCellOnDoubleClick() {
     this.displayInputter(false)
   }
 
@@ -107,10 +112,19 @@ export class ResultCell extends React.PureComponent {
     return style
   }
 
+  handleWrapperOnClick() {
+    this.refCell.current.focus()
+  }
+
+  handleCellOnClick(event) {
+    event.stopPropagation()
+  }
+
   render() {
     return (
       <Wrapper
         className='row-label-height col-label-width'
+        onClick={this.handleWrapperOnClick}
       >
         <Cell
           ref={this.refCell}
@@ -118,8 +132,9 @@ export class ResultCell extends React.PureComponent {
           data-location={this.props.location}
           css={this.getStyle()}
           tabIndex='0'
-          onKeyDown={this.handleOnKeyDown}
-          onDoubleClick={this.handleOnDoubleClick}
+          onClick={this.handleCellOnClick}
+          onKeyDown={this.handleCellOnKeyDown}
+          onDoubleClick={this.handleCellOnDoubleClick}
         >
           {this.props.result}
         </Cell>
@@ -134,6 +149,6 @@ function mapStateToProps(state, ownProps) {
   return { result }
 }
 
-const mapDispatchToProps = { clearCellData, displayInputter }
+const mapDispatchToProps = { clearCellData, displayInputter, setActiveCell }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultCell)
