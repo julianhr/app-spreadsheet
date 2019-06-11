@@ -13,22 +13,29 @@ import { InputContext } from './InputContext'
 import { closeCellInputter } from '~/actions/globalActions'
 
 
+const INPUT_PADDING_RIGHT = 15
+
 const Root = styled.div`
   position: fixed;
 `
 
 const Input = styled.input`
-  display: flex;
   align-items: center;
-  outline: none;
-  height: 100%;
-  width: 100%;
-  border: 2px solid salmon;
-  padding: 2px;
-  box-sizing: border-box;
-  font-size: 13px;
-  padding-right: 10px;
   background-color: white;
+  border: 2px solid salmon;
+  box-sizing: border-box;
+  display: flex;
+  font-size: 13px;
+  height: 100%;
+  outline: none;
+  padding: 2px;
+  width: 100%;
+`
+
+const HiddenInput = styled(Input)`
+  position: absolute;
+  margin-top: -100vh;
+  visibility: hidden;
 `
 
 export class CellInputter extends React.PureComponent {
@@ -64,6 +71,7 @@ export class CellInputter extends React.PureComponent {
   }
 
   refInput = React.createRef()
+  refHiddenInput = React.createRef()
 
   componentDidMount() {
     const entered = this.props.willReplaceValue ? '' : this.props.entered
@@ -146,7 +154,11 @@ export class CellInputter extends React.PureComponent {
       return
     }
 
-    this.props.setCellData(location, inputValue.toUpperCase())
+    const cellValue = inputValue.length > 0 && inputValue[0] === '='
+      ? inputValue.toUpperCase()
+      : inputValue
+
+    this.props.setCellData(location, cellValue)
   }
 
   isWhitespace(text) {
@@ -186,9 +198,35 @@ export class CellInputter extends React.PureComponent {
     })
   }
 
+  getRootStyle() {
+    const { top, left, width: cellWidth, height: cellHeight } = this.props.cellRect
+    const { current: hiddenInputEl } = this.refHiddenInput
+    let width, height
+
+    if (hiddenInputEl) {
+      const textWidth = hiddenInputEl.scrollWidth
+      const hiddenRect = hiddenInputEl.getBoundingClientRect()
+      width = textWidth > hiddenRect.width
+        ? Math.max(cellWidth, textWidth + INPUT_PADDING_RIGHT)
+        : cellWidth
+      height = cellHeight
+    } else {
+      width = cellWidth
+      height = cellHeight
+    }
+
+
+    return {
+      top,
+      left,
+      height,
+      width,
+    }
+  }
+
   render() {
     const inputEl = this.refInput.current
-    const { top, left, width, height } = this.props.cellRect
+    const { width, height } = this.props.cellRect
 
     if (!this.props.location) { return null }
 
@@ -203,8 +241,16 @@ export class CellInputter extends React.PureComponent {
         }}
       >
         <Root
-          css={{ top, left, width, height }}
+          css={this.getRootStyle()}
         >
+          <HiddenInput
+            ref={this.refHiddenInput}
+            defaultValue={this.state.inputValue}
+            css={{
+              width: width - INPUT_PADDING_RIGHT,
+              height,
+            }}
+          />
           <Input
             ref={this.refInput}
             data-cell='input'
