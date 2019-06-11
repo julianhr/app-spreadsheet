@@ -7,7 +7,6 @@ import { isNumber } from '~/library/utils'
 const TOKENS = {
   // internal
   EOF: 'EOF',
-  UNKNOWN: 'UNKNOWN',
   // structure
   EQUALS: 'EQUALS',
   COMMA: 'COMMA',
@@ -93,7 +92,7 @@ class Lexer {
     }
 
     if (!token) {
-      token = this.tokenUNKNOWN(whitespaceLen)
+      token = this.tokenTEXT(whitespaceLen)
     }
 
     return token
@@ -108,7 +107,7 @@ class Lexer {
     return input[this.index]
   }
 
-  tokenUNKNOWN(whitespace) {
+  tokenTEXT(whitespace) {
     const chars = []
 
     while (!(this.isEOF() || this.isSeparator() || this.isWhitespace())) {
@@ -117,7 +116,7 @@ class Lexer {
     }
 
     const text = chars.join('')
-    return new Token(t.UNKNOWN, text, whitespace, 'unknown', this.index - text.length)
+    return new Token(t.TEXT, text, whitespace, 'entity', this.index - text.length)
   }
 
   tokenTEXTorNUMBER() {
