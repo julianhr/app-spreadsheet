@@ -48,11 +48,11 @@ class FuncDescription extends React.PureComponent {
   }
 
   getFnScope() {
-    const { cursorPos, fnScopes } = this.props
+    const { fnScopes, cursorPos } = this.props
     let currScope
 
     for (let scope of fnScopes) {
-      if (cursorPos > scope.startIndex) {
+      if (cursorPos >= scope.startIndex + 1) {
         currScope = scope
       } else {
         break
@@ -60,7 +60,7 @@ class FuncDescription extends React.PureComponent {
     }
 
     if (currScope && currScope.endIndex === null) { return currScope}
-    if (currScope && cursorPos - 1 < currScope.end) { return currScope }
+    if (currScope && cursorPos - 1 < currScope.endIndex) { return currScope }
     return null
   }
 
@@ -71,7 +71,9 @@ class FuncDescription extends React.PureComponent {
 
   render() {
     const scope = this.getFnScope()
-    const inputRect = this.context.clientRect
+    const { inputRect } = this.context
+    if (!inputRect) { return null }
+    const { bottom: top, left } = inputRect
     let fnNode
 
     if (!scope) { return null }
@@ -79,10 +81,7 @@ class FuncDescription extends React.PureComponent {
 
     return (
       <Root
-        css={css`
-          top: ${inputRect.bottom};
-          left: ${inputRect.left};
-        `}
+        css={{ top, left }}
       >
         <Pre
           css={css`

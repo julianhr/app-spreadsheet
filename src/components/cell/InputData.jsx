@@ -55,14 +55,18 @@ export class InputData extends React.PureComponent {
   refInput = React.createRef()
 
   componentDidMount() {
-    this.setInputValue(this.props.replaceValue ? '' : this.props.entered)
-    this.tokenizeInputValue(this.refInput.current.value, '')
+    const entered = this.props.replaceValue ? '' : this.props.entered
+    this.setInputValue(entered)
     this.focusInputTag()
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.keyEvent !== this.state.keyEvent) {
       this.keyActions()
+    }
+
+    if (prevState.inputValue !== this.state.inputValue) {
+      this.tokenizeInputValue()
     }
   }
 
@@ -80,16 +84,14 @@ export class InputData extends React.PureComponent {
     }
   }
 
-  tokenizeInputValue(entered) {
-    const lexer = new Lexer(entered)
-    const tokens = lexer.getTokens()
-    this.setState({ tokens })
-  }
-
   focusInputTag() {
     const input = this.refInput.current
     input.focus()
     input.scrollLeft = input.scrollWidth
+  }
+
+  setInputValue(inputValue) {
+    this.setState({ inputValue })
   }
 
   setNewValue() {
@@ -104,6 +106,13 @@ export class InputData extends React.PureComponent {
     this.props.setCellData(location, inputValue)
   }
 
+  tokenizeInputValue() {
+    const { inputValue } = this.state
+    const lexer = new Lexer(inputValue)
+    const tokens = lexer.getTokens()
+    this.setState({ tokens })
+  }
+
   isWhitespace(text) {
     return text.length === 0 || Boolean(text.match(/^\s+$/))
   }
@@ -112,14 +121,8 @@ export class InputData extends React.PureComponent {
     this.setState({ isFuncSelectorVisible })
   }
 
-  setInputValue(inputValue) {
-    this.setState({ inputValue })
-    this.tokenizeInputValue(inputValue)
-  }
-
   handleOnChange(event) {
     const { target: { value } } = event
-    this.tokenizeInputValue(value)
     this.setState({ inputValue: value })
   }
 

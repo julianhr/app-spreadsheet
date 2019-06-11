@@ -98,13 +98,15 @@ class FuncSelector extends React.Component {
   }
 
   updateInputValue() {
-    const { inputValue: currInputValue } = this.context
+    const currInputValue = this.context.inputValue
     const { token } = this.props
-    const endIndex = currInputValue.length - token.text.length
-    const inputValue = currInputValue.slice(0, endIndex)
     const { fnName } = this.state.listItems[this.state.itemIndex]
-    const newInputValue = `${inputValue}${fnName}(`
-    this.context.setInputValue(newInputValue)
+    const rightChunkIndex = token.index + token.text.length
+    const leftChunk = currInputValue.slice(0, token.index)
+    const rightChunk = currInputValue.slice(rightChunkIndex)
+    const newInputValue = `${leftChunk}${fnName}(${rightChunk}`
+    const cursorPos = leftChunk.length + fnName.length + 1
+    this.context.setInputValue(newInputValue, cursorPos)
   }
 
   setListItems() {
@@ -190,15 +192,15 @@ class FuncSelector extends React.Component {
 
   render() {
     const { listItems, isVisible } = this.state
-    const { clientRect } = this.context
+    const { inputRect } = this.context
 
     if (isVisible) {
       return (
         <InteractiveList
           selectItem={() => {}}
           items={listItems}
-          top={Math.round(clientRect.bottom)}
-          left={Math.round(clientRect.left)}
+          top={Math.round(inputRect.bottom)}
+          left={Math.round(inputRect.left)}
           styles={this.getListStyles()}
         />
       )

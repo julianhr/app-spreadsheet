@@ -7,6 +7,7 @@ import FuncSelector from './FuncSelector'
 
 
 class Suggestions extends React.PureComponent {
+
   static propTypes = {
     tokens: PropTypes.array.isRequired,
     cursorPos: PropTypes.number,
@@ -25,7 +26,7 @@ class Suggestions extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.tokens !== this.props.tokens) { // avoid infinite loop
+    if (prevProps.tokens !== this.props.tokens) {
       this.setFnScopes()
     }
   }
@@ -54,52 +55,72 @@ class Suggestions extends React.PureComponent {
     this.setState({ fnScopes })
   }
 
-  getComponentToRender() {
-    const { tokens, cursorPos } = this.props
-    let componentName = null
+  getCurrTokenIndex(tokens, cursorPos) {
+    let index
 
-    if (tokens.length < 2) {
-      componentName = null
-    } else {
-      const token1 = tokens[tokens.length - 1]
-      const token2 = tokens.length > 1 && tokens[tokens.length - 2]
+    for (index = 0; index < tokens.length; index++) {
+      const token = tokens[index]
+      const endIndex = token.index + token.text.length
 
-      if (
-        [t.UNKNOWN, t.FUNCTION].includes(token1.type)
-        && (token2.category === 'operator'
-            || token2.type === t.EQUALS)
-      ) {
-        if (cursorPos >= token1.index) {
-          componentName = 'FuncSelector'
-        }
-      } else {
-        componentName = 'FuncDescription'
+      if (cursorPos > token.index && cursorPos <= endIndex) {
+        break
       }
     }
 
-    return componentName
+    return index
+  }
+
+  getCompareTokens() {
+    const { tokens, cursorPos } = this.props
+    const index = this.getCurrTokenIndex(tokens, cursorPos)
+    const tokenBefore = index > 0 && tokens[index - 1]
+    const tokenCurr = tokens[index]
+    const tokenAfter = index < tokens.length - 2 && tokens[index + 1]
+    return [ tokenBefore, tokenCurr, tokenAfter ]
+  }
+
+  getFuncSelector() {
+    const [ tokenBefore, tokenCurr, tokenAfter ] = this.getCompareTokens()
+
+    if (this.props.tokens.length < 2) { return null }
+
+    const option1 = (
+      tokenBefore
+      && tokenCurr
+      && tokenAfter
+      && tokenBefore.category === 'operator'
+      && [t.TEXT, t.FUNCTION].includes(tokenCurr.type)
+      && tokenAfter.type !== t.RPAREN
+    )
+
+    const option2 = (
+      tokenBefore
+      && tokenCurr
+      && !tokenAfter
+      && [t.TEXT, t.FUNCTION].includes(tokenCurr.type)
+    )
+
+    if (option1 || option2) {
+      return (
+        <FuncSelector
+            token={tokenCurr}
+        />
+      )
+    }
   }
 
   render() {
-    const { tokens, cursorPos } = this.props
-    const token1 = tokens[tokens.length - 1]
+    const renderedFuncSelector = this.getFuncSelector()
 
-    switch (this.getComponentToRender()) {
-      case 'FuncSelector':
-        return (
-          <FuncSelector
-            token={token1}
-          />
-        )
-      case 'FuncDescription':
-        return (
-          <FuncDescription
-            cursorPos={cursorPos}
-            fnScopes={this.state.fnScopes}
-          />
-        )
-      default:
-        return null
+    if (renderedFuncSelector) {
+      return renderedFuncSelector
+    } else {
+      return (
+        <FuncDescription
+          cursorPos={this.props.cursorPos}
+          fnScopes={this.state.fnScopes}
+        />
+      )
     }
   }
 }
