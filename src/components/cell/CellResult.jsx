@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
 import { clearCellData } from '~/actions/tableActions'
-import { displayInputter, setActiveCell } from '~/actions/globalActions'
+import { displayCellInputter, setActiveCell } from '~/actions/globalActions'
 
 
 const Wrapper = styled.div`
@@ -38,7 +38,7 @@ export class ResultCell extends React.PureComponent {
     location: PropTypes.string.isRequired,
     // onDoubleClick: PropTypes.func.isRequired,
     // onKeyDownEditable: PropTypes.func.isRequired,
-    displayInputter: PropTypes.func.isRequired,
+    displayCellInputter: PropTypes.func.isRequired,
     // redux
     clearCellData: PropTypes.func.isRequired,
     // setActiveCell: PropTypes.func.isRequired,
@@ -66,12 +66,12 @@ export class ResultCell extends React.PureComponent {
   //   if (this.props.isFocused) { this.refCell.current.focus() }
   // }
 
-  displayInputter(willReplaceValue) {
+  displayCellInputter(willReplaceValue) {
     const { location } = this.props
     const cellDomRect = this.refCell.current.getBoundingClientRect()
     const cellRect = JSON.parse(JSON.stringify(cellDomRect))
 
-    this.props.displayInputter({
+    this.props.displayCellInputter({
       location,
       willReplaceValue,
       cellRect,
@@ -90,12 +90,12 @@ export class ResultCell extends React.PureComponent {
       // key pressed is a printable symbol, ex: 'a', '1', ','
       // can be further refined, but for now it's fine
     } else if (key.length === 1) {
-      this.displayInputter(true)
+      this.displayCellInputter(true)
     }
   }
 
   handleCellOnDoubleClick() {
-    this.displayInputter(false)
+    this.displayCellInputter(false)
   }
 
   getStyle() {
@@ -149,6 +149,6 @@ function mapStateToProps(state, ownProps) {
   return { result }
 }
 
-const mapDispatchToProps = { clearCellData, displayInputter, setActiveCell }
+const mapDispatchToProps = { clearCellData, displayCellInputter, setActiveCell }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultCell)

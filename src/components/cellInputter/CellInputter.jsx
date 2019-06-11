@@ -8,9 +8,9 @@ import { connect } from 'react-redux'
 import { setCellData, clearCellData } from '~/actions/tableActions'
 import { parseLocation, getColumnLabel } from '~/library/utils'
 import Lexer from '~/formulas/Lexer'
-// import Suggestions from '../suggestions/Suggestions'
+import Suggestions from './Suggestions'
 import { InputContext } from './InputContext'
-import { displayInputter } from '~/actions/globalActions'
+import { closeCellInputter } from '~/actions/globalActions'
 
 
 const Root = styled.div`
@@ -34,10 +34,6 @@ const Input = styled.input`
 export class CellInputter extends React.PureComponent {
 
   static propTypes = {
-    // props
-    // onEscape: PropTypes.func.isRequired,
-    // onCommit: PropTypes.func.isRequired,
-    
     // redux
     location: PropTypes.string.isRequired,
     cellRect: PropTypes.object.isRequired,
@@ -47,7 +43,7 @@ export class CellInputter extends React.PureComponent {
     willReplaceValue: PropTypes.bool.isRequired,
     clearCellData: PropTypes.func.isRequired,
     setCellData: PropTypes.func.isRequired,
-    displayInputter: PropTypes.func.isRequired,
+    closeCellInputter: PropTypes.func.isRequired,
   }
 
   constructor() {
@@ -85,12 +81,12 @@ export class CellInputter extends React.PureComponent {
     switch (this.state.keyEvent.key) { // eslint-disable-line
       case 'Escape':
         // this.props.onEscape()
-        this.props.displayInputter(null)
+        this.props.closeCellInputter()
         break
       case 'Enter':
         if (!this.state.isFuncSelectorVisible) {
           this.setNewValue()
-          this.props.displayInputter(null)
+          this.props.closeCellInputter()
           // this.props.onCommit()
         }
         break
@@ -118,6 +114,8 @@ export class CellInputter extends React.PureComponent {
     if (key === 'Tab') {
       elId = `[data-cell="result"][data-location="${location}"]`
     } else if (key === 'Enter') {
+      if (this.state.isFuncSelectorVisible) { return }
+
       const nextRowIndex = Math.min(this.props.rows - 1, rowIndex + 1)
       const colLabel = getColumnLabel(colIndex)
       const rowLabel = '' + (nextRowIndex + 1)
@@ -166,15 +164,6 @@ export class CellInputter extends React.PureComponent {
 
   handleOnKeyDown(event) {
     const { key, target: { value } } = event
-
-    if (this.state.isFuncSelectorVisible) {
-      event.stopPropagation()
-    } else {
-      if (!['Enter', 'Escape'].includes(key)) {
-        event.stopPropagation()
-      }
-    }
-
     this.setState({ keyEvent: { key }, inputValue: value })
   }
 
@@ -182,7 +171,7 @@ export class CellInputter extends React.PureComponent {
     this.setState({ inputValue: event.target.value }, () => {
       this.setNewValue()
       this.setFocus()
-      this.props.displayInputter(null)
+      this.props.closeCellInputter()
     })
   }
 
@@ -219,10 +208,10 @@ export class CellInputter extends React.PureComponent {
             onKeyDown={this.handleOnKeyDown}
             onBlur={this.handleOnBlur}
           />
-          {/* <Suggestions
+          <Suggestions
             tokens={this.state.tokens}
             cursorPos={inputEl && inputEl.selectionStart}
-          /> */}
+          />
         </Root>
       </InputContext.Provider>
     )
@@ -245,6 +234,6 @@ function mapStateToProps(state) {
   return { location, willReplaceValue, cellRect, entered, rows, columns }
 }
 
-const mapDispatchToProps = { setCellData, clearCellData, displayInputter }
+const mapDispatchToProps = { setCellData, clearCellData, closeCellInputter }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CellInputter)
