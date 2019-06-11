@@ -2,6 +2,7 @@ import { createReducer } from 'redux-starter-kit'
 
 export const INITIAL_STATE = {
   activeCell: null,
+  cellInputter: null,
   rows: 14,
   columns: 6,
 }
@@ -11,7 +12,7 @@ export default createReducer(INITIAL_STATE, {
     state.activeCell = payload
   },
 
-  'DISPLAY_INPUTTER': (state, { payload }) => {
-    state.displayInputter = payload
+  'SET_CELL_INPUTTER': (state, { payload }) => {
+    state.cellInputter = payload
   }
 })
