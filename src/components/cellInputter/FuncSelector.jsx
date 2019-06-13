@@ -11,17 +11,21 @@ import { InputContext } from './InputContext'
 import { withTheme } from 'emotion-theming'
 
 
-const baseStyle = css`
+const Dialog = styled.dialog`
+  border: 0;
+`
+
+const baseItemStyle = css`
   padding: 6px 8px;
 `
 
-const BaseRoot = styled.div`
-  ${baseStyle}
+const ItemBaseRoot = styled.div`
+  ${baseItemStyle}
   background: ${props => props.theme.colors.dropdown.normal};
 `
 
-const ActiveRoot = styled.div`
-  ${baseStyle}
+const ItemActiveRoot = styled.div`
+  ${baseItemStyle}
   background: ${props => props.theme.colors.dropdown.active};
 `
 
@@ -50,6 +54,12 @@ class FuncSelector extends React.Component {
     itemIndex: 0,
     keyEvent: null,
     isVisible: false,
+  }
+
+  constructor() {
+    super()
+    this.handleOnClick = this.handleOnClick.bind(this)
+    this.setIndex = this.setIndex.bind(this)
   }
 
   componentDidMount() {
@@ -85,14 +95,14 @@ class FuncSelector extends React.Component {
 
     if (prevState.keyEvent !== keyEvent) {
       this.setState({ keyEvent })
-      this.setItemIndex(keyEvent)
+      this.keyEventSetIndex(keyEvent)
     }
   }
 
   keyActions() {
     const { keyEvent } = this.context
     if (this.state.keyEvent === keyEvent) { return }
-    if (keyEvent.key === 'Enter' && this.state.isVisible) {
+    if (['Enter', 'Tab'].includes(keyEvent.key) && this.state.isVisible) {
       this.updateInputValue()
     }
   }
@@ -112,8 +122,6 @@ class FuncSelector extends React.Component {
   setListItems() {
     const { token } = this.props
     const text = token.text.toUpperCase()
-    let isVisible = false
-    let itemIndex
     const listItems = Object
       .keys(formulaFuncs)
       .filter(fnName => fnName.startsWith(text))
@@ -126,6 +134,8 @@ class FuncSelector extends React.Component {
         isActive: false,
         fnName,
       }))
+    let isVisible = false
+    let itemIndex
 
     itemIndex = Math.max(Math.min(listItems.length - 1, this.state.itemIndex), 0)
 
@@ -137,7 +147,7 @@ class FuncSelector extends React.Component {
     this.setState({ listItems, itemIndex, isVisible })
   }
 
-  setItemIndex(keyEvent) {
+  keyEventSetIndex(keyEvent) {
     let itemIndex = this.state.itemIndex
 
     switch (keyEvent.key) { // eslint-disable-line default-case
@@ -154,26 +164,32 @@ class FuncSelector extends React.Component {
     })
   }
 
+  setIndex(itemIndex) {
+    this.setState({ itemIndex }, () => {
+      this.setListItems()
+    })
+  }
+
   itemBase(fnName) {
     return (
-      <BaseRoot>
+      <ItemBaseRoot>
         <Pre>
           {fnName}
         </Pre>
-      </BaseRoot>
+      </ItemBaseRoot>
     )
   }
 
   itemActive(fnName) {
     return (
-      <ActiveRoot>
+      <ItemActiveRoot>
         <Pre>
           {fnName}
         </Pre>
         <Subtitle>
           {formulaFuncs[fnName].summary}
         </Subtitle>
-      </ActiveRoot>
+      </ItemActiveRoot>
     )
   }
 
@@ -190,23 +206,28 @@ class FuncSelector extends React.Component {
     }
   }
 
+  handleOnClick() {
+    this.updateInputValue()
+  }
+
   render() {
     const { listItems, isVisible } = this.state
     const { inputRect } = this.context
 
-    if (isVisible) {
-      return (
+    return (
+      <Dialog
+        open={isVisible}
+        onClick={this.handleOnClick}
+      >
         <InteractiveList
-          selectItem={() => {}}
           items={listItems}
           top={Math.round(inputRect.bottom)}
           left={Math.round(inputRect.left)}
           styles={this.getListStyles()}
+          onMouseEnter={this.setIndex}
         />
-      )
-    } else {
-      return null
-    }
+      </Dialog>
+    )
   }
 }
 

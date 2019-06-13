@@ -23,6 +23,7 @@ const Input = styled.input`
   align-items: center;
   background-color: white;
   border: 2px solid salmon;
+  box-shadow: 0 0 5px ${props => props.theme.colors.shadow};
   box-sizing: border-box;
   display: flex;
   font-size: 13px;
@@ -91,19 +92,30 @@ export class CellInputter extends React.PureComponent {
   }
 
   keyActions() {
-    switch (this.state.keyEvent.key) { // eslint-disable-line
-      case 'Escape':
-        this.props.closeCellInputter()
-        break
-      case 'Enter':
-        if (!this.state.isFuncSelectorVisible) {
+    const { key } = this.state.keyEvent
+
+    if (this.state.isFuncSelectorVisible) {
+      switch (key) { // eslint-disable-line
+        case 'Escape':
+          this.props.closeCellInputter()
+          break
+        case 'ArrowLeft':
+        case 'ArrowRight':
+          this.setState({ cursorPos: this.refInput.current.selectionEnd })
+      }
+    } else {
+      switch (key) { // eslint-disable-line
+        case 'Escape':
+          this.props.closeCellInputter()
+          break
+        case 'Enter':
           this.setCellValue()
           this.props.closeCellInputter()
-        }
-        break
-      case 'ArrowLeft':
-      case 'ArrowRight':
-        this.setState({ cursorPos: this.refInput.current.selectionEnd })
+          break
+        case 'ArrowLeft':
+        case 'ArrowRight':
+          this.setState({ cursorPos: this.refInput.current.selectionEnd })
+      }
     }
   }
 
@@ -115,8 +127,12 @@ export class CellInputter extends React.PureComponent {
   }
 
   focusInputTag() {
-    const input = this.refInput.current
-    input.focus()
+    const inputEl = this.refInput.current
+
+    setImmediate(() => {
+      inputEl.focus()
+      inputEl.selectionStart = inputEl.value.length
+    })
   }
 
   setFocus() {
@@ -125,20 +141,26 @@ export class CellInputter extends React.PureComponent {
     const [colIndex, rowIndex] = parseLocation(location)
     let el, elId
 
-    if (key === 'Tab') {
-      elId = `[data-cell="result"][data-location="${location}"]`
-    } else if (key === 'Enter') {
-      if (this.state.isFuncSelectorVisible) { return }
-
-      const nextRowIndex = Math.min(this.props.rows - 1, rowIndex + 1)
-      const colLabel = getColumnLabel(colIndex)
-      const rowLabel = '' + (nextRowIndex + 1)
-      const endLocation = `${colLabel}-${rowLabel}`
-      elId = `[data-cell="result"][data-location="${endLocation}"]`
-    } else if (key === 'Escape') {
-      elId = `[data-cell="result"][data-location="${location}"]`
+    if (this.state.isFuncSelectorVisible) {
+      if (key === 'Escape') {
+        elId = `[data-cell="result"][data-location="${location}"]`
+      } else {
+        return
+      }
     } else {
-      elId = `[data-cell="input"][data-location="${location}"]`
+      if (key === 'Tab') {
+        elId = `[data-cell="result"][data-location="${location}"]`
+      } else if (key === 'Enter') {
+        const nextRowIndex = Math.min(this.props.rows - 1, rowIndex + 1)
+        const colLabel = getColumnLabel(colIndex)
+        const rowLabel = '' + (nextRowIndex + 1)
+        const endLocation = `${colLabel}-${rowLabel}`
+        elId = `[data-cell="result"][data-location="${endLocation}"]`
+      } else if (key === 'Escape') {
+        elId = `[data-cell="result"][data-location="${location}"]`
+      } else {
+        elId = `[data-cell="input"][data-location="${location}"]`
+      }
     }
 
     el = document.querySelector(elId)
@@ -170,13 +192,12 @@ export class CellInputter extends React.PureComponent {
   }
 
   setInputValue(inputValue, cursorPos) {
-    this.setState({ inputValue, cursorPos: inputValue.length }, () => {
-      if (!cursorPos) { return }
+    const inputEl = this.refInput.current
 
-      setImmediate(() => {
-        this.refInput.current.selectionStart = cursorPos
-        this.refInput.current.selectionEnd = cursorPos
-      })
+    this.setState({ inputValue, cursorPos: inputValue.length }, () => {
+      inputEl.focus()
+      inputEl.selectionStart = cursorPos
+      inputEl.selectionEnd = cursorPos
     })
   }
 
@@ -188,10 +209,17 @@ export class CellInputter extends React.PureComponent {
 
   handleOnKeyDown(event) {
     const { key, target: { value } } = event
+
+    if (this.state.isFuncSelectorVisible && key === 'Tab') {
+      event.preventDefault()
+    }
+
     this.setState({ keyEvent: { key }, inputValue: value })
   }
 
   handleOnBlur(event) {
+    if (this.state.isFuncSelectorVisible) { return }
+
     this.setState({ inputValue: event.target.value }, () => {
       this.setCellValue()
       this.props.closeCellInputter()
