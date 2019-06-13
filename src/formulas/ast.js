@@ -48,6 +48,14 @@ class CellNode extends AST {
   }
 }
 
+class CellRange extends AST {
+  constructor(leftCell, rightCell) {
+    super('CellRange')
+    this.leftCell = leftCell
+    this.rightCell = rightCell
+  }
+}
+
 class UnaryOp extends AST {
   constructor(opNode, expr) {
     super('UnaryOp')
@@ -109,6 +117,7 @@ export {
   TextNode,
   NumberNode,
   CellNode,
+  CellRange,
   BinaryOp,
   UnaryOp,
   FuncOp,

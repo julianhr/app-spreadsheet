@@ -123,8 +123,22 @@ describe('Parser', () => {
           expect(ast).toMatchSnapshot()
         })
   
-        test('"=sum(5,6,7)"', () => {
+        test('"=sum(5,6)"', () => {
           const input = '=sum(5,6,7)'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+
+        test('"=sum(A1:B2, C1)"', () => {
+          const input = '=sum(A1:B2, C1)'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
+
+        test('"=sum(B2:A1, C2:D4)"', () => {
+          const input = '=sum(B2:A1, C2:D4)'
           const parser = getParser(input)
           const ast = parser.parse()
           expect(ast).toMatchSnapshot()
