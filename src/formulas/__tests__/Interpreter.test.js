@@ -40,7 +40,7 @@ describe('Interpreter', () => {
       const interpreter = new Interpreter('A-1')
       class Test {}
       const node = new Test()
-      expect(() => interpreter._visit(node)).toThrow()
+      expect(() => interpreter.visitNode(node)).toThrow()
     })
   })
 
@@ -123,7 +123,7 @@ describe('Interpreter', () => {
     })
 
     describe('cell references happy path', () => {
-      test('A1=4, B2=A1', async () => {
+      test('A1=4, B2=A1', () => {
         const a1 = new Interpreter('A-1')
         const b2 = new Interpreter('B-2')
         a1.interpret('4')
@@ -131,27 +131,43 @@ describe('Interpreter', () => {
         expect(result).toBe(4)
       })
 
-      test('A1="test", B2=A1', async () => {
+      test('A1="test", B1=A1, C1=B1', () => {
         const input = 'test'
         const a1 = new Interpreter('A-1')
-        const b2 = new Interpreter('B-2')
+        const b1 = new Interpreter('B-1')
+        const c1 = new Interpreter('C-1')
+        let result
+
         a1.interpret('test')
-        const result = b2.interpret('=A1')
+        result = b1.interpret('=A1')
+        expect(result).toBe(input)
+        result = c1.interpret('=B1')
         expect(result).toBe(input)
       })
 
-      test('A2=4, A1=A2, B2=A1', async () => {
+      test('A1=4, B1=A1, C1=B1', () => {
         const a1 = new Interpreter('A-1')
-        const a2 = new Interpreter('A-2')
-        const b2 = new Interpreter('B-2')
+        const b1 = new Interpreter('B-1')
+        const c1 = new Interpreter('C-1')
 
-        a2.interpret('4')
-        a1.interpret('=A2')
-        const result = b2.interpret('=A1')
+        a1.interpret('4')
+        b1.interpret('=A1')
+        const result = c1.interpret('=B1')
         expect(result).toBe(4)
       })
 
-      test('dependent cells update their result', async () => {
+      test('A1=3, B1=A1, C1=A1+B1', () => {
+        const a1 = new Interpreter('A-1')
+        const b1 = new Interpreter('B-1')
+        const c1 = new Interpreter('C-1')
+
+        a1.interpret('3')
+        b1.interpret('=A1')
+        const result = c1.interpret('=A1+B1')
+        expect(result).toBe(6)
+      })
+
+      test('dependent cells update their result', () => {
         const a1 = new Interpreter('A-1')
         const a2 = new Interpreter('A-2')
         const a3 = new Interpreter('A-3')
@@ -165,6 +181,28 @@ describe('Interpreter', () => {
         a1.interpret('3')
         expect(graph.getCellResult('A-2')).toBe(8)
         expect(graph.getCellResult('A-3')).toBe(11)
+      })
+
+      test('A1=3, A3=2, C1=SUM(A1:A3)', () => {
+        const a1 = new Interpreter('A-1')
+        const a3 = new Interpreter('A-3')
+        const c1 = new Interpreter('C-1')
+
+        a1.interpret('3')
+        a3.interpret('2')
+        const result = c1.interpret('=SUM(A1:A3)')
+        expect(result).toBe(5)
+      })
+
+      test('A1=3, C2=A1+1, C1=SUM(A1:B2,C2,(C3+9)/3)', () => {
+        const a1 = new Interpreter('A-1')
+        const c2 = new Interpreter('C-2')
+        const c1 = new Interpreter('C-1')
+
+        a1.interpret('3')
+        c2.interpret('=A1+1')
+        const result = c1.interpret('=SUM(A1:B2,C2,(C3+9)/3)')
+        expect(result).toBe(10)
       })
     })
 
@@ -202,14 +240,14 @@ describe('Interpreter', () => {
         const a1 = new Interpreter('A-1')
         const b1 = new Interpreter('B-1')
         b1.interpret('2')
-        jest.spyOn(Interpreter.prototype, 'dfsCellVisit')
+        jest.spyOn(graph, 'visitCell')
         a1.interpret('=B1+B1+B1')
-        expect(a1.dfsCellVisit).toHaveBeenCalledTimes(1)
+        expect(graph.visitCell).toHaveBeenCalledTimes(1)
         expect(a1.result).toBe(6)
       })
 
       describe('circular reference', () => {
-        test('A1=A1', async () => {
+        test('A1=A1', () => {
           const a1 = new Interpreter('A-1')
           const result = a1.interpret('=A1')
           expect(result).toBe(ERR_CIRCULAR_REFERENCE)

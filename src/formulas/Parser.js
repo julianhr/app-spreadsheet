@@ -1,5 +1,13 @@
 import { TOKENS as t } from './Lexer'
-import { TextNode, NumberNode, CellNode, BinaryOp, UnaryOp, FuncOp } from './ast'
+import {
+  TextNode,
+  NumberNode,
+  CellNode,
+  CellRange,
+  BinaryOp,
+  UnaryOp,
+  FuncOp
+} from './ast'
 
 
 class Parser {
@@ -8,7 +16,6 @@ class Parser {
     this.tokens = tokens
     this.curr = this.tokens[0]
     this.ast = null
-    this.hasCellRefs = false
   }
 
   parse() {
@@ -130,9 +137,45 @@ class Parser {
     }
 
     const node = new CellNode(this.curr)
-    this.hasCellRefs = true
     this.consume()
     return node
+  }
+
+  isCellRange() {
+    return (
+      this.peekType(0) === t.CELL
+      && this.peekType(1) === t.COLON
+      && this.peekType(2) === t.CELL
+    )
+  }
+
+  cellRange() {
+    let left, right
+
+    if (!this.isCellRange()) {
+      throw new Error('Missing cell range')
+    }
+
+    left = new CellNode(this.curr)
+    this.consume() // skip colon
+    this.consume()
+    right = new CellNode(this.curr)
+    this.consume()
+
+    if (right.location < left.location) {
+      [left, right] = this.invertCellRange(left, right)
+    }
+
+    return new CellRange(left, right)
+  }
+
+  invertCellRange(left, right) {
+    this.tokens[this.index - 2] = right.cell
+    this.tokens[this.index] = left.cell
+    let temp = left
+    left = right
+    right = temp
+    return [left, right]
   }
 
   func() {
@@ -143,24 +186,33 @@ class Parser {
     const func = this.curr
     this.consume()
     this.lparen()
-    const args = this.args()
+    const args = this.list()
     this.rparen()
     return new FuncOp(func, args)
   }
 
-  args() {
-    const args = []
-    let term = this.term()
+  list() {
+    const list = []
+    let node
 
-    args.push(term)
+    node = this.getListNode()
+    list.push(node)
 
     while (this.peekType() === t.COMMA) {
-      this.consume()
-      term = this.term()
-      args.push(term)
+      this.consume() // skip comma token
+      node = this.getListNode()
+      list.push(node)
     }
 
-    return args
+    return list
+  }
+
+  getListNode() {
+    if (this.isCellRange()) {
+      return this.cellRange()
+    } else {
+      return this.expr()
+    }
   }
 
   equals() {
@@ -207,8 +259,20 @@ class Parser {
     }
   }
 
-  peekType() {
-    return this.curr && this.curr.type
+  peekType(stepsAhead) {
+    if (stepsAhead) {
+      if (stepsAhead < 0) {
+        throw new Error('peak ahead index must be positive')
+      }
+
+      const index = this.index + stepsAhead
+
+      if (index < this.tokens.length) {
+        return this.tokens[index].type
+      }
+    } else {
+      return this.curr && this.curr.type
+    }
   }
 }
 

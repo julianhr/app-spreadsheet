@@ -1,8 +1,11 @@
 import graph from '~/formulas/graph'
+import Interpreter from '../formulas/Interpreter'
 
 
 export function setCellData(location, entered) {
-  const result = graph.interpret(location, entered)
+  const interpreter = new Interpreter(location)
+  const result = interpreter.interpret(entered)
+
 
   return {
     type: 'SET_CELL_DATA',

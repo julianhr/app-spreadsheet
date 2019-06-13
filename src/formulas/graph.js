@@ -19,23 +19,10 @@ class Graph {
     this.store = new ReduxConnect()
   }
 
-  interpret(location, input) {
-    const interpreter = new Interpreter(location)
-    return interpreter.interpret(input)
-  }
-
-  recalculate(initLocation) {
+  recalculate(location) {
     this.setPendingNodes()
-    this.dfs(initLocation)
+    this.dfs(location)
     this.updateStore()
-  }
-
-  getCellResult(location) {
-    if (this.hasVertex(location)) {
-      return this.getVertex(location).result
-    } else {
-      return ''
-    }
   }
 
   setPendingNodes() {
@@ -46,34 +33,51 @@ class Graph {
     })
   }
 
-  isResolved(location) {
-    return this.isVisited(location) || !this.isPending(location)
-  }
-
-  isVisited(location) {
-    return this.visited.has(location)
-  }
-
-  isPending(location) {
-    return this.pending.has(location)
-  }
-
   dfs(location) {
     while (this.pending.size > 0) {
-      let interpreter
-      this.visited = new Set()
-
       if (!location) {
         location = [...this.pending][0]
       }
 
       try {
-        interpreter = new Interpreter(location)
-        interpreter.visit(location)
+        this.visited = new Set([location])
+        const interpreter = new Interpreter(location)
+        interpreter.visitAST(location)
       } catch (error) {}
 
       this.visited.forEach(location => this.pending.delete(location))
       location = null
+    }
+
+    this.visited = null
+    this.pending = null
+  }
+
+  visitCell(location) {
+    if (!this.hasVertex(location)) {
+      return 0
+    }
+
+    this.testPathCycle(location)
+    this.pending.delete(location)
+    this.visited.add(location)
+    const interpreter = new Interpreter(location)
+    const result = interpreter.visitAST(location)
+    this.visited.delete(location)
+    return result
+  }
+
+  getCellResult(location) {
+    if (location in this.adj) {
+      return graph.adj[location].result
+    } else {
+      return ''
+    }
+  }
+
+  testPathCycle(location) {
+    if (this.visited.has(location)) {
+      throw new Error('Circular reference')
     }
   }
 
@@ -93,10 +97,6 @@ class Graph {
     for (let location of locationKeys) {
       this.store.clearCell(location)
     }
-  }
-
-  markVisited(location) {
-    return this.visited.add(location)
   }
 
   addVertex(location, entered) {
