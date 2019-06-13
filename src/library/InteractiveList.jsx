@@ -14,8 +14,9 @@ const Ul = styled.ul`
 `
 
 class InteractiveList extends React.PureComponent {
+
   static propsTypes = {
-    selectedFn: PropTypes.func.isRequired,
+    onMouseEnter: PropTypes.func,
     items: PropTypes.array.isRequired,
     top: PropTypes.number.isRequired,
     left: PropTypes.number.isRequired,
@@ -25,29 +26,16 @@ class InteractiveList extends React.PureComponent {
     }),
   }
 
-  state = {
-    activeIndex: 0,
-    selectedIndex: null,
-  }
-
-  componentDidUpdate(prevProps, prevState) { // eslint-disable-line
-    this.fireSelected()
-  }
-
-  fireSelected() {
-    if (this.state.selectedIndex === null) { return }
-    const item = this.props.items[this.state.selectedIndex]
-    this.props.selectedFn(item.value)
-  }
-
   renderListItems() {
     return this.props.items
-      .map((item, i) => (
+      .map((item, index) => (
         <InteractiveListItem
-          key={i}
+          key={index}
+          index={index}
           item={item.item}
           style={{...this.props.styles.li}}
           isActive={item.isActive}
+          onMouseEnter={this.props.onMouseEnter}
         />
       ))
   }
@@ -61,7 +49,6 @@ class InteractiveList extends React.PureComponent {
       <Ul
         tabIndex={-1}
         style={{ top, left, ...styles.ul }}
-        onClick={this.handleOnClick}
       >
         {this.renderListItems()}
       </Ul>
