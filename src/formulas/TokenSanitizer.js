@@ -17,6 +17,8 @@ class TokenSanitizer {
           return this.cell(token)
         case t.FUNCTION:
           return this.function(token)
+        case t.STRING:
+          return this.string(token)
         default:
           return token
       }
@@ -25,7 +27,7 @@ class TokenSanitizer {
 
   number(token) {
     if (!isNumber(token.text)) {
-      token.type = t.TEXT
+      token.type = t.UNKNOWN
       return token
     }
 
@@ -40,13 +42,18 @@ class TokenSanitizer {
 
   function(token) {
     const fn = this.getFunction(token)
-
+    
     if (fn) {
       token.value = fn
     } else {
-      token.type = t.TEXT
+      token.type = t.UNKNOWN
     }
 
+    return token
+  }
+
+  string(token) {
+    token.value = token.text.slice(1, -1)
     return token
   }
 

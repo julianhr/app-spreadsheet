@@ -19,10 +19,12 @@ const TOKENS = {
   MULT: 'MULT',
   DIV: 'DIV',
   // entities
-  NUMBER: 'NUMBER',
-  CELL: 'CELL',
-  FUNCTION: 'FUNCTION',
   TEXT: 'TEXT',
+  CELL: 'CELL',
+  STRING: 'STRING',
+  NUMBER: 'NUMBER',
+  FUNCTION: 'FUNCTION',
+  UNKNOWN: 'UNKNOWN',
 }
 
 const t = TOKENS
@@ -40,6 +42,7 @@ const GRAMMAR = [
   new LexerRule(/\*/g, 0, t.MULT, 'operator'),
   new LexerRule(/\//g, 0, t.DIV, 'operator'),
   // multi-character
+  new LexerRule(/("[^"]+")/g, 1, t.STRING, 'entity'), // eslint-disable-line
   new LexerRule(/[\d\.]+/g, 0, t.NUMBER, 'entity'), // eslint-disable-line
   new LexerRule(/[a-z]+[\d]+/gi, 0, t.CELL, 'entity'),
   new LexerRule(/([a-z]+)\(/gi, 1, t.FUNCTION, 'entity'),
@@ -92,7 +95,7 @@ class Lexer {
     }
 
     if (!token) {
-      token = this.tokenTEXT(whitespaceLen)
+      token = this.tokenUNKNOWN(whitespaceLen)
     }
 
     return token
@@ -107,7 +110,7 @@ class Lexer {
     return input[this.index]
   }
 
-  tokenTEXT(whitespace) {
+  tokenUNKNOWN(whitespace) {
     const chars = []
 
     while (!(this.isEOF() || this.isSeparator() || this.isWhitespace())) {
@@ -116,7 +119,7 @@ class Lexer {
     }
 
     const text = chars.join('')
-    return new Token(t.TEXT, text, whitespace, 'entity', this.index - text.length)
+    return new Token(t.UNKNOWN, text, whitespace, 'entity', this.index - text.length)
   }
 
   tokenTEXTorNUMBER() {

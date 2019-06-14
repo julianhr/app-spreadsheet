@@ -12,18 +12,6 @@ Token {
 }
 `;
 
-exports[`Lexer token NUMBER includes malformed float numbers 1`] = `
-Token {
-  "category": "entity",
-  "html": null,
-  "index": 14,
-  "text": "..5",
-  "type": "TEXT",
-  "value": null,
-  "whitespace": 0,
-}
-`;
-
 exports[`Lexer token TEXT matches snapshot 1`] = `
 Token {
   "category": "entity",

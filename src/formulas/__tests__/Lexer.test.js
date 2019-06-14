@@ -186,7 +186,7 @@ describe('Lexer', () => {
         const lexer = new Lexer(input)
         const tokens = lexer.getTokens()
   
-        expect(tokens[index].type).toBe(t.TEXT)
+        expect(tokens[index].type).toBe(t.UNKNOWN)
       }
     })
   })
@@ -256,16 +256,11 @@ describe('Lexer', () => {
 
   test('token COLON', () => {
     const input = '=SUM(B2:D4)*sum(BC45  : Z5)'
-    let lexer = new Lexer(input)
-    let token
+    const lexer = new Lexer(input)
+    const tokens = lexer.getTokens()
 
-    Array(4).fill('').forEach(_ => lexer.nextToken() ) // skip to token
-    token = lexer.nextToken()
-    expect(token.type).toBe(t.COLON)
-
-    Array(6).fill('').forEach(_ => lexer.nextToken() ) // skip to token
-    token = lexer.nextToken()
-    expect(token.type).toBe(t.COLON)
+    expect(tokens[4].type).toBe(t.COLON)
+    expect(tokens[11].type).toBe(t.COLON)
   })
 
   test('token PLUS', () => {
@@ -324,6 +319,15 @@ describe('Lexer', () => {
     expect(token.type).toBe(t.MULT)
   })
 
+  test('token STRING', () => {
+    const input = '=CONCAT("  one ", "sum")'
+    const lexer = new Lexer(input)
+    const tokens = lexer.getTokens()
+
+    expect(tokens[3].type).toBe(t.STRING)
+    expect(tokens[5].type).toBe(t.STRING)
+  })
+
   describe('token NUMBER', () => {
     it('returns 0 if string is empty', () => {
       const input = ''
@@ -376,27 +380,6 @@ describe('Lexer', () => {
       token = tokens[i]
       expect(token.value).toBe(.23)
     })
-
-    it('includes malformed float numbers', () => {
-      const input = '=0.13.2.6+.9.+..5'
-      const lexer = new Lexer(input)
-      const tokens = lexer.getTokens()
-      let i = 0
-      let token
-
-      Array(1).fill('').forEach(_ => i++ ) // skip to token
-      token = tokens[i]
-      expect(token.type).toBe(t.TEXT)
-
-      Array(2).fill('').forEach(_ => i++ ) // skip to token
-      token = tokens[i]
-      expect(token.type).toBe(t.TEXT)
-
-      Array(2).fill('').forEach(_ => i++ ) // skip to token
-      token = tokens[i]
-      expect(token.type).toBe(t.TEXT)
-      expect(token).toMatchSnapshot()
-    })
   })
 
   test('token CELL', () => {
@@ -437,6 +420,27 @@ describe('Lexer', () => {
     Array(4).fill('').forEach(_ => lexer.nextToken() ) // skip to token
     token = lexer.nextToken()
     expect(token.type).toBe(t.FUNCTION)
+  })
+
+  describe('token UNKNOWN', () => {
+    it('catches invalid function names', () => {
+      const input = '=summ(5)+sqrtt(6)'
+      const lexer = new Lexer(input)
+      const tokens = lexer.getTokens()
+
+      expect(tokens[1].type).toBe(t.UNKNOWN)
+      expect(tokens[6].type).toBe(t.UNKNOWN)
+    })
+
+    it('catches malformed float numbers', () => {
+      const input = '=0.13.2.6+.9.+..5'
+      const lexer = new Lexer(input)
+      const tokens = lexer.getTokens()
+
+      expect(tokens[1].type).toBe(t.UNKNOWN)
+      expect(tokens[3].type).toBe(t.UNKNOWN)
+      expect(tokens[5].type).toBe(t.UNKNOWN)
+    })
   })
 
   describe('#getTokens', () => {
@@ -493,12 +497,12 @@ describe('Lexer', () => {
         t.CELL,
         t.DIV,
         t.LPAREN,
-        t.TEXT,
+        t.UNKNOWN,
         t.RPAREN,
         t.PLUS,
         t.FUNCTION,
         t.LPAREN,
-        t.TEXT,
+        t.UNKNOWN,
         t.COMMA,
         t.CELL,
         t.RPAREN,
