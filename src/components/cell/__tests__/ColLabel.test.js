@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, fireEvent, cleanup } from 'react-testing-library'
+import { render, fireEvent, cleanup } from '@testing-library/react'
 
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import ColLabel from '../ColLabel'
