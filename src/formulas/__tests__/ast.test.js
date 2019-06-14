@@ -34,7 +34,7 @@ describe('NumberNode', () => {
     const tokens = lexer.getTokens()
     const token = tokens[1]
     const node = new NumberNode(token)
-    expect(node.value).toBe(5)
+    expect(node.eval()).toBe(5)
   })
 })
 

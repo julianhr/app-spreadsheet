@@ -150,6 +150,13 @@ describe('Parser', () => {
           const ast = parser.parse()
           expect(ast).toMatchSnapshot()
         })
+
+        test('\'=CONCAT("str1"," str2 ")\'', () => {
+          const input = '=CONCAT("str1"," str2 ")'
+          const parser = getParser(input)
+          const ast = parser.parse()
+          expect(ast).toMatchSnapshot()
+        })
       })
     })
 

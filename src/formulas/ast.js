@@ -14,26 +14,33 @@ class AST {
 class TextNode extends AST {
   constructor(textNode) {
     super('TextNode')
-    this.textNode = textNode
+    this.node = textNode
   }
 
   eval() {
-    return this.textNode.text
+    return this.node.text
+  }
+}
+
+class StringNode extends AST {
+  constructor(node) {
+    super('StringNode')
+    this.node = node
+  }
+
+  eval() {
+    return this.node.value
   }
 }
 
 class NumberNode extends AST {
-  constructor(numberNode) {
+  constructor(node) {
     super('NumberNode')
-    this.numberNode = numberNode
-  }
-
-  get value() {
-    return this.numberNode.value
+    this.node = node
   }
 
   eval() {
-    return this.value
+    return this.node.value
   }
 }
 
@@ -115,6 +122,7 @@ class BinaryOp extends AST {
 
 export {
   TextNode,
+  StringNode,
   NumberNode,
   CellNode,
   CellRange,

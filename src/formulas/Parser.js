@@ -1,6 +1,7 @@
 import { TOKENS as t } from './Lexer'
 import {
   TextNode,
+  StringNode,
   NumberNode,
   CellNode,
   CellRange,
@@ -74,6 +75,8 @@ class Parser {
     //          | LPAREN expr RPAREN
     //          | FUNCTION LPAREN list RPAREN
     switch (this.peekType()) {
+      case t.LPAREN:
+        return this.enclosedExpr()
       case t.PLUS:
       case t.MINUS:
         return this.unaryOp()
@@ -81,46 +84,12 @@ class Parser {
         return this.number()
       case t.CELL:
         return this.cell()
-      case t.LPAREN:
-        return this.enclosedExpr()
       case t.FUNCTION:
         return this.func()
       case t.RPAREN:
         throw new Error(`Unexpected term at index ${this.index}: "${this.curr.text}"`)
       default:
         throw new Error('Missing factor')
-    }
-  }
-
-  text() {
-    let node
-
-    if (this.peekType() !== t.TEXT) {
-      throw new Error('Missing string')
-    }
-
-    node = new TextNode(this.curr)
-    this.consume()
-    return node
-  }
-
-  number() {
-    if (this.peekType() === t.NUMBER) {
-      const node = new NumberNode(this.curr)
-      this.consume()
-      return node
-    } else {
-      throw new Error('Missing number')
-    }
-  }
-
-  operator() {
-    if ([t.PLUS, t.MINUS, t.MULT, t.DIV].includes(this.peekType())) {
-      const node = this.curr
-      this.consume()
-      return node
-    } else {
-      throw new Error('Missing operator')
     }
   }
 
@@ -139,14 +108,6 @@ class Parser {
     const node = new CellNode(this.curr)
     this.consume()
     return node
-  }
-
-  isCellRange() {
-    return (
-      this.peekType(0) === t.CELL
-      && this.peekType(1) === t.COLON
-      && this.peekType(2) === t.CELL
-    )
   }
 
   cellRange() {
@@ -195,23 +156,63 @@ class Parser {
     const list = []
     let node
 
-    node = this.getListNode()
+    node = this.listNode()
     list.push(node)
 
     while (this.peekType() === t.COMMA) {
       this.consume() // skip comma token
-      node = this.getListNode()
+      node = this.listNode()
       list.push(node)
     }
 
     return list
   }
 
-  getListNode() {
+  listNode() {
     if (this.isCellRange()) {
       return this.cellRange()
+    } else if (this.peekType() === t.STRING) {
+      return this.string()
     } else {
       return this.expr()
+    }
+  }
+
+  text() {
+    let node
+
+    if (this.peekType() !== t.TEXT) {
+      throw new Error('Missing string')
+    }
+
+    node = new TextNode(this.curr)
+    this.consume()
+    return node
+  }
+
+  string() {
+    const node = new StringNode(this.curr)
+    this.consume()
+    return node
+  }
+
+  number() {
+    if (this.peekType() === t.NUMBER) {
+      const node = new NumberNode(this.curr)
+      this.consume()
+      return node
+    } else {
+      throw new Error('Missing number')
+    }
+  }
+
+  operator() {
+    if ([t.PLUS, t.MINUS, t.MULT, t.DIV].includes(this.peekType())) {
+      const node = this.curr
+      this.consume()
+      return node
+    } else {
+      throw new Error('Missing operator')
     }
   }
 
@@ -257,6 +258,22 @@ class Parser {
     } else {
       this.curr = null
     }
+  }
+
+  isCellRange() {
+    return (
+      this.peekType(0) === t.CELL
+      && this.peekType(1) === t.COLON
+      && this.peekType(2) === t.CELL
+    )
+  }
+
+  isString() {
+    return (
+      this.peekType(0) === t.DQUOTE
+      && this.peekType(1) === t.TEXT
+      && this.peekType(2) === t.DQUOTE
+    )
   }
 
   peekType(stepsAhead) {
