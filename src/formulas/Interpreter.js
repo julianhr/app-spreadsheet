@@ -79,6 +79,10 @@ class Interpreter {
         throw new Error(`Unrecognized AST node ${nodeName}`)
     }
   }
+  
+  /* ***************************************
+   * Nodes that don't require processing
+   ****************************************/
 
   TextNode(node) {
     return node.eval()
@@ -92,8 +96,26 @@ class Interpreter {
     return node.eval()
   }
 
+  /* ***************************************
+   * Nodes requiring processing
+   ****************************************/
+
+  UnaryOp(node) {
+    const result = this.visitNode(node.expr)
+    return node.eval(result)
+  }
+
   CellNode(node) {
-    return this.getCellResult(node.location)
+    const result = this.getCellResult(node.location)
+    return result === undefined
+      ? 0
+      : result
+  }
+
+  BinaryOp(node) {
+    const left = this.visitNode(node.leftNode)
+    const right = this.visitNode(node.rightNode)
+    return node.eval(left, right)
   }
 
   CellRange(node) {
@@ -109,7 +131,10 @@ class Interpreter {
       for (let colI = colIndexStart; colI <= colIndexEnd; colI++) {
         const location = `${getColumnLabel(colI)}-${rowI + 1}`
         const result = this.getCellResult(location)
-        list.push(result)
+
+        if (result !== undefined) {
+          list.push(result)
+        }
       }
     }
 
@@ -132,11 +157,6 @@ class Interpreter {
     return result
   }
 
-  UnaryOp(node) {
-    const result = this.visitNode(node.expr)
-    return node.eval(result)
-  }
-
   FuncOp(node) {
     const evaluatedArgs = []
 
@@ -151,12 +171,6 @@ class Interpreter {
     }
 
     return node.eval(evaluatedArgs)
-  }
-
-  BinaryOp(node) {
-    const left = this.visitNode(node.leftNode)
-    const right = this.visitNode(node.rightNode)
-    return node.eval(left, right)
   }
 
   isLocationValid(location) {
