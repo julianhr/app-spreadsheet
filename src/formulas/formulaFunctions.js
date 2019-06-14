@@ -1,3 +1,11 @@
+function testArgsAllNumbers(args) {
+  args.forEach(arg => {
+    if (typeof arg !== 'number') {
+      throw new TypeError(`Function argument not a number: ${arg}`)
+    }
+  })
+}
+
 const Fn = {
   AVERAGE: {
     fn: (...args) => {
@@ -37,13 +45,8 @@ const Fn = {
       if (args.length === 0) {
         throw new Error('Empty elements')
       }
-  
-      args.forEach(arg => {
-        if (typeof arg !== 'number') {
-          throw new TypeError(`${arg} is not a number`)
-        }
-      })
-  
+
+      testArgsAllNumbers(args)
       return Math.max(...args)
     },
     definition: 'MAX(value1, value2, ...)',
@@ -56,13 +59,8 @@ const Fn = {
       if (args.length === 0) {
         throw new Error('Empty elements')
       }
-  
-      args.forEach(arg => {
-        if (typeof arg !== 'number') {
-          throw new TypeError(`${arg} is not a number`)
-        }
-      })
-  
+
+      testArgsAllNumbers(args)
       return Math.min(...args)
     },
     definition: 'MIN(value1, value2, ...)',
@@ -75,7 +73,8 @@ const Fn = {
       if (args.length !== 2) {
         throw new Error('Formula takes only two elements')
       }
-    
+
+      testArgsAllNumbers(args)
       const [base, exp] = args
       return Math.pow(base, exp)
     },
@@ -89,7 +88,8 @@ const Fn = {
       if (args.length !== 1) {
         throw new Error(`Formula takes only one element`)
       }
-  
+
+      testArgsAllNumbers(args)
       return Math.sqrt(args[0])
     },
     definition: 'SQRT(value)',
@@ -102,8 +102,9 @@ const Fn = {
       if (args.length === 0) {
         throw new Error('Empty elements')
       }
-  
-      return args.reduce((prev, curr) => prev + curr)
+
+      testArgsAllNumbers(args)
+      return args.reduce((prev, curr) => (curr + prev), 0)
     },
     definition: 'SUM(value1, value2, ...)',
     example: 'SUM(A1:B3, 3, C5)',
