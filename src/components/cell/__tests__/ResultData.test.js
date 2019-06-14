@@ -1,6 +1,6 @@
 import React from 'react'
 import { create } from 'react-test-renderer'
-import { render, fireEvent, cleanup } from 'react-testing-library'
+import { render, fireEvent, cleanup } from '@testing-library/react'
 import emotionSerializer from 'jest-emotion'
 
 import ConnectedResultData, { ResultData } from '../ResultData'
