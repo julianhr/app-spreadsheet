@@ -55,7 +55,7 @@ class Graph {
 
   visitCell(location) {
     if (!this.hasVertex(location)) {
-      return 0
+      return
     }
 
     this.testPathCycle(location)
