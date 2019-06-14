@@ -177,7 +177,9 @@ export class CellInputter extends React.PureComponent {
     }
 
     const cellValue = inputValue.length > 0 && inputValue[0] === '='
-      ? inputValue.toUpperCase()
+      // ? inputValue.toUpperCase()
+      ? inputValue
+      // NOTE: fix!!
       : inputValue
 
     this.props.setCellData(location, cellValue)

@@ -7,7 +7,7 @@ BinaryOp {
     "_name": "BinaryOp",
     "leftNode": NumberNode {
       "_name": "NumberNode",
-      "numberNode": Token {
+      "node": Token {
         "category": "entity",
         "html": null,
         "index": 2,
@@ -28,7 +28,7 @@ BinaryOp {
     },
     "rightNode": NumberNode {
       "_name": "NumberNode",
-      "numberNode": Token {
+      "node": Token {
         "category": "entity",
         "html": null,
         "index": 4,
@@ -50,7 +50,7 @@ BinaryOp {
   },
   "rightNode": NumberNode {
     "_name": "NumberNode",
-    "numberNode": Token {
+    "node": Token {
       "category": "entity",
       "html": null,
       "index": 7,
@@ -66,7 +66,7 @@ BinaryOp {
 exports[`Parser #parse happy path arithmitic "=2" 1`] = `
 NumberNode {
   "_name": "NumberNode",
-  "numberNode": Token {
+  "node": Token {
     "category": "entity",
     "html": null,
     "index": 1,
@@ -83,7 +83,7 @@ BinaryOp {
   "_name": "BinaryOp",
   "leftNode": NumberNode {
     "_name": "NumberNode",
-    "numberNode": Token {
+    "node": Token {
       "category": "entity",
       "html": null,
       "index": 1,
@@ -106,7 +106,7 @@ BinaryOp {
     "_name": "UnaryOp",
     "expr": NumberNode {
       "_name": "NumberNode",
-      "numberNode": Token {
+      "node": Token {
         "category": "entity",
         "html": null,
         "index": 4,
@@ -134,7 +134,7 @@ BinaryOp {
   "_name": "BinaryOp",
   "leftNode": NumberNode {
     "_name": "NumberNode",
-    "numberNode": Token {
+    "node": Token {
       "category": "entity",
       "html": null,
       "index": 1,
@@ -155,7 +155,7 @@ BinaryOp {
   },
   "rightNode": NumberNode {
     "_name": "NumberNode",
-    "numberNode": Token {
+    "node": Token {
       "category": "entity",
       "html": null,
       "index": 3,
@@ -175,7 +175,7 @@ BinaryOp {
     "_name": "BinaryOp",
     "leftNode": NumberNode {
       "_name": "NumberNode",
-      "numberNode": Token {
+      "node": Token {
         "category": "entity",
         "html": null,
         "index": 1,
@@ -198,7 +198,7 @@ BinaryOp {
       "_name": "BinaryOp",
       "leftNode": NumberNode {
         "_name": "NumberNode",
-        "numberNode": Token {
+        "node": Token {
           "category": "entity",
           "html": null,
           "index": 3,
@@ -219,7 +219,7 @@ BinaryOp {
       },
       "rightNode": NumberNode {
         "_name": "NumberNode",
-        "numberNode": Token {
+        "node": Token {
           "category": "entity",
           "html": null,
           "index": 5,
@@ -242,7 +242,7 @@ BinaryOp {
   },
   "rightNode": NumberNode {
     "_name": "NumberNode",
-    "numberNode": Token {
+    "node": Token {
       "category": "entity",
       "html": null,
       "index": 8,
@@ -281,7 +281,7 @@ BinaryOp {
   },
   "rightNode": NumberNode {
     "_name": "NumberNode",
-    "numberNode": Token {
+    "node": Token {
       "category": "entity",
       "html": null,
       "index": 6,
@@ -354,7 +354,7 @@ FuncOp {
   "argNodes": Array [
     NumberNode {
       "_name": "NumberNode",
-      "numberNode": Token {
+      "node": Token {
         "category": "entity",
         "html": null,
         "index": 5,
@@ -383,7 +383,7 @@ FuncOp {
   "argNodes": Array [
     NumberNode {
       "_name": "NumberNode",
-      "numberNode": Token {
+      "node": Token {
         "category": "entity",
         "html": null,
         "index": 5,
@@ -398,7 +398,7 @@ FuncOp {
       "argNodes": Array [
         NumberNode {
           "_name": "NumberNode",
-          "numberNode": Token {
+          "node": Token {
             "category": "entity",
             "html": null,
             "index": 12,
@@ -410,7 +410,7 @@ FuncOp {
         },
         NumberNode {
           "_name": "NumberNode",
-          "numberNode": Token {
+          "node": Token {
             "category": "entity",
             "html": null,
             "index": 14,
@@ -435,7 +435,7 @@ FuncOp {
       "_name": "BinaryOp",
       "leftNode": NumberNode {
         "_name": "NumberNode",
-        "numberNode": Token {
+        "node": Token {
           "category": "entity",
           "html": null,
           "index": 21,
@@ -458,7 +458,7 @@ FuncOp {
         "_name": "BinaryOp",
         "leftNode": NumberNode {
           "_name": "NumberNode",
-          "numberNode": Token {
+          "node": Token {
             "category": "entity",
             "html": null,
             "index": 24,
@@ -479,7 +479,7 @@ FuncOp {
         },
         "rightNode": NumberNode {
           "_name": "NumberNode",
-          "numberNode": Token {
+          "node": Token {
             "category": "entity",
             "html": null,
             "index": 26,
@@ -510,7 +510,7 @@ FuncOp {
   "argNodes": Array [
     NumberNode {
       "_name": "NumberNode",
-      "numberNode": Token {
+      "node": Token {
         "category": "entity",
         "html": null,
         "index": 5,
@@ -522,7 +522,7 @@ FuncOp {
     },
     NumberNode {
       "_name": "NumberNode",
-      "numberNode": Token {
+      "node": Token {
         "category": "entity",
         "html": null,
         "index": 7,
@@ -534,7 +534,7 @@ FuncOp {
     },
     NumberNode {
       "_name": "NumberNode",
-      "numberNode": Token {
+      "node": Token {
         "category": "entity",
         "html": null,
         "index": 9,
@@ -684,10 +684,51 @@ FuncOp {
 }
 `;
 
+exports[`Parser #parse happy path formulas '=CONCAT("str1"," str2 ")' 1`] = `
+FuncOp {
+  "_name": "FuncOp",
+  "argNodes": Array [
+    StringNode {
+      "_name": "StringNode",
+      "node": Token {
+        "category": "entity",
+        "html": null,
+        "index": 8,
+        "text": "\\"str1\\"",
+        "type": "STRING",
+        "value": "str1",
+        "whitespace": 0,
+      },
+    },
+    StringNode {
+      "_name": "StringNode",
+      "node": Token {
+        "category": "entity",
+        "html": null,
+        "index": 15,
+        "text": "\\" str2 \\"",
+        "type": "STRING",
+        "value": " str2 ",
+        "whitespace": 0,
+      },
+    },
+  ],
+  "funcNode": Token {
+    "category": "entity",
+    "html": null,
+    "index": 1,
+    "text": "CONCAT",
+    "type": "FUNCTION",
+    "value": [Function],
+    "whitespace": 0,
+  },
+}
+`;
+
 exports[`Parser #parse happy path strings "  2" 1`] = `
 TextNode {
   "_name": "TextNode",
-  "textNode": Token {
+  "node": Token {
     "category": "entity",
     "html": null,
     "index": 0,
@@ -702,7 +743,7 @@ TextNode {
 exports[`Parser #parse happy path strings "  2+" 1`] = `
 TextNode {
   "_name": "TextNode",
-  "textNode": Token {
+  "node": Token {
     "category": "entity",
     "html": null,
     "index": 0,
@@ -717,7 +758,7 @@ TextNode {
 exports[`Parser #parse happy path strings "  2+3" 1`] = `
 TextNode {
   "_name": "TextNode",
-  "textNode": Token {
+  "node": Token {
     "category": "entity",
     "html": null,
     "index": 0,
@@ -732,7 +773,7 @@ TextNode {
 exports[`Parser #parse happy path strings "  text" 1`] = `
 TextNode {
   "_name": "TextNode",
-  "textNode": Token {
+  "node": Token {
     "category": "entity",
     "html": null,
     "index": 0,
@@ -747,7 +788,7 @@ TextNode {
 exports[`Parser #parse happy path strings " " 1`] = `
 TextNode {
   "_name": "TextNode",
-  "textNode": Token {
+  "node": Token {
     "category": "entity",
     "html": null,
     "index": 0,
@@ -762,7 +803,7 @@ TextNode {
 exports[`Parser #parse happy path strings "" 1`] = `
 NumberNode {
   "_name": "NumberNode",
-  "numberNode": Token {
+  "node": Token {
     "category": "entity",
     "html": null,
     "index": -1,

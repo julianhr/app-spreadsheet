@@ -64,6 +64,8 @@ class Interpreter {
         return this.CellNode(node)
       case 'TextNode':
         return this.TextNode(node)
+      case 'StringNode':
+        return this.StringNode(node)
       case 'CellRange':
         return this.CellRange(node)
       case 'FuncOp':
@@ -79,6 +81,10 @@ class Interpreter {
   }
 
   TextNode(node) {
+    return node.eval()
+  }
+
+  StringNode(node) {
     return node.eval()
   }
 

@@ -204,6 +204,12 @@ describe('Interpreter', () => {
         const result = c1.interpret('=SUM(A1:B2,C2,(C3+9)/3)')
         expect(result).toBe(10)
       })
+
+      test('A1=CONCAT(" one ", "two")', () => {
+        const a1 = new Interpreter('A-1')
+        const result = a1.interpret('=CONCAT(" one ", "two")')
+        expect(result).toBe(" one two")
+      })
     })
 
     describe('cell references error path', () => {
