@@ -17,7 +17,7 @@ describe('ReduxConnect', () => {
   test('get #table', () => {
     rc.replaceCellData('A-1', '7', 7)
     rc.replaceCellData('B-2', '=A1+3', 10)
-    expect(rc.table).toMatchSnapshot()
+    expect(rc.tableData).toMatchSnapshot()
   })
 
   test('get #locations', () => {
@@ -33,10 +33,10 @@ describe('ReduxConnect', () => {
 
   test('#replaceCellData', () => {
     rc.replaceCellData('B-2', '=A1+3', 3)
-    expect(rc.table).toMatchSnapshot()
+    expect(rc.tableData).toMatchSnapshot()
 
     rc.replaceCellData('B-2', '=c5/7', 0)
-    expect(rc.table).toMatchSnapshot()
+    expect(rc.tableData).toMatchSnapshot()
   })
 
   test('#clearCell', () => {
