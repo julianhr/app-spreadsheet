@@ -22,7 +22,7 @@ export function replaceCellData(location, entered, result) {
 
 export function clearCellData(location) {
   return (dispatch, getState) => {
-    const value = getState().table[location]
+    const value = getState().tableData[location]
 
     graph.delVertex(location)
 

@@ -1,8 +1,8 @@
 import { appStoreGen } from '~/reducers/'
-import * as actions from '~/actions/tableActions'
+import * as actions from '~/actions/tableDataActions'
 
 
-describe('tableActions', () => {
+describe('tableDataActions', () => {
   describe('#setCellData', () => {
     it('sets currently active cell', async () => {
       const location = 'B-2'
@@ -10,9 +10,9 @@ describe('tableActions', () => {
       const result = 5
       const appStore = appStoreGen()
 
-      expect(appStore.getState().table[location]).toBeUndefined()
+      expect(appStore.getState().tableData[location]).toBeUndefined()
       await appStore.dispatch(actions.setCellData(location, entered))
-      expect(appStore.getState().table[location]).toEqual({ entered, result })
+      expect(appStore.getState().tableData[location]).toEqual({ entered, result })
     })
   })
 
@@ -23,13 +23,13 @@ describe('tableActions', () => {
       const result = 5
       const appStore = appStoreGen()
 
-      expect(appStore.getState().table[location]).toBeUndefined()
+      expect(appStore.getState().tableData[location]).toBeUndefined()
 
       appStore.dispatch(actions.setCellData(location, entered))
-      expect(appStore.getState().table[location]).toEqual({ entered, result })
+      expect(appStore.getState().tableData[location]).toEqual({ entered, result })
 
       await appStore.dispatch(actions.clearCellData(location))
-      expect(appStore.getState().table[location]).toBeUndefined()
+      expect(appStore.getState().tableData[location]).toBeUndefined()
     })
   })
 })
