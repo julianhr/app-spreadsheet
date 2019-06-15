@@ -2,14 +2,14 @@ import React from 'react'
 import { render, fireEvent, cleanup } from '@testing-library/react'
 
 import MockApp from '~/__tests__/__mocks__/MockApp'
-import ColLabelRow from '../ColLabelRow'
+import ColHeaderRow from '../ColHeaderRow'
 
 
 const renderApp = (props) => {
   const wrapper = render(
     <MockApp>
       <table>
-        <ColLabelRow {...props} />
+        <ColHeaderRow {...props} />
       </table>
     </MockApp>
   )
@@ -17,7 +17,7 @@ const renderApp = (props) => {
   return wrapper
 }
 
-describe('ColLabelRow', () => {
+describe('ColHeaderRow', () => {
   afterEach(cleanup)
 
   it('matches snapshot', () => {

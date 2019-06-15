@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   background: ${props => props.theme.colors.cell.labelBkg};
 `
 
-function RowLabel({ label }) {
+function RowHeader({ label }) {
   return (
     <Wrapper
       data-row={label}
@@ -24,8 +24,8 @@ function RowLabel({ label }) {
   )
 }
 
-RowLabel.propTypes = {
+RowHeader.propTypes = {
   label: PropTypes.number,
 }
 
-export default RowLabel
+export default RowHeader

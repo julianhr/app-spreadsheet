@@ -35,7 +35,7 @@ const BtnWidth = styled.button`
   z-index: 1;
 `
 
-class ColLabel extends React.PureComponent {
+class ColHeader extends React.PureComponent {
 
   static propTypes = {
     label: PropTypes.string.isRequired,
@@ -150,4 +150,4 @@ function mapStateToProps(state, ownProps) {
 
 const mapDispatchToProps = { setColWidthDelta }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ColLabel)
+export default connect(mapStateToProps, mapDispatchToProps)(ColHeader)

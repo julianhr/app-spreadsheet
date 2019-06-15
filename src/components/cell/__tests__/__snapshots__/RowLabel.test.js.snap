@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RowLabel matches snapshot 1`] = `
+exports[`RowHeader matches snapshot 1`] = `
 <div
-  class="row-label-width row-label-height css-1cj8orw-Wrapper e12nkt8n0"
+  class="row-label-width row-label-height css-1cj8orw-Wrapper e1d5mcq00"
   data-row="1"
 >
   1
