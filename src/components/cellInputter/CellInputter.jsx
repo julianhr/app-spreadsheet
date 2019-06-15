@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { css, jsx } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
-import { setCellData, clearCellData } from '~/actions/tableActions'
+import { setCellData, clearCellData } from '~/actions/tableDataActions'
 import { parseLocation, getColumnLabel } from '~/library/utils'
 import Lexer from '~/formulas/Lexer'
 import Suggestions from './Suggestions'
@@ -310,7 +310,7 @@ function mapStateToProps(state) {
       columns,
     }
   } = state
-  const cell = state.table[location]
+  const cell = state.tableData[location]
   const entered = cell ? cell.entered : ''
 
   return { location, willReplaceValue, cellRect, entered, rows, columns }

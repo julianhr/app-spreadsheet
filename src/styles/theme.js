@@ -10,7 +10,8 @@ const colors = {
     active: '#ebebeb',
   },
   primary: {
-    strong: '#E10D75'
+    strong: '#E10D75',
+    live: '#7e5f67',
   },
   field: {
     background: '#F0F0F0',

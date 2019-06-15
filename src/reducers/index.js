@@ -1,14 +1,16 @@
 import { configureStore } from 'redux-starter-kit'
 
 import globalReducer from './globalReducer'
-import tableReducer from './tableReducer'
+import tableDataReducer from './tableDataReducer'
+import tableMetaReducer from './tableMetaReducer'
 
 
 const appStoreGen = () => (
   configureStore({
     reducer: {
       global: globalReducer,
-      table: tableReducer,
+      tableData: tableDataReducer,
+      tableMeta: tableMetaReducer,
     }
   })
 )

@@ -6,7 +6,7 @@ import emotionSerializer from 'jest-emotion'
 import ConnectedResultData, { ResultData } from '../ResultData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import { appStoreGen } from '~/reducers'
-import { setCellData } from '~/actions/tableActions'
+import { setCellData } from '~/actions/tableDataActions'
 
 
 const requiredProps = {
@@ -116,7 +116,7 @@ describe('ResultData', () => {
       for (let [key, expected] of keys) {
         await store.dispatch(setCellData(location, entered, true, result))
         fireEvent.keyDown(tag, { key })
-        const hasValue = Boolean(store.getState().table[testProps.location])
+        const hasValue = Boolean(store.getState().tableData[testProps.location])
         expect(hasValue).toEqual(expected)
       }
     })

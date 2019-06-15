@@ -12,7 +12,7 @@ exports[`DataRow matches snapshot 1`] = `
     2
   </div>
   <div
-    class="row-label-height col-label-width css-1wpoxe-Wrapper egobumn0"
+    class="row-label-height css-1p2iaz6-Wrapper-ResultCell egobumn0"
   >
     <div
       class="css-17w7ktc-Cell egobumn1"
@@ -22,7 +22,7 @@ exports[`DataRow matches snapshot 1`] = `
     />
   </div>
   <div
-    class="row-label-height col-label-width css-1wpoxe-Wrapper egobumn0"
+    class="row-label-height css-1p2iaz6-Wrapper-ResultCell egobumn0"
   >
     <div
       class="css-17w7ktc-Cell egobumn1"

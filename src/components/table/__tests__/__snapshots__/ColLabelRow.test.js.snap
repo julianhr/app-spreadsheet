@@ -9,16 +9,24 @@ exports[`ColLabelRow matches snapshot 1`] = `
     class="row-label-width col-label-height css-ql6bmv-InnerBorder e1ia7371"
   />
   <div
-    class="col-label-width col-label-height css-19eh4ji-InnerBorder etucg500"
+    class="col-label-height css-1g1zj8a-InnerBorder-ColLabel etucg500"
     data-col="A"
   >
     A
+    <button
+      class="css-1oguur2-BtnWidth etucg501"
+      tabindex="-1"
+    />
   </div>
   <div
-    class="col-label-width col-label-height css-19eh4ji-InnerBorder etucg500"
+    class="col-label-height css-1g1zj8a-InnerBorder-ColLabel etucg500"
     data-col="B"
   >
     B
+    <button
+      class="css-1oguur2-BtnWidth etucg501"
+      tabindex="-1"
+    />
   </div>
 </div>
 `;

@@ -5,8 +5,9 @@ import styled from '@emotion/styled'
 import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
-import { clearCellData } from '~/actions/tableActions'
+import { clearCellData } from '~/actions/tableDataActions'
 import { displayCellInputter, setActiveCell } from '~/actions/globalActions'
+import { DEFAULT_COL_WIDTH } from '~/library/constants'
 
 
 const Wrapper = styled.div`
@@ -41,11 +42,16 @@ export class ResultCell extends React.PureComponent {
     displayCellInputter: PropTypes.func.isRequired,
     // redux
     clearCellData: PropTypes.func.isRequired,
+    width: PropTypes.number.isRequired,
     // setActiveCell: PropTypes.func.isRequired,
     result: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
     ]).isRequired,
+  }
+
+  static defaultProps = {
+    width: DEFAULT_COL_WIDTH
   }
 
   constructor() {
@@ -123,8 +129,11 @@ export class ResultCell extends React.PureComponent {
   render() {
     return (
       <Wrapper
-        className='row-label-height col-label-width'
+        className='row-label-height'
         onClick={this.handleWrapperOnClick}
+        css={css`
+          width: ${this.props.width}px;
+        `}
       >
         <Cell
           ref={this.refCell}
@@ -144,9 +153,11 @@ export class ResultCell extends React.PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  const cell = state.table[ownProps.location]
+  const [colLabel, _] = ownProps.location.split('-')
+  const cell = state.tableData[ownProps.location]
   const result = cell ? cell.result : ''
-  return { result }
+  const width = state.tableMeta.colWidths[colLabel]
+  return { result, width }
 }
 
 const mapDispatchToProps = { clearCellData, displayCellInputter, setActiveCell }

@@ -8,6 +8,7 @@ import ColLabelRow from './ColLabelRow'
 import DataRow from './DataRow'
 import { getColumnNames } from '~/library/utils'
 import getKeyboardNavMachine from './keyboardNavMachine'
+import { DEFAULT_COL_WIDTH } from '~/library/constants'
 
 
 const Grid = styled.div`
@@ -32,7 +33,7 @@ const Grid = styled.div`
   }
 
   .col-label-width {
-    width: 140px;
+    width: ${DEFAULT_COL_WIDTH}px;
   }
 
   .col-label-height {
@@ -71,7 +72,11 @@ export class Table extends React.PureComponent {
 
   handleTableOnKeyDown(event) {
     event.stopPropagation()
-    this.moveFocus(event.key, event.target.dataset.location)
+    const { location } = event.target.dataset
+
+    if (location) {
+      this.moveFocus(event.key, event.target.dataset.location)
+    }
   }
 
   moveFocus(key, location) {
@@ -91,7 +96,7 @@ export class Table extends React.PureComponent {
   renderDataRows(rowNumber) {
     return (
       <DataRow
-      key={rowNumber}
+        key={rowNumber}
         rowNumber={rowNumber}
         colLabels={this.colLabels}
         activeCell={this.props.activeCell}

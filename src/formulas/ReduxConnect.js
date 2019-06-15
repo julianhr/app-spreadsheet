@@ -1,5 +1,5 @@
 import appStore from '~/reducers/'
-import { clearCellData, replaceCellData } from '~/actions/tableActions'
+import { clearCellData, replaceCellData } from '~/actions/tableDataActions'
 
 
 class ReduxConnect {
@@ -10,16 +10,16 @@ class ReduxConnect {
     this.columns = globalState.columns
   }
 
-  get table() {
-    return this.store.getState().table
+  get tableData() {
+    return this.store.getState().tableData
   }
 
   get locations() {
-    return Object.keys(this.table)
+    return Object.keys(this.tableData)
   }
 
   getCellResult(location) {
-    const data = this.table[location]
+    const data = this.tableData[location]
     return data && data.result
   }
 
