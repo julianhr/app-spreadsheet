@@ -6,13 +6,17 @@ exports[`DataRow matches snapshot 1`] = `
   data-row="2"
 >
   <div
-    class="row-label-width row-label-height css-1cj8orw-Wrapper e1d5mcq00"
+    class="row-header-width css-1i9qrac-Root e1d5mcq00"
     data-row="2"
   >
     2
+    <button
+      class="css-1b5c3lg-BtnHeight e1d5mcq01"
+      tabindex="-1"
+    />
   </div>
   <div
-    class="row-label-height css-1p2iaz6-Wrapper-ResultCell egobumn0"
+    class="css-1n907nv-Root egobumn0"
   >
     <div
       class="css-17w7ktc-Cell egobumn1"
@@ -22,7 +26,7 @@ exports[`DataRow matches snapshot 1`] = `
     />
   </div>
   <div
-    class="row-label-height css-1p2iaz6-Wrapper-ResultCell egobumn0"
+    class="css-1n907nv-Root egobumn0"
   >
     <div
       class="css-17w7ktc-Cell egobumn1"

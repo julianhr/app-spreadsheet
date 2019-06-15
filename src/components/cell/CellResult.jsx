@@ -10,8 +10,9 @@ import { displayCellInputter, setActiveCell } from '~/actions/globalActions'
 import { DEFAULT_COL_WIDTH } from '~/library/constants'
 
 
-const Wrapper = styled.div`
+const Root = styled.div`
   cursor: cell;
+  overflow: hidden;
   font-size: 13px;
   border-right: 1px solid ${props => props.theme.colors.cell.border};
   border-bottom: 1px solid ${props => props.theme.colors.cell.border};
@@ -43,6 +44,7 @@ export class ResultCell extends React.PureComponent {
     // redux
     clearCellData: PropTypes.func.isRequired,
     width: PropTypes.number.isRequired,
+    height: PropTypes.number,
     // setActiveCell: PropTypes.func.isRequired,
     result: PropTypes.oneOfType([
       PropTypes.string,
@@ -51,7 +53,7 @@ export class ResultCell extends React.PureComponent {
   }
 
   static defaultProps = {
-    width: DEFAULT_COL_WIDTH
+    width: DEFAULT_COL_WIDTH,
   }
 
   constructor() {
@@ -59,7 +61,7 @@ export class ResultCell extends React.PureComponent {
     this.handleCellOnKeyDown = this.handleCellOnKeyDown.bind(this)
     this.handleCellOnDoubleClick = this.handleCellOnDoubleClick.bind(this)
     this.handleCellOnClick = this.handleCellOnClick.bind(this)
-    this.handleWrapperOnClick = this.handleWrapperOnClick.bind(this)
+    this.handleRootOnClick = this.handleRootOnClick.bind(this)
   }
 
   refCell = React.createRef()
@@ -104,7 +106,16 @@ export class ResultCell extends React.PureComponent {
     this.displayCellInputter(false)
   }
 
-  getStyle() {
+  getRootStyle() {
+    const { width, height } = this.props
+
+    return {
+      width,
+      height: height && height
+    }
+  }
+
+  getCellStyle() {
     let style = {}
 
     if (typeof this.props.result === 'number') {
@@ -118,7 +129,7 @@ export class ResultCell extends React.PureComponent {
     return style
   }
 
-  handleWrapperOnClick() {
+  handleRootOnClick() {
     this.refCell.current.focus()
   }
 
@@ -128,18 +139,15 @@ export class ResultCell extends React.PureComponent {
 
   render() {
     return (
-      <Wrapper
-        className='row-label-height'
-        onClick={this.handleWrapperOnClick}
-        css={css`
-          width: ${this.props.width}px;
-        `}
+      <Root
+        onClick={this.handleRootOnClick}
+        css={this.getRootStyle()}
       >
         <Cell
           ref={this.refCell}
           data-cell='result'
           data-location={this.props.location}
-          css={this.getStyle()}
+          css={this.getCellStyle()}
           tabIndex='0'
           onClick={this.handleCellOnClick}
           onKeyDown={this.handleCellOnKeyDown}
@@ -147,17 +155,18 @@ export class ResultCell extends React.PureComponent {
         >
           {this.props.result}
         </Cell>
-      </Wrapper>
+      </Root>
     )
   }
 }
 
 function mapStateToProps(state, ownProps) {
-  const [colLabel, _] = ownProps.location.split('-')
+  const [colLabel, rowLabel] = ownProps.location.split('-')
   const cell = state.tableData[ownProps.location]
   const result = cell ? cell.result : ''
   const width = state.tableMeta.colWidths[colLabel]
-  return { result, width }
+  const height = state.tableMeta.rowHeights[rowLabel]
+  return { result, width, height }
 }
 
 const mapDispatchToProps = { clearCellData, displayCellInputter, setActiveCell }

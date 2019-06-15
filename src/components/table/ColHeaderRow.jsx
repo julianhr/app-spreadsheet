@@ -1,6 +1,8 @@
+/* @jsx jsx */
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { jsx, css } from '@emotion/core'
 
 import ColHeader from '../cell/ColHeader'
 
@@ -22,7 +24,10 @@ const InnerBorder = styled.div`
 function ColHeaderRow({ colLabels }) {
   const renderCornerCell = () => (
     <InnerBorder
-      className='row-label-width col-label-height'
+      css={css`
+        width: 34px;
+        height: 26px;
+      `}
     />
   )
 

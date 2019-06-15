@@ -11,7 +11,7 @@ const colors = {
   },
   primary: {
     strong: '#E10D75',
-    live: '#7e5f67',
+    light: 'salmon',
   },
   field: {
     background: '#F0F0F0',
