@@ -26,13 +26,18 @@ const BtnWidth = styled.button`
   cursor: col-resize;
   outline: none;
   position: absolute;
-  border: 2px solid transparent;
   height: 100%;
   margin: 0 -3px 0 0;
-  padding: 1px;
+  width: 6px;
+  border: 0;
+  padding: 0;
   right: 0;
   top: 0;
   z-index: 1;
+
+  :hover {
+    background: ${props => props.theme.colors.primary.light};
+  }
 `
 
 class ColHeader extends React.PureComponent {
@@ -71,9 +76,9 @@ class ColHeader extends React.PureComponent {
     const right = -(clamp(newRight, minRight, maxRight) - 4)
 
     return (theme) => css`
-      right: ${right}px;
+      width: 1.5px;
       height: 90vh;
-      border: 0;
+      right: ${right}px;
       background: ${theme.colors.primary.light};
     `
   }

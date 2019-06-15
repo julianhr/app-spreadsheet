@@ -26,13 +26,18 @@ const BtnHeight = styled.button`
   cursor: row-resize;
   outline: none;
   position: absolute;
-  border: 1px solid transparent;
   width: 100%;
+  height: 6px;
   margin: 0 0 -3px 0;
-  padding: 1px;
+  border: 0;
+  padding: 0;
   left: 0;
   bottom: 0;
   z-index: 1;
+
+  :hover {
+    background: ${props => props.theme.colors.primary.light};
+  }
 `
 
 class RowHeader extends React.PureComponent {
@@ -86,9 +91,9 @@ class RowHeader extends React.PureComponent {
     console.log('row', newBottom, bottom)
 
     return (theme) => css`
-      bottom: ${bottom}px;
+      height: 1.5px;
       width: 95vw;
-      border: 0;
+      bottom: ${bottom}px;
       background: ${theme.colors.primary.light};
     `
   }
