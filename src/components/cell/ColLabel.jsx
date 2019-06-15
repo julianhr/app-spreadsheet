@@ -70,7 +70,6 @@ class ColLabel extends React.PureComponent {
     const right = Math.min(newRight, minRight)
 
     return (theme) => css`
-      user-select: none;
       right: ${right}px;
       margin-top: -70px;
       height: 95vh;
@@ -99,6 +98,8 @@ class ColLabel extends React.PureComponent {
   }
 
   handleBtnWidthOnMouseDown(event) {
+    event.preventDefault()
+
     this.setState({
       pageX: event.pageX,
       width: this.props.width,
