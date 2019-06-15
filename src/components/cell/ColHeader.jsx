@@ -5,12 +5,12 @@ import styled from '@emotion/styled'
 import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
-import { setColWidthDelta } from '~/actions/tableMetaActions'
-import { DEFAULT_COL_WIDTH, MIN_COL_WIDTH } from '~/library/constants'
-import { debounce } from '~/library/utils'
+import { setColWidth } from '~/actions/tableMetaActions'
+import { DEFAULT_COL_WIDTH, MIN_COL_WIDTH, MAX_COL_WIDTH } from '~/library/constants'
+import { debounce, clamp } from '~/library/utils'
 
 
-let InnerBorder = styled.div`
+let Root = styled.div`
   position: relative;
   display: flex;
   align-items: center;
@@ -26,9 +26,9 @@ const BtnWidth = styled.button`
   cursor: col-resize;
   outline: none;
   position: absolute;
-  border: 3px solid transparent;
+  border: 2px solid transparent;
   height: 100%;
-  margin: 0 -4px 0 0;
+  margin: 0 -3px 0 0;
   padding: 1px;
   right: 0;
   top: 0;
@@ -39,7 +39,7 @@ class ColHeader extends React.PureComponent {
 
   static propTypes = {
     label: PropTypes.string.isRequired,
-    setColWidthDelta: PropTypes.func.isRequired,
+    setColWidth: PropTypes.func.isRequired,
     width: PropTypes.number.isRequired,
   }
 
@@ -65,21 +65,21 @@ class ColHeader extends React.PureComponent {
   getBtnWidthStyle() {
     if (!this.state.isResizing) { return }
 
-    const newRight = this.state.btnRight + 4
-    const minRight = this.state.width - MIN_COL_WIDTH
-    const right = Math.min(newRight, minRight)
+    const newRight = this.state.btnRight
+    const minRight = MIN_COL_WIDTH - this.state.width
+    const maxRight = MAX_COL_WIDTH - this.state.width
+    const right = -(clamp(newRight, minRight, maxRight) - 4)
 
     return (theme) => css`
       right: ${right}px;
-      margin-top: -70px;
-      height: 95vh;
+      height: 90vh;
       border: 0;
-      background: ${theme.colors.primary.live};
+      background: ${theme.colors.primary.light};
     `
   }
 
   debSetColWidth = debounce(40, (event) => {
-    const delta = this.state.pageX - event.pageX
+    const delta = event.pageX - this.state.pageX
     this.setState({ btnRight: delta, })
   })
 
@@ -91,7 +91,7 @@ class ColHeader extends React.PureComponent {
     const delta = event.pageX - this.state.pageX
     const width = this.state.width + delta
 
-    this.props.setColWidthDelta(this.props.label, width)
+    this.props.setColWidth(this.props.label, width)
     this.setState({ btnRight: 0, isResizing: false })
     document.removeEventListener('mousemove', this.handleDocumentMouseMove)
     document.removeEventListener('mouseup', this.handleDocumentMouseUp)
@@ -123,11 +123,12 @@ class ColHeader extends React.PureComponent {
     const { label, width } = this.props
 
     return (
-      <InnerBorder
+      <Root
         data-col={label}
         className='col-label-height'
         css={css`
           width: ${width}px;
+          height: 26px;
         `}
       >
         {label}
@@ -138,7 +139,7 @@ class ColHeader extends React.PureComponent {
           onMouseMove={this.handleBtnWidthOnMouseMove}
           onMouseUp={this.handleBtnWidthOnMouseUp}
         />
-      </InnerBorder>
+      </Root>
     )
   }
 }
@@ -148,6 +149,6 @@ function mapStateToProps(state, ownProps) {
   return { width }
 }
 
-const mapDispatchToProps = { setColWidthDelta }
+const mapDispatchToProps = { setColWidth }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColHeader)

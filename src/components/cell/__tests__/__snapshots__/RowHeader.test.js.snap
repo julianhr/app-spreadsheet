@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RowHeader matches snapshot 1`] = `
+<div
+  class="row-header-width css-1i9qrac-Root e1d5mcq00"
+  data-row="1"
+>
+  1
+  <button
+    class="css-1b5c3lg-BtnHeight e1d5mcq01"
+    tabindex="-1"
+  />
+</div>
+`;

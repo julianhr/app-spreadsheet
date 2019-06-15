@@ -2,12 +2,12 @@
 
 exports[`ColHeader matches snapshot 1`] = `
 <div
-  class="col-label-height css-va29v5-InnerBorder-ColHeader e11zdtao0"
+  class="col-label-height css-bow3c7-Root-ColHeader e11zdtao0"
   data-col="A"
 >
   A
   <button
-    class="css-1oguur2-BtnWidth e11zdtao1"
+    class="css-4pe6r1-BtnWidth e11zdtao1"
     tabindex="-1"
   />
 </div>

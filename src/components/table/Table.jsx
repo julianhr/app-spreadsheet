@@ -8,13 +8,13 @@ import ColHeaderRow from './ColHeaderRow'
 import DataRow from './DataRow'
 import { getColumnNames } from '~/library/utils'
 import getKeyboardNavMachine from './keyboardNavMachine'
-import { DEFAULT_COL_WIDTH } from '~/library/constants'
 
 
 const Grid = styled.div`
   display: flex;
   flex-direction: column;
   width: fit-content;
+  overflow: hidden;
   border-top: 2px solid ${props => props.theme.colors.cell.borderDark};
   border-left: 2px solid ${props => props.theme.colors.cell.borderDark};
   border-right: 1px solid ${props => props.theme.colors.cell.borderDark};
@@ -22,22 +22,6 @@ const Grid = styled.div`
 
   * {
     box-sizing: border-box;
-  }
-
-  .row-label-width {
-    width: 34px;
-  }
-
-  .row-label-height {
-    min-height: 28px;
-  }
-
-  .col-label-width {
-    width: ${DEFAULT_COL_WIDTH}px;
-  }
-
-  .col-label-height {
-    min-height: 26px;
   }
 `
 

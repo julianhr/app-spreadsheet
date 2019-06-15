@@ -3,7 +3,7 @@
 exports[`CellData functional tests lifecycle snapshots: 1. initial text tag 1`] = `
 <DocumentFragment>
   <div
-    class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+    class="row-header-height col-label-width css-1wpoxe-Wrapper eoyj2860"
   >
     <div
       class="css-16d5k2m-DataTag ekht17d0"
@@ -18,7 +18,7 @@ exports[`CellData functional tests lifecycle snapshots: 1. initial text tag 1`] 
 exports[`CellData functional tests lifecycle snapshots: 2. initial input tag 1`] = `
 <DocumentFragment>
   <div
-    class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+    class="row-header-height col-label-width css-1wpoxe-Wrapper eoyj2860"
   >
     <input
       class="css-1obixtf-Input egik0ru0"
@@ -33,7 +33,7 @@ exports[`CellData functional tests lifecycle snapshots: 2. initial input tag 1`]
 exports[`CellData functional tests lifecycle snapshots: 3. text tag has text 1`] = `
 <DocumentFragment>
   <div
-    class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+    class="row-header-height col-label-width css-1wpoxe-Wrapper eoyj2860"
   >
     <div
       class="css-11zzl5v-DataTag ekht17d0"
@@ -50,7 +50,7 @@ exports[`CellData functional tests lifecycle snapshots: 3. text tag has text 1`]
 exports[`CellData functional tests lifecycle snapshots: 4. input tag has formula 1`] = `
 <DocumentFragment>
   <div
-    class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+    class="row-header-height col-label-width css-1wpoxe-Wrapper eoyj2860"
   >
     <input
       class="css-1obixtf-Input egik0ru0"
@@ -65,7 +65,7 @@ exports[`CellData functional tests lifecycle snapshots: 4. input tag has formula
 exports[`CellData functional tests lifecycle snapshots: 5. cell value deleted with Backspace 1`] = `
 <DocumentFragment>
   <div
-    class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+    class="row-header-height col-label-width css-1wpoxe-Wrapper eoyj2860"
   >
     <div
       class="css-16d5k2m-DataTag ekht17d0"
@@ -80,7 +80,7 @@ exports[`CellData functional tests lifecycle snapshots: 5. cell value deleted wi
 exports[`CellData functional tests lifecycle snapshots: 6. key down "a" on text tag 1`] = `
 <DocumentFragment>
   <div
-    class="row-label-height col-label-width css-1wpoxe-Wrapper eoyj2860"
+    class="row-header-height col-label-width css-1wpoxe-Wrapper eoyj2860"
   >
     <input
       class="css-1obixtf-Input egik0ru0"

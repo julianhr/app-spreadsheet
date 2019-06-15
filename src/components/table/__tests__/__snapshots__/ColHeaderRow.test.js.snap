@@ -6,25 +6,25 @@ exports[`ColHeaderRow matches snapshot 1`] = `
   data-row="header"
 >
   <div
-    class="row-label-width col-label-height css-ql6bmv-InnerBorder e40r6tf1"
+    class="css-57e4l-InnerBorder e40r6tf1"
   />
   <div
-    class="col-label-height css-va29v5-InnerBorder-ColHeader e11zdtao0"
+    class="col-label-height css-bow3c7-Root-ColHeader e11zdtao0"
     data-col="A"
   >
     A
     <button
-      class="css-1oguur2-BtnWidth e11zdtao1"
+      class="css-4pe6r1-BtnWidth e11zdtao1"
       tabindex="-1"
     />
   </div>
   <div
-    class="col-label-height css-va29v5-InnerBorder-ColHeader e11zdtao0"
+    class="col-label-height css-bow3c7-Root-ColHeader e11zdtao0"
     data-col="B"
   >
     B
     <button
-      class="css-1oguur2-BtnWidth e11zdtao1"
+      class="css-4pe6r1-BtnWidth e11zdtao1"
       tabindex="-1"
     />
   </div>
