@@ -10,7 +10,7 @@ describe('tableDataActions', () => {
       const appStore = appStoreGen()
       
       expect(appStore.getState().tableMeta['colWidths'][rowLabel]).toBeUndefined()
-      appStore.dispatch(actions.setColWidthDelta(rowLabel, width))
+      appStore.dispatch(actions.setColWidth(rowLabel, width))
       expect(appStore.getState().tableMeta['colWidths'][rowLabel]).toBe(width)
     })
   })
