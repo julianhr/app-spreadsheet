@@ -3,7 +3,7 @@ import { create } from 'react-test-renderer'
 import { render, fireEvent, cleanup } from '@testing-library/react'
 import * as xstate from 'xstate'
 
-import { setCellData } from '~/actions/tableActions'
+import { setCellData } from '~/actions/tableDataActions'
 import { appStoreGen } from '~/reducers'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import CellData from '../CellData'

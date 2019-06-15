@@ -5,7 +5,7 @@ import { render, fireEvent, cleanup } from '@testing-library/react'
 import ConnectedInputData, { InputData } from '../InputData'
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import { appStoreGen } from '~/reducers'
-import { setCellData } from '~/actions/tableActions'
+import { setCellData } from '~/actions/tableDataActions'
 import {
   ERR_DIVISION_BY_ZERO,
   ERR_CIRCULAR_REFERENCE,
@@ -96,13 +96,13 @@ describe('InputData', () => {
       entered = 'test string'
       result = entered
       await appStore.dispatch(setCellData(location, entered, isEnteredValid, result))
-      expect(appStore.getState().table[location]).toBeTruthy()
+      expect(appStore.getState().tableData[location]).toBeTruthy()
 
       renderApp(testProps, appStore)
       const input = document.querySelector(`[data-location="${location}"]`)
       input.value = ''
       fireEvent.keyDown(input, { key: 'Enter' })
-      expect(appStore.getState().table[location]).toBeUndefined()
+      expect(appStore.getState().tableData[location]).toBeUndefined()
     })
   })
 
@@ -177,7 +177,7 @@ describe('InputData', () => {
       input.value = entered
       fireEvent.blur(input)
 
-      expect(store.getState().table[testProps.location]).toEqual(cellData)
+      expect(store.getState().tableData[testProps.location]).toEqual(cellData)
       expect(testProps.onCommit).toHaveBeenCalledTimes(1)
     })
   })

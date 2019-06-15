@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
-import { clearCellData } from '~/actions/tableActions'
+import { clearCellData } from '~/actions/tableDataActions'
 import { setActiveCell } from '~/actions/globalActions'
 
 
@@ -103,7 +103,7 @@ export class ResultData extends React.PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  const cell = state.table[ownProps.location]
+  const cell = state.tableData[ownProps.location]
   const result = cell ? cell.result : ''
   return { result }
 }

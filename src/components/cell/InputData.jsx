@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { connect } from 'react-redux'
 
-import { setCellData, clearCellData } from '~/actions/tableActions'
+import { setCellData, clearCellData } from '~/actions/tableDataActions'
 import Lexer from '~/formulas/Lexer'
 import Suggestions from '../suggestions/Suggestions'
 import { InputContext } from './InputContext'
@@ -179,7 +179,7 @@ export class InputData extends React.PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  const cell = state.table[ownProps.location]
+  const cell = state.tableData[ownProps.location]
   const entered = cell ? cell.entered : ''
   return { entered }
 }
