@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-import RowLabel from '../cell/RowLabel'
+import RowHeader from '../cell/RowHeader'
 // import CellData from '../cell/CellData'
 import CellResult from '../cell/CellResult'
 
@@ -38,7 +38,7 @@ function DataRow({ rowNumber, colLabels }) {
     <Row
       data-row={rowNumber}
     >
-      <RowLabel
+      <RowHeader
         label={rowNumber}
       />
       {dataCells()}

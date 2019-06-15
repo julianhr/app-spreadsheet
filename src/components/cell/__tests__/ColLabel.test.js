@@ -2,7 +2,7 @@ import React from 'react'
 import { render, fireEvent, cleanup } from '@testing-library/react'
 
 import MockApp from '~/__tests__/__mocks__/MockApp'
-import ColLabel from '../ColLabel'
+import ColHeader from '../ColHeader'
 
 
 const renderApp = (props) => {
@@ -10,7 +10,7 @@ const renderApp = (props) => {
     <MockApp>
       <table>
         <tr>
-          <ColLabel {...props} />
+          <ColHeader {...props} />
         </tr>
       </table>
     </MockApp>
@@ -19,7 +19,7 @@ const renderApp = (props) => {
   return wrapper
 }
 
-describe('ColLabel', () => {
+describe('ColHeader', () => {
   afterEach(cleanup)
 
   it('matches snapshot', () => {

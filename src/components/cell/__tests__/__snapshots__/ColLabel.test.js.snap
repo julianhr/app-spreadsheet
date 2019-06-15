@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ColLabel matches snapshot 1`] = `
+exports[`ColHeader matches snapshot 1`] = `
 <div
-  class="col-label-height css-1g1zj8a-InnerBorder-ColLabel etucg500"
+  class="col-label-height css-va29v5-InnerBorder-ColHeader e11zdtao0"
   data-col="A"
 >
   A
   <button
-    class="css-1oguur2-BtnWidth etucg501"
+    class="css-1oguur2-BtnWidth e11zdtao1"
     tabindex="-1"
   />
 </div>

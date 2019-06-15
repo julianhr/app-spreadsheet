@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-import ColLabel from '../cell/ColLabel'
+import ColHeader from '../cell/ColHeader'
 
 
 const Row = styled.div`
@@ -19,7 +19,7 @@ const InnerBorder = styled.div`
   background: ${props => props.theme.colors.cell.labelBkg};
 `
 
-function ColLabelRow({ colLabels }) {
+function ColHeaderRow({ colLabels }) {
   const renderCornerCell = () => (
     <InnerBorder
       className='row-label-width col-label-height'
@@ -28,7 +28,7 @@ function ColLabelRow({ colLabels }) {
 
   const renderLabelCells = () => (
     new Array(colLabels.length).fill(0).map((_, i) => (
-      <ColLabel
+      <ColHeader
         key={i}
         label={colLabels[i]}
       />
@@ -45,9 +45,9 @@ function ColLabelRow({ colLabels }) {
   )
 }
 
-ColLabelRow.propTypes = {
+ColHeaderRow.propTypes = {
   colLabels: PropTypes.arrayOf(PropTypes.string)
 }
 
-export default ColLabelRow
+export default ColHeaderRow
 

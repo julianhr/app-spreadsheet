@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { connect } from 'react-redux'
 import { interpret } from 'xstate'
 
-import ColLabelRow from './ColLabelRow'
+import ColHeaderRow from './ColHeaderRow'
 import DataRow from './DataRow'
 import { getColumnNames } from '~/library/utils'
 import getKeyboardNavMachine from './keyboardNavMachine'
@@ -83,9 +83,9 @@ export class Table extends React.PureComponent {
     this.focusService.send({ type: 'MOVE_FOCUS', key, location })
   }
 
-  renderColLabelRow(i) {
+  renderColHeaderRow(i) {
     return (
-      <ColLabelRow
+      <ColHeaderRow
         key={i}
         rows={this.props.rows}
         colLabels={this.colLabels}
@@ -107,7 +107,7 @@ export class Table extends React.PureComponent {
   renderRows() {
     return new Array(this.props.rows + 1).fill(0).map((_, i) => {
       if (i === 0) {
-        return this.renderColLabelRow(i)
+        return this.renderColHeaderRow(i)
       } else {
         return this.renderDataRows(i)
       }

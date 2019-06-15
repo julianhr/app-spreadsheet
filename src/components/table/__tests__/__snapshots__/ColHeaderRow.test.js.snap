@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColHeaderRow matches snapshot 1`] = `
+<div
+  class="css-g0yt5d-Row e40r6tf0"
+  data-row="header"
+>
+  <div
+    class="row-label-width col-label-height css-ql6bmv-InnerBorder e40r6tf1"
+  />
+  <div
+    class="col-label-height css-va29v5-InnerBorder-ColHeader e11zdtao0"
+    data-col="A"
+  >
+    A
+    <button
+      class="css-1oguur2-BtnWidth e11zdtao1"
+      tabindex="-1"
+    />
+  </div>
+  <div
+    class="col-label-height css-va29v5-InnerBorder-ColHeader e11zdtao0"
+    data-col="B"
+  >
+    B
+    <button
+      class="css-1oguur2-BtnWidth e11zdtao1"
+      tabindex="-1"
+    />
+  </div>
+</div>
+`;
