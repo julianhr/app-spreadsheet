@@ -46,7 +46,6 @@ export class Table extends React.PureComponent {
     activeCell: PropTypes.string,
     rows: PropTypes.number.isRequired,
     columns: PropTypes.number.isRequired,
-    colWidths: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -130,8 +129,7 @@ export class Table extends React.PureComponent {
 
 const mapStateToProps = (state) => {
   const { activeCell, rows, columns } = state.global
-  const { colWidths } = state.tableMeta
-  return { activeCell, rows, columns, colWidths }
+  return { activeCell, rows, columns }
 }
 
 export default connect(mapStateToProps)(Table)
