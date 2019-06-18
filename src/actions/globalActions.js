@@ -1,6 +1,36 @@
 import { createAction } from 'redux-starter-kit'
 
 
-export const setActiveCell = createAction('SET_ACTIVE_CELL')
-export const displayCellInputter = createAction('SET_CELL_INPUTTER')
-export const closeCellInputter = createAction('UNSET_CELL_INPUTTER')
+export function setActiveCell(location) {
+  return (dispatch, getState) => {
+    const cellData = getState().tableData[location]
+    const entered = (cellData || {}).entered || ''
+
+    return Promise.resolve(dispatch({
+      type: 'SET_ACTIVE_CELL',
+      payload: {
+        location,
+        entered,
+      }
+    }))
+  }
+}
+
+export function openCellInputter(cellRect, willReplaceValue) {
+  return (dispatch, getState) => {
+    let newEntered = willReplaceValue
+      ? ''
+      : getState().global.activeCell.entered
+
+    return Promise.resolve(dispatch({
+      type: 'OPEN_CELL_INPUTTER',
+      payload: {
+        isCellInputterOpen: true,
+        newEntered,
+        cellRect,
+      }
+    }))
+  }
+}
+
+export const closeCellInputter = createAction('CLOSE_CELL_INPUTTER')
