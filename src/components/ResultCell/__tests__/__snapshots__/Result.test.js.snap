@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Result #openCellInputter matches signature 1`] = `
+Array [
+  Array [
+    Object {
+      "bottom": 0,
+      "height": 0,
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "width": 0,
+    },
+    false,
+  ],
+]
+`;
+
+exports[`Result functional tests matches snapshot with Redux 1`] = `
+<DocumentFragment>
+  <div
+    class="css-4dsbpr-Root-Datum e1rvd88v0"
+    data-cell="result"
+    data-location="A-3"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

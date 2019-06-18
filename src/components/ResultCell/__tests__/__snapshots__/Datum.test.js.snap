@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Datum result is number 1`] = `
+.emotion-0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border: 2px solid transparent;
+  line-height: 1.1em;
+  height: 100%;
+  width: 100%;
+  padding: 2px;
+  white-space: nowrap;
+  text-overflow: clip;
+  overflow: hidden;
+}
+
+.emotion-0:focus,
+.emotion-0:focus-within {
+  border: 2px solid salmon;
+}
+
+<div
+  class="emotion-0 emotion-1"
+  data-cell="result"
+  tabindex="0"
+>
+  5
+</div>
+`;
+
+exports[`Datum result is string 1`] = `
+.emotion-0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border: 2px solid transparent;
+  line-height: 1.1em;
+  height: 100%;
+  width: 100%;
+  padding: 2px;
+}
+
+.emotion-0:focus,
+.emotion-0:focus-within {
+  border: 2px solid salmon;
+}
+
+<div
+  class="emotion-0 emotion-1"
+  data-cell="result"
+  tabindex="0"
+>
+  test
+</div>
+`;

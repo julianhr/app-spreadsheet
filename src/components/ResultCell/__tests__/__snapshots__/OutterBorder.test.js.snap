@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OutterBorder default width and height 1`] = `
+.emotion-0 {
+  cursor: cell;
+  overflow: hidden;
+  font-size: 13px;
+  border-right: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  outline: none;
+  width: 140px;
+}
+
+<div
+  class="emotion-0 emotion-1"
+  data-cell="border"
+>
+  Test
+</div>
+`;
+
+exports[`OutterBorder specified width and height 1`] = `
+.emotion-0 {
+  cursor: cell;
+  overflow: hidden;
+  font-size: 13px;
+  border-right: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  outline: none;
+  width: 100px;
+  height: 30px;
+}
+
+<div
+  class="emotion-0 emotion-1"
+  data-cell="border"
+>
+  Test
+</div>
+`;
