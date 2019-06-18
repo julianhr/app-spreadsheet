@@ -8,14 +8,13 @@ import { jsx, css } from '@emotion/core' // eslint-disable-line
 const Root = styled.div`
   display: flex;
   align-items: center;
-  /* outline: none; */
   border: 2px solid transparent;
   line-height: 1.1em;
   height: 100%;
   width: 100%;
   padding: 2px;
 
-  :focus, :focus-within {
+  :focus {
     border: 2px solid salmon;
   }
 `

@@ -20,8 +20,7 @@ exports[`Datum result is number 1`] = `
   overflow: hidden;
 }
 
-.emotion-0:focus,
-.emotion-0:focus-within {
+.emotion-0:focus {
   border: 2px solid salmon;
 }
 
@@ -51,8 +50,7 @@ exports[`Datum result is string 1`] = `
   padding: 2px;
 }
 
-.emotion-0:focus,
-.emotion-0:focus-within {
+.emotion-0:focus {
   border: 2px solid salmon;
 }
 

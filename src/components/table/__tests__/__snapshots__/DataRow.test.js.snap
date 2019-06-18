@@ -20,7 +20,7 @@ exports[`DataRow matches snapshot 1`] = `
     data-cell="border"
   >
     <div
-      class="css-4dsbpr-Root-Datum e1rvd88v0"
+      class="css-i8mrfd-Root-Datum e1rvd88v0"
       data-cell="result"
       data-location="A-2"
       tabindex="0"
@@ -31,7 +31,7 @@ exports[`DataRow matches snapshot 1`] = `
     data-cell="border"
   >
     <div
-      class="css-4dsbpr-Root-Datum e1rvd88v0"
+      class="css-i8mrfd-Root-Datum e1rvd88v0"
       data-cell="result"
       data-location="B-2"
       tabindex="0"
