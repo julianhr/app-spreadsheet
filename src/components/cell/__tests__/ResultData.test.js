@@ -89,12 +89,12 @@ describe('ResultData', () => {
   describe('#handleOnKeyDown', () => {
     it('sets active cell to current one', async () => {
       const store = appStoreGen()
-      expect(store.getState().global.activeCell).toBeNull()
+      expect(store.getState().global.activeCell).toEqual({})
 
       renderApp(testProps, store)
       const tag = document.querySelector(`[data-location="${testProps.location}"]`)
       fireEvent.keyDown(tag, { key: 'a' })
-      expect(store.getState().global.activeCell).toEqual(testProps.location)
+      expect(store.getState().global.activeCell.location).toEqual(testProps.location)
     })
 
     it('clears value if key pressed is Backspace or Delete', async () => {

@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`globalActions #displayCellInputter sets data for cell inputter 1`] = `
+Object {
+  "cellRect": Object {
+    "bottom": 0,
+    "height": 0,
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "width": 0,
+  },
+  "isCellInputterOpen": true,
+  "newEntered": "=5+3",
+}
+`;
+
+exports[`globalActions #displayCellInputter sets data for cell inputter 2`] = `
+Object {
+  "cellRect": Object {
+    "bottom": 0,
+    "height": 0,
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "width": 0,
+  },
+  "isCellInputterOpen": true,
+  "newEntered": "",
+}
+`;
+
+exports[`globalActions #setActiveCell sets currently active cell 1`] = `
+Object {
+  "entered": "",
+  "location": "B-2",
+}
+`;

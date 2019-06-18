@@ -19,11 +19,11 @@ const Main = styled.main`
   grid-area: main;
 `
 
-function App({ cellInputter }) {
+function App({ isCellInputterOpen }) {
   return (
     <Container>
       <Main>
-        {cellInputter &&  <CellInputter />}
+        {isCellInputterOpen &&  <CellInputter />}
         <div data-dummy-focus-stop tabIndex="0" />
         <Header />
         <Table />
@@ -33,10 +33,13 @@ function App({ cellInputter }) {
 }
 
 App.propTypes = {
-  cellInputter: PropTypes.object,
+  isCellInputterOpen: PropTypes.bool,
   setActiveCell: PropTypes.func,
 }
 
-const mapStateToProps = (state) => ({ cellInputter: state.global.cellInputter })
+const mapStateToProps = (state) => {
+  const { isCellInputterOpen } = state.global.cellInputter
+  return { isCellInputterOpen }
+}
 
 export default connect(mapStateToProps)(App)

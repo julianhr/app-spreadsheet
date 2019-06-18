@@ -27,7 +27,6 @@ const Grid = styled.div`
 
 export class Table extends React.PureComponent {
   static propTypes = {
-    activeCell: PropTypes.string,
     rows: PropTypes.number.isRequired,
     columns: PropTypes.number.isRequired,
   }
@@ -83,7 +82,6 @@ export class Table extends React.PureComponent {
         key={rowNumber}
         rowNumber={rowNumber}
         colLabels={this.colLabels}
-        activeCell={this.props.activeCell}
       />
     )
   }
@@ -112,8 +110,8 @@ export class Table extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  const { activeCell, rows, columns } = state.global
-  return { activeCell, rows, columns }
+  const { rows, columns } = state.global
+  return { rows, columns }
 }
 
 export default connect(mapStateToProps)(Table)

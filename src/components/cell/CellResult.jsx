@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
 import { clearCellData } from '~/actions/tableDataActions'
-import { displayCellInputter, setActiveCell } from '~/actions/globalActions'
+import { openCellInputter, setActiveCell } from '~/actions/globalActions'
 import { DEFAULT_COL_WIDTH } from '~/library/constants'
 
 
@@ -33,19 +33,19 @@ const Cell = styled.div`
   }
 `
 
-export class ResultCell extends React.PureComponent {
+export class CellResult extends React.PureComponent {
   static propTypes = {
     // props
     // isFocused: PropTypes.bool,
     location: PropTypes.string.isRequired,
     // onDoubleClick: PropTypes.func.isRequired,
     // onKeyDownEditable: PropTypes.func.isRequired,
-    displayCellInputter: PropTypes.func.isRequired,
+    openCellInputter: PropTypes.func.isRequired,
     // redux
     clearCellData: PropTypes.func.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number,
-    // setActiveCell: PropTypes.func.isRequired,
+    setActiveCell: PropTypes.func.isRequired,
     result: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
@@ -58,6 +58,7 @@ export class ResultCell extends React.PureComponent {
 
   constructor() {
     super()
+    this.handleCellOnFocus = this.handleCellOnFocus.bind(this)
     this.handleCellOnKeyDown = this.handleCellOnKeyDown.bind(this)
     this.handleCellOnDoubleClick = this.handleCellOnDoubleClick.bind(this)
     this.handleCellOnClick = this.handleCellOnClick.bind(this)
@@ -74,36 +75,10 @@ export class ResultCell extends React.PureComponent {
   //   if (this.props.isFocused) { this.refCell.current.focus() }
   // }
 
-  displayCellInputter(willReplaceValue) {
-    const { location } = this.props
+  openCellInputter(willReplaceValue) {
     const cellDomRect = this.refCell.current.getBoundingClientRect()
     const cellRect = JSON.parse(JSON.stringify(cellDomRect))
-
-    this.props.displayCellInputter({
-      location,
-      willReplaceValue,
-      cellRect,
-    })
-  }
-
-  handleCellOnKeyDown({ key }) {
-    this.props.setActiveCell(this.props.location)
-
-    if (['Delete', 'Backspace'].includes(key)) {
-      const valueStr = '' + this.props.result
-
-      if (valueStr.length > 0) {
-        this.props.clearCellData(this.props.location)
-      }
-      // key pressed is a printable symbol, ex: 'a', '1', ','
-      // can be further refined, but for now it's fine
-    } else if (key.length === 1) {
-      this.displayCellInputter(true)
-    }
-  }
-
-  handleCellOnDoubleClick() {
-    this.displayCellInputter(false)
+    this.props.openCellInputter(cellRect, willReplaceValue)
   }
 
   getRootStyle() {
@@ -133,6 +108,28 @@ export class ResultCell extends React.PureComponent {
     this.refCell.current.focus()
   }
 
+  handleCellOnFocus() {
+    this.props.setActiveCell(this.props.location)
+  }
+
+  handleCellOnKeyDown({ key }) {
+    if (['Delete', 'Backspace'].includes(key)) {
+      const valueStr = '' + this.props.result
+
+      if (valueStr.length > 0) {
+        this.props.clearCellData(this.props.location)
+      }
+      // key pressed is a printable symbol, ex: 'a', '1', ','
+      // can be further refined, but for now it's fine
+    } else if (key.length === 1) {
+      this.openCellInputter(true)
+    }
+  }
+
+  handleCellOnDoubleClick() {
+    this.openCellInputter(false)
+  }
+
   handleCellOnClick(event) {
     event.stopPropagation()
   }
@@ -152,6 +149,7 @@ export class ResultCell extends React.PureComponent {
           onClick={this.handleCellOnClick}
           onKeyDown={this.handleCellOnKeyDown}
           onDoubleClick={this.handleCellOnDoubleClick}
+          onFocus={this.handleCellOnFocus}
         >
           {this.props.result}
         </Cell>
@@ -169,6 +167,6 @@ function mapStateToProps(state, ownProps) {
   return { result, width, height }
 }
 
-const mapDispatchToProps = { clearCellData, displayCellInputter, setActiveCell }
+const mapDispatchToProps = { clearCellData, openCellInputter, setActiveCell }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResultCell)
+export default connect(mapStateToProps, mapDispatchToProps)(CellResult)

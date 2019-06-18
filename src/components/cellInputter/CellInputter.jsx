@@ -48,10 +48,11 @@ export class CellInputter extends React.PureComponent {
     closeCellInputter: PropTypes.func.isRequired,
     columns: PropTypes.number.isRequired,
     entered: PropTypes.string.isRequired,
+    newEntered: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
     rows: PropTypes.number.isRequired,
     setCellData: PropTypes.func.isRequired,
-    willReplaceValue: PropTypes.bool.isRequired,
+    isCellInputterOpen: PropTypes.bool,
   }
 
   constructor() {
@@ -75,9 +76,8 @@ export class CellInputter extends React.PureComponent {
   refHiddenInput = React.createRef()
 
   componentDidMount() {
-    const entered = this.props.willReplaceValue ? '' : this.props.entered
     this.focusInputTag()
-    this.setInputValue(entered)
+    this.setInputValue(this.props.newEntered)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -258,8 +258,6 @@ export class CellInputter extends React.PureComponent {
     const inputEl = this.refInput.current
     const { width, height } = this.props.cellRect
 
-    if (!this.props.location) { return null }
-
     return (
       <InputContext.Provider
         value={{
@@ -304,16 +302,20 @@ function mapStateToProps(state) {
   const {
     global: {
       cellInputter: {
-        location, willReplaceValue, cellRect
+        isCellInputterOpen,
+        newEntered,
+        cellRect,
+      },
+      activeCell: {
+        location,
+        entered,
       },
       rows,
       columns,
     }
   } = state
-  const cell = state.tableData[location]
-  const entered = cell ? cell.entered : ''
 
-  return { location, willReplaceValue, cellRect, entered, rows, columns }
+  return { location, entered, newEntered, isCellInputterOpen, cellRect, rows, columns }
 }
 
 const mapDispatchToProps = { setCellData, clearCellData, closeCellInputter }
