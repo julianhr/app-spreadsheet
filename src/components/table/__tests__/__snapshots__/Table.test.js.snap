@@ -58,30 +58,33 @@ exports[`Table functional tests matches snapshot 1`] = `
       />
     </div>
     <div
-      class="css-1n907nv-Root egobumn0"
+      class="css-1kx7ize-Root-OutterBorder e17q3q8l0"
+      data-cell="border"
     >
       <div
-        class="css-17w7ktc-Cell egobumn1"
+        class="css-4dsbpr-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="A-1"
         tabindex="0"
       />
     </div>
     <div
-      class="css-1n907nv-Root egobumn0"
+      class="css-1kx7ize-Root-OutterBorder e17q3q8l0"
+      data-cell="border"
     >
       <div
-        class="css-17w7ktc-Cell egobumn1"
+        class="css-4dsbpr-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="B-1"
         tabindex="0"
       />
     </div>
     <div
-      class="css-1n907nv-Root egobumn0"
+      class="css-1kx7ize-Root-OutterBorder e17q3q8l0"
+      data-cell="border"
     >
       <div
-        class="css-17w7ktc-Cell egobumn1"
+        class="css-4dsbpr-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="C-1"
         tabindex="0"
@@ -103,30 +106,33 @@ exports[`Table functional tests matches snapshot 1`] = `
       />
     </div>
     <div
-      class="css-1n907nv-Root egobumn0"
+      class="css-1kx7ize-Root-OutterBorder e17q3q8l0"
+      data-cell="border"
     >
       <div
-        class="css-17w7ktc-Cell egobumn1"
+        class="css-4dsbpr-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="A-2"
         tabindex="0"
       />
     </div>
     <div
-      class="css-1n907nv-Root egobumn0"
+      class="css-1kx7ize-Root-OutterBorder e17q3q8l0"
+      data-cell="border"
     >
       <div
-        class="css-17w7ktc-Cell egobumn1"
+        class="css-4dsbpr-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="B-2"
         tabindex="0"
       />
     </div>
     <div
-      class="css-1n907nv-Root egobumn0"
+      class="css-1kx7ize-Root-OutterBorder e17q3q8l0"
+      data-cell="border"
     >
       <div
-        class="css-17w7ktc-Cell egobumn1"
+        class="css-4dsbpr-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="C-2"
         tabindex="0"
