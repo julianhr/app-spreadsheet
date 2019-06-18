@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 import RowHeader from '../cell/RowHeader'
-// import CellData from '../cell/CellData'
-import CellResult from '../cell/CellResult'
+import ResultCell from '../ResultCell/ResultCell'
 
 
 const Row = styled.div`
@@ -12,21 +11,12 @@ const Row = styled.div`
   width: fit-content;
 `
 
-// function DataRow({ rowNumber, colLabels, activeCell }) {
 function DataRow({ rowNumber, colLabels }) {
   const dataCells = () => (
     new Array(colLabels.length).fill(0).map((_, i) => {
       const location = `${colLabels[i]}-${rowNumber}`
-
-      // return (
-      //   <CellData
-      //     key={i}
-      //     isActive={activeCell === location}
-      //     location={location}
-      //   />
-      // )
       return (
-        <CellResult
+        <ResultCell
           key={i}
           location={location}
         />
@@ -49,7 +39,6 @@ function DataRow({ rowNumber, colLabels }) {
 DataRow.propTypes = {
   rowNumber: PropTypes.number,
   colLabels: PropTypes.arrayOf(PropTypes.string),
-  // activeCell: PropTypes.string,
 }
 
 export default DataRow

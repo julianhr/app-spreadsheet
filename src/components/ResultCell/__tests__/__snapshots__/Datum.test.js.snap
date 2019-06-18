@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ResultData functional tests snapshot with value as number 1`] = `
+exports[`Datum result is number 1`] = `
 .emotion-0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -10,7 +10,6 @@ exports[`ResultData functional tests snapshot with value as number 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  outline: none;
   border: 2px solid transparent;
   line-height: 1.1em;
   height: 100%;
@@ -28,14 +27,13 @@ exports[`ResultData functional tests snapshot with value as number 1`] = `
 <div
   class="emotion-0 emotion-1"
   data-cell="result"
-  data-location="B-2"
   tabindex="0"
 >
   5
 </div>
 `;
 
-exports[`ResultData functional tests snapshot with value as string 1`] = `
+exports[`Datum result is string 1`] = `
 .emotion-0 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -45,7 +43,6 @@ exports[`ResultData functional tests snapshot with value as string 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  outline: none;
   border: 2px solid transparent;
   line-height: 1.1em;
   height: 100%;
@@ -60,9 +57,8 @@ exports[`ResultData functional tests snapshot with value as string 1`] = `
 <div
   class="emotion-0 emotion-1"
   data-cell="result"
-  data-location="B-2"
   tabindex="0"
 >
-  test result
+  test
 </div>
 `;
