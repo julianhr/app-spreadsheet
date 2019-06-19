@@ -11,6 +11,7 @@ import { closeCellInputter } from '~/actions/globalActions'
 import HiddenInput from './HiddenInput'
 import { Input } from './Inputter'
 import Wrapper from './Wrapper'
+import KeyActions from './KeyActions'
 
 
 export class CellInputter extends React.PureComponent {
@@ -37,6 +38,7 @@ export class CellInputter extends React.PureComponent {
     this.setIsFuncSelectorVisible = this.setIsFuncSelectorVisible.bind(this)
     this.setInputValue = this.setInputValue.bind(this)
     this.setInputWidth = this.setInputWidth.bind(this)
+    this.keyActions = new KeyActions(this)
   }
 
   state = {
@@ -58,39 +60,11 @@ export class CellInputter extends React.PureComponent {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.keyEvent !== this.state.keyEvent) {
       this.setFocus(this.state.keyEvent.key)
-      this.keyActions()
+      this.keyActions.action()
     }
 
     if (prevState.inputValue !== this.state.inputValue) {
       this.tokenizeInputValue()
-    }
-  }
-
-  keyActions() {
-    const { key } = this.state.keyEvent
-
-    if (this.state.isFuncSelectorVisible) {
-      switch (key) { // eslint-disable-line
-        case 'Escape':
-          this.props.closeCellInputter()
-          break
-        case 'ArrowLeft':
-        case 'ArrowRight':
-          this.setState({ cursorPos: this.refInput.current.selectionEnd })
-      }
-    } else {
-      switch (key) { // eslint-disable-line
-        case 'Escape':
-          this.props.closeCellInputter()
-          break
-        case 'Enter':
-          this.setCellValue()
-          this.props.closeCellInputter()
-          break
-        case 'ArrowLeft':
-        case 'ArrowRight':
-          this.setState({ cursorPos: this.refInput.current.selectionEnd })
-      }
     }
   }
 
