@@ -12,6 +12,7 @@ import { Input } from './Inputter'
 import Wrapper from './Wrapper'
 import KeyboardActions from './KeyboardActions'
 import KeyboardFocuser from './KeyboardFocuser'
+import CellValueSetter from './CellValueSetter'
 
 
 export class CellInputter extends React.PureComponent {
@@ -40,6 +41,7 @@ export class CellInputter extends React.PureComponent {
     this.setInputWidth = this.setInputWidth.bind(this)
     this.keyboardActions = new KeyboardActions(this)
     this.keyboardFocuser = new KeyboardFocuser(this)
+    this.cellValueSetter = new CellValueSetter(this)
   }
 
   state = {
@@ -91,28 +93,6 @@ export class CellInputter extends React.PureComponent {
     }, 0)
   }
 
-  setCellValue() {
-    const { location } = this.props
-    const { inputValue } = this.state
-
-    if (this.isWhitespace(inputValue)) {
-      this.props.clearCellData(location)
-      return
-    }
-
-    const cellValue = inputValue.length > 0 && inputValue[0] === '='
-      // ? inputValue.toUpperCase()
-      ? inputValue
-      // NOTE: fix!!
-      : inputValue
-
-    this.props.setCellData(location, cellValue)
-  }
-
-  isWhitespace(text) {
-    return text.length === 0 || Boolean(text.match(/^\s+$/))
-  }
-
   setIsFuncSelectorVisible(isFuncSelectorVisible) {
     this.setState({ isFuncSelectorVisible })
   }
@@ -147,7 +127,8 @@ export class CellInputter extends React.PureComponent {
     if (this.state.isFuncSelectorVisible) { return }
 
     this.setState({ inputValue: event.target.value }, () => {
-      this.setCellValue()
+      console.count('set cell value')
+      this.cellValueSetter.run()
       this.props.closeCellInputter()
     })
   }
