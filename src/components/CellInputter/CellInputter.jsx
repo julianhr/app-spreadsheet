@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { setCellData, clearCellData } from '~/actions/tableDataActions'
-import { parseLocation, getColumnLabel } from '~/library/utils'
 import Lexer from '~/formulas/Lexer'
 import Suggestions from './Suggestions'
 import { InputContext } from './InputContext'
@@ -11,7 +10,8 @@ import { closeCellInputter } from '~/actions/globalActions'
 import HiddenInput from './HiddenInput'
 import { Input } from './Inputter'
 import Wrapper from './Wrapper'
-import KeyActions from './KeyActions'
+import KeyboardActions from './KeyboardActions'
+import KeyboardFocuser from './KeyboardFocuser'
 
 
 export class CellInputter extends React.PureComponent {
@@ -38,7 +38,8 @@ export class CellInputter extends React.PureComponent {
     this.setIsFuncSelectorVisible = this.setIsFuncSelectorVisible.bind(this)
     this.setInputValue = this.setInputValue.bind(this)
     this.setInputWidth = this.setInputWidth.bind(this)
-    this.keyActions = new KeyActions(this)
+    this.keyboardActions = new KeyboardActions(this)
+    this.keyboardFocuser = new KeyboardFocuser(this)
   }
 
   state = {
@@ -59,8 +60,8 @@ export class CellInputter extends React.PureComponent {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.keyEvent !== this.state.keyEvent) {
-      this.setFocus(this.state.keyEvent.key)
-      this.keyActions.action()
+      this.keyboardFocuser.run()
+      this.keyboardActions.run()
     }
 
     if (prevState.inputValue !== this.state.inputValue) {
@@ -84,42 +85,10 @@ export class CellInputter extends React.PureComponent {
   focusInputTag() {
     const inputEl = this.refInput.current
 
-    setImmediate(() => {
+    setTimeout(() => {
       inputEl.focus()
       inputEl.selectionStart = inputEl.value.length
-    })
-  }
-
-  setFocus() {
-    const { keyEvent: { key } } = this.state
-    const { location } = this.props
-    const [colIndex, rowIndex] = parseLocation(location)
-    let el, elId
-
-    if (this.state.isFuncSelectorVisible) {
-      if (key === 'Escape') {
-        elId = `[data-cell="result"][data-location="${location}"]`
-      } else {
-        return
-      }
-    } else {
-      if (key === 'Tab') {
-        elId = `[data-cell="result"][data-location="${location}"]`
-      } else if (key === 'Enter') {
-        const nextRowIndex = Math.min(this.props.rows - 1, rowIndex + 1)
-        const colLabel = getColumnLabel(colIndex)
-        const rowLabel = '' + (nextRowIndex + 1)
-        const endLocation = `${colLabel}-${rowLabel}`
-        elId = `[data-cell="result"][data-location="${endLocation}"]`
-      } else if (key === 'Escape') {
-        elId = `[data-cell="result"][data-location="${location}"]`
-      } else {
-        elId = `[data-cell="input"][data-location="${location}"]`
-      }
-    }
-
-    el = document.querySelector(elId)
-    if (document.activeElement !== el) { el.focus() }
+    }, 0)
   }
 
   setCellValue() {

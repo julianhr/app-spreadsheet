@@ -1,9 +1,9 @@
-class KeyActions {
+class KeyboardActions {
   constructor(component) {
     this.c = component
   }
 
-  action() {
+  run() {
     const { key } = this.c.state.keyEvent
 
     if (this.c.state.isFuncSelectorVisible) {
@@ -40,4 +40,4 @@ class KeyActions {
   }
 }
 
-export default KeyActions
+export default KeyboardActions
