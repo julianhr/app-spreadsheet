@@ -1,8 +1,5 @@
-/* @jsx jsx */
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
-import { css, jsx } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
 import { setCellData, clearCellData } from '~/actions/tableDataActions'
@@ -13,11 +10,8 @@ import { InputContext } from './InputContext'
 import { closeCellInputter } from '~/actions/globalActions'
 import HiddenInput from './HiddenInput'
 import { Input } from './Inputter'
+import Wrapper from './Wrapper'
 
-
-const Root = styled.div`
-  position: fixed;
-`
 
 export class CellInputter extends React.PureComponent {
 
@@ -101,7 +95,9 @@ export class CellInputter extends React.PureComponent {
   }
 
   setInputWidth(width) {
-    this.setState({ width })
+    if (this.state.width !== width) {
+      this.setState({ width })
+    }
   }
 
   tokenizeInputValue() {
@@ -213,22 +209,11 @@ export class CellInputter extends React.PureComponent {
     })
   }
 
-  getRootStyle() {
-    const { top, left, width: cellWidth, height } = this.props.cellRect
-    const width = this.state.width || cellWidth
-
-    return {
-      top,
-      left,
-      height,
-      width,
-    }
-  }
-
   render() {
     const inputEl = this.refInput.current
     const inputRect = inputEl && inputEl.getBoundingClientRect()
-    const width = (inputRect || {}).width || this.props.cellRect.width
+    const { top, left, height, width: cellWidth } = this.props.cellRect
+    const width = this.state.width || cellWidth
 
     return (
       <InputContext.Provider
@@ -240,8 +225,11 @@ export class CellInputter extends React.PureComponent {
           inputValue: this.state.inputValue,
         }}
       >
-        <Root
-          css={this.getRootStyle()}
+        <Wrapper
+          width={width}
+          height={height}
+          top={top}
+          left={left}
         >
           <HiddenInput
             value={this.state.inputValue}
@@ -261,7 +249,7 @@ export class CellInputter extends React.PureComponent {
             tokens={this.state.tokens}
             cursorPos={this.state.cursorPos}
           />
-        </Root>
+        </Wrapper>
       </InputContext.Provider>
     )
   }
