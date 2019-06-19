@@ -42,7 +42,7 @@ class HiddenInput extends React.PureComponent {
       ? Math.max(cellWidth, textWidth + INPUT_PADDING_RIGHT)
       : cellWidth
 
-      this.props.setInputWidth(width)
+    this.props.setInputWidth(width)
   }
 
   render() {
