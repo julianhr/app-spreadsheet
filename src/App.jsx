@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 
 import Header from './components/header/Header'
 import Table from './components/table/Table'
-import CellInputter from './components/cellInputter/CellInputter'
+import CellInputter from './components/CellInputter/CellInputter'
 
 
 const Container = styled.div`

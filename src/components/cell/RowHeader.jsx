@@ -88,7 +88,6 @@ class RowHeader extends React.PureComponent {
     const minBottom = MIN_ROW_HEIGHT - this.state.height
     const maxBottom = MAX_ROW_HEIGHT - this.state.height
     const bottom = -(clamp(newBottom, minBottom, maxBottom) - 4)
-    console.log('row', newBottom, bottom)
 
     return (theme) => css`
       height: 1.5px;
