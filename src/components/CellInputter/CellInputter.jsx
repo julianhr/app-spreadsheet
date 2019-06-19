@@ -11,32 +11,12 @@ import Lexer from '~/formulas/Lexer'
 import Suggestions from './Suggestions'
 import { InputContext } from './InputContext'
 import { closeCellInputter } from '~/actions/globalActions'
+import HiddenInput from './HiddenInput'
+import { Input } from './Inputter'
 
-
-const INPUT_PADDING_RIGHT = 15
 
 const Root = styled.div`
   position: fixed;
-`
-
-const Input = styled.input`
-  align-items: center;
-  background-color: white;
-  border: 2px solid salmon;
-  box-shadow: 0 0 5px ${props => props.theme.colors.shadow};
-  box-sizing: border-box;
-  display: flex;
-  font-size: 13px;
-  height: 100%;
-  outline: none;
-  padding: 2px;
-  width: 100%;
-`
-
-const HiddenInput = styled(Input)`
-  position: absolute;
-  margin-top: -100vh;
-  visibility: hidden;
 `
 
 export class CellInputter extends React.PureComponent {
@@ -62,6 +42,7 @@ export class CellInputter extends React.PureComponent {
     this.handleOnChange = this.handleOnChange.bind(this)
     this.setIsFuncSelectorVisible = this.setIsFuncSelectorVisible.bind(this)
     this.setInputValue = this.setInputValue.bind(this)
+    this.setInputWidth = this.setInputWidth.bind(this)
   }
 
   state = {
@@ -70,10 +51,10 @@ export class CellInputter extends React.PureComponent {
     inputValue: '',
     keyEvent: { key: '' },
     cursorPos: 0,
+    width: null,
   }
 
   refInput = React.createRef()
-  refHiddenInput = React.createRef()
 
   componentDidMount() {
     this.focusInputTag()
@@ -117,6 +98,10 @@ export class CellInputter extends React.PureComponent {
           this.setState({ cursorPos: this.refInput.current.selectionEnd })
       }
     }
+  }
+
+  setInputWidth(width) {
+    this.setState({ width })
   }
 
   tokenizeInputValue() {
@@ -229,22 +214,8 @@ export class CellInputter extends React.PureComponent {
   }
 
   getRootStyle() {
-    const { top, left, width: cellWidth, height: cellHeight } = this.props.cellRect
-    const { current: hiddenInputEl } = this.refHiddenInput
-    let width, height
-
-    if (hiddenInputEl) {
-      const textWidth = hiddenInputEl.scrollWidth
-      const hiddenRect = hiddenInputEl.getBoundingClientRect()
-      width = textWidth > hiddenRect.width
-        ? Math.max(cellWidth, textWidth + INPUT_PADDING_RIGHT)
-        : cellWidth
-      height = cellHeight
-    } else {
-      width = cellWidth
-      height = cellHeight
-    }
-
+    const { top, left, width: cellWidth, height } = this.props.cellRect
+    const width = this.state.width || cellWidth
 
     return {
       top,
@@ -256,12 +227,13 @@ export class CellInputter extends React.PureComponent {
 
   render() {
     const inputEl = this.refInput.current
-    const { width, height } = this.props.cellRect
+    const inputRect = inputEl && inputEl.getBoundingClientRect()
+    const width = (inputRect || {}).width || this.props.cellRect.width
 
     return (
       <InputContext.Provider
         value={{
-          inputRect: inputEl && inputEl.getBoundingClientRect(),
+          inputRect,
           setIsFuncSelectorVisible: this.setIsFuncSelectorVisible,
           setInputValue: this.setInputValue,
           keyEvent: this.state.keyEvent,
@@ -272,12 +244,9 @@ export class CellInputter extends React.PureComponent {
           css={this.getRootStyle()}
         >
           <HiddenInput
-            ref={this.refHiddenInput}
-            defaultValue={this.state.inputValue}
-            css={{
-              width: width - INPUT_PADDING_RIGHT,
-              height,
-            }}
+            value={this.state.inputValue}
+            cellWidth={width}
+            setInputWidth={this.setInputWidth}
           />
           <Input
             ref={this.refInput}
