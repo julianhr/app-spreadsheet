@@ -30,7 +30,7 @@ class KeyboardActions {
         this.c.props.closeCellInputter()
         break
       case 'Enter':
-        this.c.setCellValue()
+        this.c.cellValueSetter.run()
         this.c.props.closeCellInputter()
         break
       case 'ArrowLeft':

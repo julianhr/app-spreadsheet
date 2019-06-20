@@ -8,7 +8,7 @@ import Suggestions from './Suggestions'
 import { InputContext } from './InputContext'
 import { closeCellInputter } from '~/actions/globalActions'
 import HiddenInput from './HiddenInput'
-import { Input } from './Inputter'
+import InputTag from './InputTag'
 import Wrapper from './Wrapper'
 import KeyboardActions from './KeyboardActions'
 import KeyboardFocuser from './KeyboardFocuser'
@@ -127,7 +127,6 @@ export class CellInputter extends React.PureComponent {
     if (this.state.isFuncSelectorVisible) { return }
 
     this.setState({ inputValue: event.target.value }, () => {
-      console.count('set cell value')
       this.cellValueSetter.run()
       this.props.closeCellInputter()
     })
@@ -160,10 +159,9 @@ export class CellInputter extends React.PureComponent {
             cellWidth={width}
             setInputWidth={this.setInputWidth}
           />
-          <Input
-            ref={this.refInput}
-            data-cell='input'
-            data-location={this.props.location}
+          <InputTag
+            fwdRef={this.refInput}
+            location={this.props.location}
             value={this.state.inputValue}
             onChange={this.handleOnChange}
             onKeyDown={this.handleOnKeyDown}
