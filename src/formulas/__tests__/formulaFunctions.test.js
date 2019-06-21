@@ -19,13 +19,13 @@ describe('formulaFunctions', () => {
   })
 
   describe('CONCAT', () => {
-    it('concatenates arguments', () => {
+    it('concatenates string arguments', () => {
       expect(Fn.CONCAT.fn('one ', ' two ', ' three')).toBe('one  two  three')
     })
 
-    it('takes strings and numbers', () => {
-      expect(Fn.CONCAT.fn('one', 2)).toBe('one2')
-      expect(Fn.CONCAT.fn(7, 2)).toBe('72')
+    it('cannot mix strings and numbers', () => {
+      expect(() => Fn.CONCAT.fn('one', 2)).toThrow()
+      expect(() => Fn.CONCAT.fn(7, 2)).toThrow()
     })
 
     it('throws error if no arguments', () => {
