@@ -8,7 +8,7 @@ class CellValueSetter {
 
   run() {
     const { location } = this.c.props
-    const { inputValue } = this.c.state
+    const inputValue = this.c.state.valueEvent.value
     let cellValue
 
     if (this.isWhitespace(inputValue)) {

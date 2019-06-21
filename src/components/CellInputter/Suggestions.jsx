@@ -13,10 +13,6 @@ class Suggestions extends React.PureComponent {
     cursorPos: PropTypes.number,
   }
 
-  static defaultProps = {
-    cursorPos: 0,
-  }
-
   state = {
     fnScopes: [],
   }
@@ -110,6 +106,8 @@ class Suggestions extends React.PureComponent {
   }
 
   render() {
+    if (this.props.cursorPos === undefined) { return null }
+
     const renderedFuncSelector = this.getFuncSelector()
 
     if (renderedFuncSelector) {
