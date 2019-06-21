@@ -103,20 +103,20 @@ class FuncSelector extends React.Component {
     const { keyEvent } = this.context
     if (this.state.keyEvent === keyEvent) { return }
     if (['Enter', 'Tab'].includes(keyEvent.key) && this.state.isVisible) {
-      this.setValueEvent()
+      this.setInputterValueEvent()
     }
   }
 
-  setValueEvent() {
-    const currInputValue = this.context.inputValue
+  setInputterValueEvent() {
+    const currInputValue = this.context.valueEvent.value
     const { token } = this.props
     const { fnName } = this.state.listItems[this.state.itemIndex]
     const rightChunkIndex = token.index + token.text.length
     const leftChunk = currInputValue.slice(0, token.index)
     const rightChunk = currInputValue.slice(rightChunkIndex)
-    const newInputValue = `${leftChunk}${fnName}(${rightChunk}`
+    const value = `${leftChunk}${fnName}(${rightChunk}`
     const cursorPos = leftChunk.length + fnName.length + 1
-    this.context.setValueEvent(newInputValue, cursorPos)
+    this.context.setValueEvent(value, cursorPos)
   }
 
   setListItems() {
@@ -207,7 +207,7 @@ class FuncSelector extends React.Component {
   }
 
   handleOnClick() {
-    this.setValueEvent()
+    this.setInputterValueEvent()
   }
 
   render() {

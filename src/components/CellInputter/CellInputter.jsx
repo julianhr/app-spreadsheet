@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 
 import { closeCellInputter } from '~/actions/globalActions'
 import Inputter from './Inputter'
-import HiddenInput from './HiddenInput'
+import InputSizer from './InputSizer'
 
 
 const Root = styled.div`
@@ -35,10 +35,6 @@ export class CellInputter extends React.PureComponent {
 
   refRoot = React.createRef()
 
-  componentDidMount() {
-    this.setState({ width: this.props.cellRect.width })
-  }
-
   setInputWidth(width) {
     if (this.state.width !== width) {
       this.setState({ width })
@@ -53,7 +49,7 @@ export class CellInputter extends React.PureComponent {
 
   render() {
     const { top, left, height } = this.props.cellRect
-    const width = this.state.width
+    const { width } = this.state
 
     return (
       <Root
@@ -61,7 +57,7 @@ export class CellInputter extends React.PureComponent {
         css={{ top, left, width, height }}
         onBlur={this.handleOnBlur}
       >
-        <HiddenInput
+        <InputSizer
           setInputWidth={this.setInputWidth}
         />
         <Inputter

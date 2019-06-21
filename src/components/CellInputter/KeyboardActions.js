@@ -20,8 +20,8 @@ class KeyboardActions {
       case 'ArrowLeft':
       case 'ArrowRight':
         this.c.setValueEvent(
-          this.c.state.valueEvent.value,
-          this.c.refInput.current.selectionStart
+          this.c.props.valueEvent.value,
+          this.c.refInput.current.selectionEnd
         )
         break
     }
@@ -37,7 +37,11 @@ class KeyboardActions {
         break
       case 'ArrowLeft':
       case 'ArrowRight':
-        this.c.setValueEvent(this.c.state.valueEvent.value, this.c.refInput.current.selectionEnd)
+        this.c.setValueEvent(
+          this.c.props.valueEvent.value,
+          this.c.refInput.current.selectionEnd
+        )
+        break
     }
   }
 }
