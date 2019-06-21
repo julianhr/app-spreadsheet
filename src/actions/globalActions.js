@@ -34,3 +34,4 @@ export function openCellInputter(cellRect, willReplaceValue) {
 }
 
 export const closeCellInputter = createAction('CLOSE_CELL_INPUTTER')
+export const setInputterValueEvent = createAction('SET_INPUTTER_VALUE_EVENT')

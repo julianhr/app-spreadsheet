@@ -16,26 +16,28 @@ class KeyboardActions {
   funcSelector(key) {
     switch (key) { // eslint-disable-line
       case 'Escape':
-        this.c.props.closeCellInputter()
         break
       case 'ArrowLeft':
       case 'ArrowRight':
-        this.c.setState({ cursorPos: this.refInput.current.selectionEnd })
+        this.c.setValueEvent(
+          this.c.state.valueEvent.value,
+          this.c.refInput.current.selectionStart
+        )
+        break
     }
   }
 
   default(key) {
     switch (key) { // eslint-disable-line
       case 'Escape':
-        this.c.props.closeCellInputter()
         break
       case 'Enter':
+      case 'Tab':
         this.c.cellValueSetter.run()
-        this.c.props.closeCellInputter()
         break
       case 'ArrowLeft':
       case 'ArrowRight':
-        this.c.setState({ cursorPos: this.c.refInput.current.selectionEnd })
+        this.c.setValueEvent(this.c.state.valueEvent.value, this.c.refInput.current.selectionEnd)
     }
   }
 }

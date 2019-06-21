@@ -3,8 +3,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { css, jsx } from '@emotion/core' // eslint-disable-line
+import { connect } from 'react-redux'
 
-import { Input as BaseInput } from './Inputter'
+import { Input as BaseInput } from './InputTag'
 
 
 const INPUT_PADDING_RIGHT = 15
@@ -18,44 +19,77 @@ const Input = styled(BaseInput)`
 class HiddenInput extends React.PureComponent {
 
   static propTypes = {
-    value: PropTypes.string.isRequired,
-    cellWidth: PropTypes.number.isRequired,
+    // props
     setInputWidth: PropTypes.func.isRequired,
+    // redux
+    cellRect: PropTypes.object,
+    entered: PropTypes.string.isRequired,
+    valueEvent: PropTypes.object,
+  }
+
+  static defaultProps = {
+    valueEvent: {}
+  }
+
+  state = {
+    width: null,
   }
 
   refInput = React.createRef()
 
   componentDidMount() {
+    this.setState({ width: this.props.cellRect.width })
     this.setInputWidth()
   }
 
   componentDidUpdate(prevProps, prevState) { // eslint-disable-line
-    this.setInputWidth()
+    if (prevProps.valueEvent !== this.props.valueEvent) {
+      this.setInputWidth()
+    }
   }
 
   setInputWidth() {
-    const { cellWidth } = this.props
     const inputEl = this.refInput.current
     const textWidth = inputEl.scrollWidth
     const clientRect = inputEl.getBoundingClientRect()
     const width = textWidth > clientRect.width
-      ? Math.max(cellWidth, textWidth + INPUT_PADDING_RIGHT)
-      : cellWidth
+      ? textWidth
+      : this.props.cellRect.width - INPUT_PADDING_RIGHT
 
-    this.props.setInputWidth(width)
+    this.setState({ width })
+    this.props.setInputWidth(width + INPUT_PADDING_RIGHT)
   }
 
   render() {
+    const { value } = this.props.valueEvent
+    const { entered } = this.props
+
     return (
       <Input
         ref={this.refInput}
-        defaultValue={this.props.value}
+        defaultValue={value || entered}
         css={{
-          width: this.props.cellWidth - INPUT_PADDING_RIGHT,
+          width: this.state.width - INPUT_PADDING_RIGHT,
         }}
       />
     )
   }
 }
 
-export default HiddenInput
+function mapStateToProps(state) {
+  const {
+    global: {
+      activeCell: {
+        entered,
+      },
+      cellInputter: {
+        valueEvent,
+        cellRect,
+      }
+    }
+  } = state
+
+  return { entered, valueEvent, cellRect }
+}
+
+export default connect(mapStateToProps)(HiddenInput)

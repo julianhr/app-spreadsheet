@@ -11,6 +11,7 @@ export default createReducer(INITIAL_STATE, {
   'SET_ACTIVE_CELL': (state, { payload }) => {
     state.activeCell = payload
   },
+
   'OPEN_CELL_INPUTTER': (state, { payload }) => {
     state.cellInputter = payload
   },
@@ -18,4 +19,9 @@ export default createReducer(INITIAL_STATE, {
   'CLOSE_CELL_INPUTTER': (state) => {
     state.cellInputter = { ...state.cellInputter, isCellInputterOpen: false }
   },
+
+  'SET_INPUTTER_VALUE_EVENT': (state, { payload }) => {
+    state.cellInputter = { ...state.cellInputter, valueEvent: payload }
+  }
 })
+
