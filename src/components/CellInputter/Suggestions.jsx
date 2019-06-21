@@ -86,7 +86,7 @@ class Suggestions extends React.PureComponent {
       && tokenAfter
       && tokenBefore.category === 'operator'
       && [t.UNKNOWN, t.FUNCTION].includes(tokenCurr.type)
-      && tokenAfter.type !== t.RPAREN
+      && tokenAfter.type !== t.LPAREN
     )
 
     const option2 = (
