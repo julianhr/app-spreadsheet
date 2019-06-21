@@ -6,9 +6,11 @@ import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
 import { closeCellInputter } from '~/actions/globalActions'
-import Inputter from './Inputter'
+import Inputter from '../Inputter/Inputter'
 import InputSizer from './InputSizer'
 
+
+const NoOp = () => {}
 
 const Root = styled.div`
   position: fixed;
@@ -18,8 +20,15 @@ export class CellInputter extends React.PureComponent {
 
   static propTypes = {
     // redux
-    cellRect: PropTypes.object.isRequired,
-    closeCellInputter: PropTypes.func.isRequired,
+    cellRect: PropTypes.object,
+    closeCellInputter: PropTypes.func,
+    isCellInputterOpen: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    cellRect: {},
+    closeCellInputter: NoOp,
+    isCellInputterOpen: false,
   }
 
   constructor() {
@@ -48,6 +57,8 @@ export class CellInputter extends React.PureComponent {
   }
 
   render() {
+    if (!this.props.isCellInputterOpen) { return null }
+
     const { top, left, height } = this.props.cellRect
     const { width } = this.state
 
@@ -73,11 +84,12 @@ function mapStateToProps(state) {
     global: {
       cellInputter: {
         cellRect,
+        isCellInputterOpen,
       },
     }
   } = state
 
-  return { cellRect }
+  return { cellRect, isCellInputterOpen }
 }
 
 const mapDispatchToProps = { closeCellInputter }

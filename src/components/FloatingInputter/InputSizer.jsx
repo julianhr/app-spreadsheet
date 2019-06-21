@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { css, jsx } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
-import { Input as BaseInput } from './InputTag'
+import { Input as BaseInput } from '../Inputter/InputTag'
 
 
 const PADDING_COMPARE = 3
