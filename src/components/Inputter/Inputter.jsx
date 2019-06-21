@@ -13,7 +13,7 @@ import Suggestions from './Suggestions'
 import InputTag from './InputTag'
 
 
-export class CellInputter extends React.PureComponent {
+export class Inputter extends React.PureComponent {
 
   static propTypes = {
     // redux
@@ -176,4 +176,4 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = { setCellData, clearCellData, setInputterValueEvent }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CellInputter)
+export default connect(mapStateToProps, mapDispatchToProps)(Inputter)

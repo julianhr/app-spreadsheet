@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import styled from '@emotion/styled'
 
 import Header from './components/header/Header'
 import Table from './components/table/Table'
-import CellInputter from './components/CellInputter/CellInputter'
+import FloatingInputter from './components/FloatingInputter/FloatingInputter'
 
 
 const Container = styled.div`
@@ -19,11 +18,11 @@ const Main = styled.main`
   grid-area: main;
 `
 
-function App({ isCellInputterOpen }) {
+function App() {
   return (
     <Container>
       <Main>
-        {isCellInputterOpen &&  <CellInputter />}
+        <FloatingInputter />
         <div data-dummy-focus-stop tabIndex="0" />
         <Header />
         <Table />
@@ -33,13 +32,7 @@ function App({ isCellInputterOpen }) {
 }
 
 App.propTypes = {
-  isCellInputterOpen: PropTypes.bool,
   setActiveCell: PropTypes.func,
 }
 
-const mapStateToProps = (state) => {
-  const { isCellInputterOpen } = state.global.cellInputter
-  return { isCellInputterOpen }
-}
-
-export default connect(mapStateToProps)(App)
+export default App
