@@ -22,11 +22,21 @@ const Fn = {
 
   CONCAT: {
     fn: (...args) => {
+      let result = []
+
       if (args.length === 0) {
         throw new Error('Empty elements')
       }
-  
-      return args.reduce((prev, curr) => (prev + curr), '')
+
+      for (let arg of args) {
+        if (typeof arg !== 'string') {
+          throw new Error(`Element is not a string: ${arg}`)
+        }
+
+        result.push(arg)
+      }
+
+      return result.join('')
     },
     definition: 'CONCAT("text1", "text2", ...)',
     example: 'CONCAT("one", "two")',

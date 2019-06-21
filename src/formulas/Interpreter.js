@@ -115,6 +115,15 @@ class Interpreter {
   BinaryOp(node) {
     const left = this.visitNode(node.leftNode)
     const right = this.visitNode(node.rightNode)
+
+    if (typeof left !== 'number') {
+      throw new Error(`term is not a number: "${left}"`)
+    }
+
+    if (typeof right !== 'number') {
+      throw new Error(`term is not a number: "${right}"`)
+    }
+
     return node.eval(left, right)
   }
 
