@@ -8,7 +8,8 @@ import { connect } from 'react-redux'
 import { Input as BaseInput } from './InputTag'
 
 
-const INPUT_PADDING_RIGHT = 15
+const PADDING_COMPARE = 3
+const PADDING_SIZE = 7
 
 const Input = styled(BaseInput)`
   position: absolute;
@@ -16,14 +17,13 @@ const Input = styled(BaseInput)`
   visibility: hidden;
 `
 
-class HiddenInput extends React.PureComponent {
+class InputSizer extends React.PureComponent {
 
   static propTypes = {
     // props
     setInputWidth: PropTypes.func.isRequired,
     // redux
     cellRect: PropTypes.object,
-    entered: PropTypes.string.isRequired,
     valueEvent: PropTypes.object,
   }
 
@@ -31,14 +31,9 @@ class HiddenInput extends React.PureComponent {
     valueEvent: {}
   }
 
-  state = {
-    width: null,
-  }
-
   refInput = React.createRef()
 
   componentDidMount() {
-    this.setState({ width: this.props.cellRect.width })
     this.setInputWidth()
   }
 
@@ -51,25 +46,21 @@ class HiddenInput extends React.PureComponent {
   setInputWidth() {
     const inputEl = this.refInput.current
     const textWidth = inputEl.scrollWidth
-    const clientRect = inputEl.getBoundingClientRect()
-    const width = textWidth > clientRect.width
-      ? textWidth
-      : this.props.cellRect.width - INPUT_PADDING_RIGHT
+    const width = textWidth + PADDING_COMPARE > this.props.cellRect.width
+      ? Math.ceil(textWidth) + PADDING_SIZE
+      : this.props.cellRect.width
 
-    this.setState({ width })
-    this.props.setInputWidth(width + INPUT_PADDING_RIGHT)
+    this.props.setInputWidth(width)
   }
 
   render() {
-    const { value } = this.props.valueEvent
-    const { entered } = this.props
-
     return (
       <Input
         ref={this.refInput}
-        defaultValue={value || entered}
+        readOnly
+        value={this.props.valueEvent.value}
         css={{
-          width: this.state.width - INPUT_PADDING_RIGHT,
+          width: this.props.cellRect.width,
         }}
       />
     )
@@ -79,9 +70,6 @@ class HiddenInput extends React.PureComponent {
 function mapStateToProps(state) {
   const {
     global: {
-      activeCell: {
-        entered,
-      },
       cellInputter: {
         valueEvent,
         cellRect,
@@ -89,7 +77,7 @@ function mapStateToProps(state) {
     }
   } = state
 
-  return { entered, valueEvent, cellRect }
+  return { valueEvent, cellRect }
 }
 
-export default connect(mapStateToProps)(HiddenInput)
+export default connect(mapStateToProps)(InputSizer)

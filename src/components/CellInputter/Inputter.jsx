@@ -13,8 +13,6 @@ import Suggestions from './Suggestions'
 import InputTag from './InputTag'
 
 
-const NoOp = () => {}
-
 export class CellInputter extends React.PureComponent {
 
   static propTypes = {
@@ -23,16 +21,12 @@ export class CellInputter extends React.PureComponent {
     clearCellData: PropTypes.func.isRequired,
     columns: PropTypes.number.isRequired,
     entered: PropTypes.string.isRequired,
-    newEntered: PropTypes.string.isRequired,
+    valueEvent: PropTypes.object.isRequired,
     location: PropTypes.string.isRequired,
     rows: PropTypes.number.isRequired,
     setCellData: PropTypes.func.isRequired,
     isCellInputterOpen: PropTypes.bool,
-    onBlur: PropTypes.func,
-  }
-
-  static defaultProps = {
-    onBlur: NoOp,
+    setInputterValueEvent: PropTypes.func.isRequired,
   }
 
   constructor() {
@@ -42,9 +36,9 @@ export class CellInputter extends React.PureComponent {
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
     this.keyboardActions = new KeyboardActions(this)
     this.keyboardFocuser = new KeyboardFocuser(this)
-    this.setValueEvent = this.setValueEvent.bind(this)
     this.setInputWidth = this.setInputWidth.bind(this)
     this.setIsFuncSelectorVisible = this.setIsFuncSelectorVisible.bind(this)
+    this.setValueEvent = this.setValueEvent.bind(this)
   }
 
   state = {
@@ -52,13 +46,12 @@ export class CellInputter extends React.PureComponent {
     isFuncSelectorVisible: false,
     keyEvent: { key: '' },
     width: null,
-    valueEvent: { value: '', cursorPos: 0 },
   }
 
   refInput = React.createRef()
 
   componentDidMount() {
-    this.setValueEvent(this.props.newEntered)
+    this.focusInputTag()
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -67,7 +60,8 @@ export class CellInputter extends React.PureComponent {
       this.keyboardActions.run()
     }
 
-    if (prevState.valueEvent !== this.state.valueEvent) {
+    if (prevProps.valueEvent !== this.props.valueEvent) {
+      this.focusInputTag()
       this.tokenizeInputValue()
     }
   }
@@ -78,8 +72,13 @@ export class CellInputter extends React.PureComponent {
     }
   }
 
+  setValueEvent(value, cursorPos) {
+    const valueEvent = { value, cursorPos }
+    this.props.setInputterValueEvent(valueEvent)
+  }
+
   tokenizeInputValue() {
-    const { value } = this.state.valueEvent
+    const { value } = this.props.valueEvent
     const lexer = new Lexer(value)
     const tokens = lexer.getTokens()
     this.setState({ tokens })
@@ -91,32 +90,20 @@ export class CellInputter extends React.PureComponent {
 
   focusInputTag() {
     const inputEl = this.refInput.current
-    const { cursorPos } = this.state.valueEvent
+    const { cursorPos } = this.props.valueEvent
 
-    if (inputEl.scelectionEnd !== cursorPos) {
-      inputEl.focus()
+    inputEl.focus()
+
+    if (inputEl.selectionEnd !== cursorPos) {
       inputEl.selectionStart = cursorPos
       inputEl.selectionEnd = cursorPos
     }
   }
 
-  setValueEvent(value, cursorPos) {
-    const valueEvent = {
-      value,
-      cursorPos: cursorPos === undefined ? value.length : cursorPos
-    }
-
-    this.setState({ valueEvent }, () => {
-      this.focusInputTag()
-    })
-  }
-
   handleOnChange(event) {
     const { target: { value } } = event
     const cursorPos = event.target.selectionStart
-    const valueEvent = { value, cursorPos }
-    this.setState({ valueEvent })
-    this.props.setInputterValueEvent(valueEvent)
+    this.setValueEvent(value, cursorPos)
   }
 
   handleOnKeyDown(event) {
@@ -138,21 +125,21 @@ export class CellInputter extends React.PureComponent {
         value={{
           inputRect,
           setIsFuncSelectorVisible: this.setIsFuncSelectorVisible,
-          setValueEvent: this.setValueEvent,
           keyEvent: this.state.keyEvent,
-          inputValue: this.state.valueEvent.value,
+          valueEvent: this.props.valueEvent,
+          setValueEvent: this.setValueEvent,
         }}
       >
         <InputTag
           fwdRef={this.refInput}
           location={this.props.location}
-          value={this.state.valueEvent.value}
+          value={this.props.valueEvent.value}
           onChange={this.handleOnChange}
           onKeyDown={this.handleOnKeyDown}
         />
         <Suggestions
           tokens={this.state.tokens}
-          cursorPos={this.state.valueEvent.cursorPos}
+          cursorPos={this.props.valueEvent.cursorPos}
         />
       </InputContext.Provider>
     )
@@ -162,21 +149,29 @@ export class CellInputter extends React.PureComponent {
 function mapStateToProps(state) {
   const {
     global: {
-      cellInputter: {
-        isCellInputterOpen,
-        newEntered,
-        cellRect,
-      },
       activeCell: {
         location,
         entered,
+      },
+      cellInputter: {
+        isCellInputterOpen,
+        cellRect,
+        valueEvent,
       },
       rows,
       columns,
     }
   } = state
 
-  return { location, entered, newEntered, isCellInputterOpen, cellRect, rows, columns }
+  return {
+    cellRect,
+    columns,
+    entered,
+    isCellInputterOpen,
+    location,
+    rows,
+    valueEvent,
+  }
 }
 
 const mapDispatchToProps = { setCellData, clearCellData, setInputterValueEvent }

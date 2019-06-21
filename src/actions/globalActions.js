@@ -18,15 +18,20 @@ export function setActiveCell(location) {
 
 export function openCellInputter(cellRect, willReplaceValue) {
   return (dispatch, getState) => {
-    let newEntered = willReplaceValue
-      ? ''
-      : getState().global.activeCell.entered
+    let valueEvent = willReplaceValue
+
+    if (willReplaceValue) {
+      valueEvent = { value: '', cursorPos: 0 }
+    } else {
+      const value = getState().global.activeCell.entered
+      valueEvent = { value, cursorPos: value.length }
+    }
 
     return Promise.resolve(dispatch({
       type: 'OPEN_CELL_INPUTTER',
       payload: {
         isCellInputterOpen: true,
-        newEntered,
+        valueEvent,
         cellRect,
       }
     }))

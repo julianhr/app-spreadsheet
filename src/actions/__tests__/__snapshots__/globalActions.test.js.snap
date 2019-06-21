@@ -11,7 +11,10 @@ Object {
     "width": 0,
   },
   "isCellInputterOpen": true,
-  "newEntered": "=5+3",
+  "valueEvent": Object {
+    "cursorPos": 4,
+    "value": "=5+3",
+  },
 }
 `;
 
@@ -26,7 +29,10 @@ Object {
     "width": 0,
   },
   "isCellInputterOpen": true,
-  "newEntered": "",
+  "valueEvent": Object {
+    "cursorPos": 0,
+    "value": "",
+  },
 }
 `;
 
