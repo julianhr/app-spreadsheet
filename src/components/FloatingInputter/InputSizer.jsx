@@ -3,7 +3,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { css, jsx } from '@emotion/core' // eslint-disable-line
-import { connect } from 'react-redux'
 
 import { Input as BaseInput } from '../Inputter/InputTag'
 
@@ -25,10 +24,6 @@ class InputSizer extends React.PureComponent {
     // redux
     cellRect: PropTypes.object,
     valueEvent: PropTypes.object,
-  }
-
-  static defaultProps = {
-    valueEvent: {}
   }
 
   refInput = React.createRef()
@@ -67,17 +62,4 @@ class InputSizer extends React.PureComponent {
   }
 }
 
-function mapStateToProps(state) {
-  const {
-    global: {
-      cellInputter: {
-        valueEvent,
-        cellRect,
-      }
-    }
-  } = state
-
-  return { valueEvent, cellRect }
-}
-
-export default connect(mapStateToProps)(InputSizer)
+export default InputSizer
