@@ -28,11 +28,11 @@ describe('globalActions', () => {
       await appStore.dispatch(setCellData(location, '=5+3'))
       await appStore.dispatch(actions.setActiveCell(location))
 
-      await appStore.dispatch(actions.openCellInputter(inputRect, false))
-      expect(appStore.getState().global.cellInputter).toMatchSnapshot()
+      await appStore.dispatch(actions.openFloatingInputter(inputRect, false))
+      expect(appStore.getState().global.activeCell).toMatchSnapshot()
 
-      await appStore.dispatch(actions.openCellInputter(inputRect, true))
-      expect(appStore.getState().global.cellInputter).toMatchSnapshot()
+      await appStore.dispatch(actions.openFloatingInputter(inputRect, true))
+      expect(appStore.getState().global.activeCell).toMatchSnapshot()
     })
   })
 })

@@ -10,7 +10,9 @@ Object {
     "top": 0,
     "width": 0,
   },
-  "isCellInputterOpen": true,
+  "entered": "=5+3",
+  "isFloatingInputterOpen": true,
+  "location": "B-2",
   "valueEvent": Object {
     "cursorPos": 4,
     "value": "=5+3",
@@ -28,7 +30,9 @@ Object {
     "top": 0,
     "width": 0,
   },
-  "isCellInputterOpen": true,
+  "entered": "=5+3",
+  "isFloatingInputterOpen": true,
+  "location": "B-2",
   "valueEvent": Object {
     "cursorPos": 0,
     "value": "",
@@ -38,7 +42,13 @@ Object {
 
 exports[`globalActions #setActiveCell sets currently active cell 1`] = `
 Object {
+  "cellRect": null,
   "entered": "",
+  "isFloatingInputterOpen": false,
   "location": "B-2",
+  "valueEvent": Object {
+    "cursorPos": 0,
+    "value": "",
+  },
 }
 `;

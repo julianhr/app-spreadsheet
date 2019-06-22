@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { clearCellData } from '~/actions/tableDataActions'
-import { openCellInputter, setActiveCell } from '~/actions/globalActions'
+import { openFloatingInputter, setActiveCell } from '~/actions/globalActions'
 import Datum from './Datum'
 
 
@@ -14,7 +14,7 @@ export class Result extends React.PureComponent {
     location: PropTypes.string.isRequired,
     fwdRef: PropTypes.object.isRequired,
     // redux
-    openCellInputter: PropTypes.func.isRequired,
+    openFloatingInputter: PropTypes.func.isRequired,
     clearCellData: PropTypes.func.isRequired,
     setActiveCell: PropTypes.func.isRequired,
     result: PropTypes.oneOfType([
@@ -32,10 +32,10 @@ export class Result extends React.PureComponent {
     this.refDatum = props.fwdRef
   }
 
-  openCellInputter(willReplaceValue) {
+  openFloatingInputter(willReplaceValue) {
     const datumRect = this.refDatum.current.getBoundingClientRect()
     const cellRect = JSON.parse(JSON.stringify(datumRect))
-    this.props.openCellInputter(cellRect, willReplaceValue)
+    this.props.openFloatingInputter(cellRect, willReplaceValue)
   }
 
   handleOnFocus() {
@@ -48,7 +48,7 @@ export class Result extends React.PureComponent {
 
   handleOnDoubleClick(event) {
     event.stopPropagation()
-    this.openCellInputter(false)
+    this.openFloatingInputter(false)
   }
 
   handleOnKeyDown({ key }) {
@@ -61,7 +61,7 @@ export class Result extends React.PureComponent {
       // key pressed is a printable symbol, ex: 'a', '1', ','
       // can be further refined, but for now it's fine
     } else if (key.length === 1) {
-      this.openCellInputter(true)
+      this.openFloatingInputter(true)
     }
   }
 
@@ -86,6 +86,6 @@ function mapStateToProps(state, ownProps) {
   return { result }
 }
 
-const mapDispatchToProps = { clearCellData, openCellInputter, setActiveCell }
+const mapDispatchToProps = { clearCellData, openFloatingInputter, setActiveCell }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Result)

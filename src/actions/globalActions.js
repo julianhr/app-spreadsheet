@@ -6,37 +6,46 @@ export function setActiveCell(location) {
     const cellData = getState().tableData[location]
     const entered = (cellData || {}).entered || ''
 
-    return Promise.resolve(dispatch({
-      type: 'SET_ACTIVE_CELL',
-      payload: {
-        location,
-        entered,
-      }
-    }))
+    return Promise.resolve(
+      dispatch({
+        type: 'SET_ACTIVE_CELL',
+        payload: {
+          cellRect: null,
+          entered,
+          isFloatingInputterOpen: false,
+          location,
+          valueEvent: { value: entered, cursorPos: entered.length },
+        }
+      })
+    )
   }
 }
 
-export function openCellInputter(cellRect, willReplaceValue) {
-  return (dispatch, getState) => {
-    let valueEvent = willReplaceValue
+export function openFloatingInputter(cellRect, willReplaceValue) {
+  const payload = {
+    cellRect,
+    isFloatingInputterOpen: true,
+  }
 
-    if (willReplaceValue) {
-      valueEvent = { value: '', cursorPos: 0 }
-    } else {
-      const value = getState().global.activeCell.entered
-      valueEvent = { value, cursorPos: value.length }
+  if (willReplaceValue) {
+    payload.valueEvent = { value: '', cursorPos: 0 }
+  }
+
+  return {
+    type: 'OPEN_FLOATING_INPUTTER',
+    payload,
+  }
+}
+
+export function resetInputter(initValueEvent) {
+  return {
+    type: 'RESET_INPUTTER',
+    payload: {
+      isFloatingInputterOpen: false,
+      valueEvent: initValueEvent
     }
-
-    return Promise.resolve(dispatch({
-      type: 'OPEN_CELL_INPUTTER',
-      payload: {
-        isCellInputterOpen: true,
-        valueEvent,
-        cellRect,
-      }
-    }))
   }
 }
 
-export const closeCellInputter = createAction('CLOSE_CELL_INPUTTER')
+export const closeFloatingInputter = createAction('CLOSE_FLOATING_INPUTTER')
 export const setInputterValueEvent = createAction('SET_INPUTTER_VALUE_EVENT')

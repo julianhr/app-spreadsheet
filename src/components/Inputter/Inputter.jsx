@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { setCellData, clearCellData } from '~/actions/tableDataActions'
-import { setInputterValueEvent } from '~/actions/globalActions'
+import { setInputterValueEvent, resetInputter } from '~/actions/globalActions'
 import { InputContext } from './InputContext'
 import Lexer from '~/formulas/Lexer'
 import KeyboardActions from './KeyboardActions'
@@ -13,11 +13,14 @@ import Suggestions from './Suggestions'
 import InputTag from './InputTag'
 
 
+const NoOp = () => {}
+
 export class Inputter extends React.PureComponent {
 
   static propTypes = {
+    // props
+    isInteractive: PropTypes.bool,
     // redux
-    cellRect: PropTypes.object.isRequired,
     clearCellData: PropTypes.func.isRequired,
     columns: PropTypes.number.isRequired,
     entered: PropTypes.string.isRequired,
@@ -25,12 +28,21 @@ export class Inputter extends React.PureComponent {
     location: PropTypes.string.isRequired,
     rows: PropTypes.number.isRequired,
     setCellData: PropTypes.func.isRequired,
-    isCellInputterOpen: PropTypes.bool,
     setInputterValueEvent: PropTypes.func.isRequired,
+    resetInputter: PropTypes.func.isRequired,
+    // lifecycle functions
+    onMount: PropTypes.func,
+    onUnmount: PropTypes.func,
   }
 
-  constructor() {
-    super()
+  static defaultProps = {
+    onMount: NoOp,
+    onUnmount: NoOp,
+    isInteractive: false,
+  }
+
+  constructor(props) {
+    super(props)
     this.cellValueSetter = new CellValueSetter(this)
     this.handleOnChange = this.handleOnChange.bind(this)
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
@@ -46,12 +58,14 @@ export class Inputter extends React.PureComponent {
     isFuncSelectorVisible: false,
     keyEvent: { key: '' },
     width: null,
+    initValueEvent: null,
   }
 
   refInput = React.createRef()
 
   componentDidMount() {
-    this.focusInputTag()
+    this.setState({ initValueEvent: this.props.valueEvent })
+    this.props.onMount(this.props, this.state, this.refInput.current)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -64,6 +78,10 @@ export class Inputter extends React.PureComponent {
       this.focusInputTag()
       this.tokenizeInputValue()
     }
+  }
+
+  componentWillUnmount() {
+    this.props.onMount(this.props, this.state, this.refInput.current)
   }
 
   setInputWidth(width) {
@@ -89,6 +107,8 @@ export class Inputter extends React.PureComponent {
   }
 
   focusInputTag() {
+    if (!this.props.isInteractive) { return null }
+
     const inputEl = this.refInput.current
     const { cursorPos } = this.props.valueEvent
 
@@ -109,11 +129,22 @@ export class Inputter extends React.PureComponent {
   handleOnKeyDown(event) {
     const { key } = event
 
-    if (this.state.isFuncSelectorVisible && key === 'Tab') {
+    if (this.state.isFuncSelectorVisible && ['Tab', 'Enter'].includes(key)) {
       event.preventDefault()
     }
 
     this.setState({ keyEvent: { key } })
+  }
+
+  renderSuggestions() {
+    if (!this.props.isInteractive) { return null }
+
+    return (
+      <Suggestions
+        tokens={this.state.tokens}
+        cursorPos={this.props.valueEvent.cursorPos}
+      />
+    )
   }
 
   render() {
@@ -137,10 +168,7 @@ export class Inputter extends React.PureComponent {
           onChange={this.handleOnChange}
           onKeyDown={this.handleOnKeyDown}
         />
-        <Suggestions
-          tokens={this.state.tokens}
-          cursorPos={this.props.valueEvent.cursorPos}
-        />
+        {this.renderSuggestions()}
       </InputContext.Provider>
     )
   }
@@ -150,12 +178,8 @@ function mapStateToProps(state) {
   const {
     global: {
       activeCell: {
-        location,
         entered,
-      },
-      cellInputter: {
-        isCellInputterOpen,
-        cellRect,
+        location,
         valueEvent,
       },
       rows,
@@ -164,16 +188,19 @@ function mapStateToProps(state) {
   } = state
 
   return {
-    cellRect,
     columns,
     entered,
-    isCellInputterOpen,
     location,
     rows,
     valueEvent,
   }
 }
 
-const mapDispatchToProps = { setCellData, clearCellData, setInputterValueEvent }
+const mapDispatchToProps = {
+  clearCellData,
+  resetInputter,
+  setCellData,
+  setInputterValueEvent,
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Inputter)
