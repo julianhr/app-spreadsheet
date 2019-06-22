@@ -6,6 +6,7 @@ import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
 import { closeFloatingInputter } from '~/actions/globalActions'
+import inputTagProps from './inputTagProps'
 import Inputter from '../Inputter/Inputter'
 import InputSizer from './InputSizer'
 import KeyboardFocuser from './KeyboardFocuser'
@@ -84,6 +85,7 @@ export class FloatingInputter extends React.PureComponent {
       <Inputter
         isInteractive
         onMount={this.handleInputterOnMount}
+        inputTagProps={inputTagProps}
       />
     )
   }
