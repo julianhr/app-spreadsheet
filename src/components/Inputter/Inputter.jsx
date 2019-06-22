@@ -9,8 +9,8 @@ import Lexer from '~/formulas/Lexer'
 import KeyboardActions from './KeyboardActions'
 import KeyboardFocuser from './KeyboardFocuser'
 import CellValueSetter from './CellValueSetter'
-import Suggestions from './Suggestions'
 import InputTag from './InputTag'
+import Suggestions from './Suggestions'
 
 
 const NoOp = () => {}
@@ -30,6 +30,7 @@ export class Inputter extends React.PureComponent {
     setCellData: PropTypes.func.isRequired,
     setInputterValueEvent: PropTypes.func.isRequired,
     resetInputter: PropTypes.func.isRequired,
+    inputTagProps: PropTypes.object,
     // lifecycle functions
     onMount: PropTypes.func,
     onUnmount: PropTypes.func,
@@ -39,6 +40,7 @@ export class Inputter extends React.PureComponent {
     onMount: NoOp,
     onUnmount: NoOp,
     isInteractive: false,
+    inputTagProps: {},
   }
 
   constructor(props) {
@@ -163,8 +165,9 @@ export class Inputter extends React.PureComponent {
       >
         <InputTag
           fwdRef={this.refInput}
-          location={this.props.location}
           value={this.props.valueEvent.value}
+          style={this.props.inputTagProps.style}
+          props={this.props.inputTagProps.props}
           onChange={this.handleOnChange}
           onKeyDown={this.handleOnKeyDown}
         />
