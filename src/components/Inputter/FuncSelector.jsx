@@ -206,7 +206,8 @@ class FuncSelector extends React.Component {
     }
   }
 
-  handleOnClick() {
+  handleOnClick(event) {
+    event.nativeEvent.stopPropagation()
     this.setInputterValueEvent()
   }
 

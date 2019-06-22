@@ -2,7 +2,6 @@ import { createReducer } from 'redux-starter-kit'
 
 export const INITIAL_STATE = {
   activeCell: {},
-  cellInputter: {},
   rows: 14,
   columns: 6,
 }
@@ -12,16 +11,20 @@ export default createReducer(INITIAL_STATE, {
     state.activeCell = payload
   },
 
-  'OPEN_CELL_INPUTTER': (state, { payload }) => {
-    state.cellInputter = payload
+  'OPEN_FLOATING_INPUTTER': (state, { payload }) => {
+    state.activeCell = { ...state.activeCell, ...payload }
   },
 
-  'CLOSE_CELL_INPUTTER': (state) => {
-    state.cellInputter = { ...state.cellInputter, isCellInputterOpen: false }
+  'CLOSE_FLOATING_INPUTTER': (state) => {
+    state.activeCell.isFloatingInputterOpen = false
   },
 
   'SET_INPUTTER_VALUE_EVENT': (state, { payload }) => {
-    state.cellInputter = { ...state.cellInputter, valueEvent: payload }
+    state.activeCell = { ...state.activeCell, valueEvent: payload }
+  },
+
+  'RESET_INPUTTER': (state, { payload }) => {
+    state.activeCell = { ...state.activeCell, ...payload }
   }
 })
 

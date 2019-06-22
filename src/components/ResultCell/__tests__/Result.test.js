@@ -10,7 +10,7 @@ const requiredProps = {
   location: 'A-3',
   fwdRef: React.createRef(),
   // redux
-  openCellInputter: jest.fn(),
+  openFloatingInputter: jest.fn(),
   clearCellData: jest.fn(),
   setActiveCell: jest.fn(),
   result: 5,
@@ -44,13 +44,13 @@ describe('Result', () => {
     })
   })
 
-  describe('#openCellInputter', () => {
+  describe('#openFloatingInputter', () => {
     test('matches signature', () => {
       renderApp(testProps)
       const el = document.querySelector(selector)
-      jest.spyOn(testProps, 'openCellInputter')
+      jest.spyOn(testProps, 'openFloatingInputter')
       fireEvent.doubleClick(el)
-      expect(testProps.openCellInputter.mock.calls).toMatchSnapshot()
+      expect(testProps.openFloatingInputter.mock.calls).toMatchSnapshot()
     })
   })
 
@@ -83,12 +83,12 @@ describe('Result', () => {
   })
 
   describe('#handleOnDoubleClick', () => {
-    test('calls #openCellInputter', () => {
+    test('calls #openFloatingInputter', () => {
       renderApp(testProps)
       const el = document.querySelector(selector)
-      jest.spyOn(Result.prototype, 'openCellInputter')
+      jest.spyOn(Result.prototype, 'openFloatingInputter')
       fireEvent.doubleClick(el)
-      expect(Result.prototype.openCellInputter).toHaveBeenCalledWith(false)
+      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(false)
     })
 
     test('stops event propagation', () => {
@@ -125,13 +125,13 @@ describe('Result', () => {
       expect(testProps.clearCellData).toHaveBeenCalledWith(testProps.location)
     })
 
-    it('calls #openCellInputter if key pressed is a character', () => {
+    it('calls #openFloatingInputter if key pressed is a character', () => {
       renderApp(testProps)
       const el = document.querySelector(selector)
-      jest.spyOn(Result.prototype, 'openCellInputter')
+      jest.spyOn(Result.prototype, 'openFloatingInputter')
 
       fireEvent.keyDown(el, { key: 'a' })
-      expect(Result.prototype.openCellInputter).toHaveBeenCalledWith(true)
+      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(true)
     })
   })
 

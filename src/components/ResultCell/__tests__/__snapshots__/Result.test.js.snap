@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Result #openCellInputter matches signature 1`] = `
+exports[`Result #openFloatingInputter matches signature 1`] = `
 Array [
   Array [
     Object {
