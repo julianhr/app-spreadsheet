@@ -15,6 +15,7 @@ const Root = styled.div`
   border: 1px solid ${props => props.theme.colors.dropdown.active};
   width: 300px;
   padding: 6px 8px;
+  position: fixed;
 `
 
 const Pre = styled.pre`
@@ -72,8 +73,6 @@ class FuncDescription extends React.PureComponent {
   render() {
     const scope = this.getFnScope()
     const { inputRect } = this.context
-    if (!inputRect) { return null }
-    const { bottom: top, left } = inputRect
     let fnNode
 
     if (!scope) { return null }
@@ -81,7 +80,10 @@ class FuncDescription extends React.PureComponent {
 
     return (
       <Root
-        css={{ top, left }}
+        css={css`
+          top: ${inputRect.bottom}px;
+          left: ${inputRect.left}px;
+        `}
       >
         <Pre
           css={css`

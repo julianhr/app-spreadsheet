@@ -7,6 +7,11 @@ export const INITIAL_STATE = {
 }
 
 export default createReducer(INITIAL_STATE, {
+  'SET_TABLE_DIMENSIONS': (state, { payload }) => {
+    state.rows = payload.rows
+    state.columns = payload.columns
+  },
+  
   'SET_ACTIVE_CELL': (state, { payload }) => {
     state.activeCell = payload
   },
@@ -25,6 +30,6 @@ export default createReducer(INITIAL_STATE, {
 
   'RESET_INPUTTER': (state, { payload }) => {
     state.activeCell = { ...state.activeCell, ...payload }
-  }
+  },
 })
 

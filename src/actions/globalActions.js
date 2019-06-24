@@ -1,6 +1,16 @@
 import { createAction } from 'redux-starter-kit'
 
 
+export function setTableDimensions(rows, columns) {
+  return {
+    type: 'SET_TABLE_DIMENSIONS',
+    payload: {
+      rows,
+      columns,
+    }
+  }
+}
+
 export function setActiveCell(location) {
   return (dispatch, getState) => {
     const cellData = getState().tableData[location]
@@ -37,13 +47,22 @@ export function openFloatingInputter(cellRect, willReplaceValue) {
   }
 }
 
-export function resetInputter(initValueEvent) {
-  return {
-    type: 'RESET_INPUTTER',
-    payload: {
+export function resetActiveCell() {
+  return (dispatch, getState) => {
+    const location = getState().global.activeCell.location
+    const cellData = getState().tableData[location]
+    const entered = (cellData || {}).entered || ''
+    const payload = {
       isFloatingInputterOpen: false,
-      valueEvent: initValueEvent
+      valueEvent: { value: entered, cursorPos: entered.length },
     }
+
+    return Promise.resolve(
+      dispatch({
+        type: 'RESET_INPUTTER',
+        payload
+      })
+    )
   }
 }
 

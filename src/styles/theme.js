@@ -1,6 +1,6 @@
 const colors = {
   text: '#3D3D3D',
-  cell: {
+  table: {
     border: '#dfdfdf',
     borderDark: '#CCC',
     labelBkg: '#F5F5F5'

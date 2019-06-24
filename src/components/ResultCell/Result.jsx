@@ -21,10 +21,11 @@ export class Result extends React.PureComponent {
       PropTypes.string,
       PropTypes.number,
     ]).isRequired,
+    isActive: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
-    super()
+    super(props)
     this.handleOnClick = this.handleOnClick.bind(this)
     this.handleOnDoubleClick = this.handleOnDoubleClick.bind(this)
     this.handleOnFocus = this.handleOnFocus.bind(this)
@@ -36,6 +37,14 @@ export class Result extends React.PureComponent {
     const datumRect = this.refDatum.current.getBoundingClientRect()
     const cellRect = JSON.parse(JSON.stringify(datumRect))
     this.props.openFloatingInputter(cellRect, willReplaceValue)
+  }
+
+  getDatumStyle() {
+    if (this.props.isActive) { return }
+
+    return {
+      border: '2px solid salmon',
+    }
   }
 
   handleOnFocus() {
@@ -75,15 +84,17 @@ export class Result extends React.PureComponent {
         onDoubleClick={this.handleOnDoubleClick}
         onFocus={this.handleOnFocus}
         onKeyDown={this.handleOnKeyDown}
+        isActive={this.props.isActive}
       />
     )
   }
 }
 
 function mapStateToProps(state, ownProps) {
+  const isActive = state.global.activeCell.location === ownProps.location
   const cell = state.tableData[ownProps.location]
   const result = cell ? cell.result : ''
-  return { result }
+  return { result, isActive }
 }
 
 const mapDispatchToProps = { clearCellData, openFloatingInputter, setActiveCell }

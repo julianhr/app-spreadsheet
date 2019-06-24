@@ -19,7 +19,7 @@ Array [
 exports[`Result functional tests matches snapshot with Redux 1`] = `
 <DocumentFragment>
   <div
-    class="css-i8mrfd-Root-Datum e1rvd88v0"
+    class="css-1516bbv-Root-Datum e1rvd88v0"
     data-cell="result"
     data-location="A-3"
     tabindex="0"

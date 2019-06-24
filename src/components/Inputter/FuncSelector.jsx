@@ -11,8 +11,9 @@ import { InputContext } from './InputContext'
 import { withTheme } from 'emotion-theming'
 
 
-const Dialog = styled.dialog`
+const Root = styled.div`
   border: 0;
+  position: fixed;
 `
 
 const baseItemStyle = css`
@@ -216,18 +217,20 @@ class FuncSelector extends React.Component {
     const { inputRect } = this.context
 
     return (
-      <Dialog
+      <Root
+        css={css`
+          top: ${inputRect.bottom}px;
+          left: ${inputRect.left}px;
+        `}
         open={isVisible}
         onClick={this.handleOnClick}
       >
         <InteractiveList
           items={listItems}
-          top={Math.round(inputRect.bottom)}
-          left={Math.round(inputRect.left)}
           styles={this.getListStyles()}
           onMouseEnter={this.setIndex}
         />
-      </Dialog>
+      </Root>
     )
   }
 }

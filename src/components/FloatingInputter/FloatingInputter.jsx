@@ -12,8 +12,6 @@ import InputSizer from './InputSizer'
 import KeyboardFocuser from './KeyboardFocuser'
 
 
-const NoOp = () => {}
-
 const INIT_KEY_EVENT = { key: '' }
 
 const Root = styled.div`
@@ -25,13 +23,12 @@ export class FloatingInputter extends React.PureComponent {
   static propTypes = {
     // redux
     cellRect: PropTypes.object,
-    closeFloatingInputter: PropTypes.func,
+    closeFloatingInputter: PropTypes.func.isRequired,
     isFloatingInputterOpen: PropTypes.bool,
   }
 
   static defaultProps = {
     cellRect: {},
-    closeFloatingInputter: NoOp,
     isFloatingInputterOpen: false,
   }
 

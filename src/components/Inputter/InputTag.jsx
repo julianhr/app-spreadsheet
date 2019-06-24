@@ -9,6 +9,7 @@ export const Input = styled.input`
   height: 100%;
   outline: none;
   width: 100%;
+  z-index: 100;
 `
 
 function InputTag({ fwdRef, value, style, props, onChange, onKeyDown }) {
