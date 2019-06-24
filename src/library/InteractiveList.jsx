@@ -7,7 +7,6 @@ import InteractiveListItem from './InteractiveListItem'
 
 
 const Ul = styled.ul`
-  position: fixed;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -18,8 +17,6 @@ class InteractiveList extends React.PureComponent {
   static propsTypes = {
     onMouseEnter: PropTypes.func,
     items: PropTypes.array.isRequired,
-    top: PropTypes.number.isRequired,
-    left: PropTypes.number.isRequired,
     styles: PropTypes.shape({
       ul: PropTypes.object,
       li: PropTypes.object,
@@ -41,14 +38,14 @@ class InteractiveList extends React.PureComponent {
   }
 
   render() {
-    const { items, top, left, styles } = this.props
+    const { items, styles } = this.props
 
     if (items.length === 0) { return null }
 
     return (
       <Ul
         tabIndex={-1}
-        style={{ top, left, ...styles.ul }}
+        style={styles.ul}
       >
         {this.renderListItems()}
       </Ul>

@@ -12,8 +12,8 @@ const Root = styled.div`
   cursor: cell;
   overflow: hidden;
   font-size: 13px;
-  border-right: 1px solid ${props => props.theme.colors.cell.border};
-  border-bottom: 1px solid ${props => props.theme.colors.cell.border};
+  border-right: 1px solid ${props => props.theme.colors.table.border};
+  border-bottom: 1px solid ${props => props.theme.colors.table.border};
   outline: none;
 `
 

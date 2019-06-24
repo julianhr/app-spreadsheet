@@ -10,15 +10,17 @@ import { DEFAULT_ROW_HEIGHT, MIN_ROW_HEIGHT, MAX_ROW_HEIGHT } from '~/library/co
 import { debounce, clamp } from '~/library/utils'
 
 
+export const ROW_HEADER_WIDTH = 50
+
 const Root = styled.div`
   position: relative;
   font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid ${props => props.theme.colors.cell.borderDark};
-  border-bottom: 1px solid ${props => props.theme.colors.cell.borderDark};
-  background: ${props => props.theme.colors.cell.labelBkg};
+  border-right: 1px solid ${props => props.theme.colors.table.borderDark};
+  border-bottom: 1px solid ${props => props.theme.colors.table.borderDark};
+  background: ${props => props.theme.colors.table.labelBkg};
 `
 
 const BtnHeight = styled.button`
@@ -68,7 +70,7 @@ class RowHeader extends React.PureComponent {
   getRootStyle() {
     const { height } = this.props
     const style = {
-      width: 34
+      width: ROW_HEADER_WIDTH
     }
 
     if (height) {

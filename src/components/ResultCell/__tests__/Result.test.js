@@ -14,6 +14,7 @@ const requiredProps = {
   clearCellData: jest.fn(),
   setActiveCell: jest.fn(),
   result: 5,
+  isActive: true,
 }
 
 const testProps = {

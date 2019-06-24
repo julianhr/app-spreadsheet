@@ -13,6 +13,7 @@ const requiredProps = {
   onKeyDown: jest.fn(),
   onDoubleClick: jest.fn(),
   onFocus: jest.fn(),
+  isActive: true,
 }
 
 const testProps = {

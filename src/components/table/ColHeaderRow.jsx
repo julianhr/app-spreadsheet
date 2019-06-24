@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import { jsx, css } from '@emotion/core'
 
 import ColHeader from '../cell/ColHeader'
+import { ROW_HEADER_WIDTH } from '../cell/RowHeader'
 
 
 const Row = styled.div`
@@ -16,16 +17,16 @@ const InnerBorder = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid ${props => props.theme.colors.cell.borderDark};
-  border-bottom: 1px solid ${props => props.theme.colors.cell.borderDark};
-  background: ${props => props.theme.colors.cell.labelBkg};
+  border-right: 1px solid ${props => props.theme.colors.table.borderDark};
+  border-bottom: 1px solid ${props => props.theme.colors.table.borderDark};
+  background: ${props => props.theme.colors.table.labelBkg};
 `
 
 function ColHeaderRow({ colLabels }) {
   const renderCornerCell = () => (
     <InnerBorder
       css={css`
-        width: 34px;
+        width: ${ROW_HEADER_WIDTH}px;
         height: 26px;
       `}
     />

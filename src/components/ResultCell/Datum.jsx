@@ -13,13 +13,19 @@ const Root = styled.div`
   height: 100%;
   width: 100%;
   padding: 2px;
-
-  :focus {
-    border: 2px solid salmon;
-  }
 `
 
-function Datum({ fwdRef, location, result, onClick, onKeyDown, onDoubleClick, onFocus }) {
+function Datum({
+  fwdRef,
+  isActive,
+  location,
+  onClick,
+  onDoubleClick,
+  onFocus,
+  onKeyDown,
+  result,
+}) {
+
   const getStyle = () => {
     let style = {}
 
@@ -29,6 +35,10 @@ function Datum({ fwdRef, location, result, onClick, onKeyDown, onDoubleClick, on
         textOverflow: 'clip',
         overflow: 'hidden',
       }
+    }
+
+    if (isActive) {
+      style.border = '2px solid salmon'
     }
 
     return style
@@ -57,6 +67,7 @@ Datum.propTypes = {
     PropTypes.string,
     PropTypes.number,
   ]).isRequired,
+  isActive: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
   onDoubleClick: PropTypes.func.isRequired,

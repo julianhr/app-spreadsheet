@@ -18,9 +18,6 @@ exports[`Datum result is number 1`] = `
   white-space: nowrap;
   text-overflow: clip;
   overflow: hidden;
-}
-
-.emotion-0:focus {
   border: 2px solid salmon;
 }
 
@@ -48,9 +45,6 @@ exports[`Datum result is string 1`] = `
   height: 100%;
   width: 100%;
   padding: 2px;
-}
-
-.emotion-0:focus {
   border: 2px solid salmon;
 }
 

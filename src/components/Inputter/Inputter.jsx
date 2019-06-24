@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { setCellData, clearCellData } from '~/actions/tableDataActions'
-import { setInputterValueEvent, resetInputter } from '~/actions/globalActions'
+import { setInputterValueEvent, resetActiveCell } from '~/actions/globalActions'
 import { InputContext } from './InputContext'
 import Lexer from '~/formulas/Lexer'
 import KeyboardActions from './KeyboardActions'
@@ -29,7 +29,7 @@ export class Inputter extends React.PureComponent {
     rows: PropTypes.number.isRequired,
     setCellData: PropTypes.func.isRequired,
     setInputterValueEvent: PropTypes.func.isRequired,
-    resetInputter: PropTypes.func.isRequired,
+    resetActiveCell: PropTypes.func.isRequired,
     inputTagProps: PropTypes.object,
     // lifecycle functions
     onMount: PropTypes.func,
@@ -201,7 +201,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   clearCellData,
-  resetInputter,
+  resetActiveCell,
   setCellData,
   setInputterValueEvent,
 }
