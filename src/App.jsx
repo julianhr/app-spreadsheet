@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import Header from './components/header/Header'
 import Table from './components/table/Table'
 import FloatingInputter from './components/FloatingInputter/FloatingInputter'
+import FormulaBar from './components/FormulaBar/FormulaBar'
 
 
 const Container = styled.div`
@@ -25,6 +26,7 @@ function App() {
         <FloatingInputter />
         <div data-dummy-focus-stop tabIndex="0" />
         <Header />
+        <FormulaBar />
         <Table />
       </Main>
     </Container>
