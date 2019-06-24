@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import { connect } from 'react-redux'
 import { interpret } from 'xstate'
 
+import { setActiveCell } from '~/actions/globalActions'
 import ColHeaderRow from './ColHeaderRow'
 import DataRow from './DataRow'
 import { getColumnNames } from '~/library/utils'
@@ -15,10 +16,10 @@ const Grid = styled.div`
   flex-direction: column;
   width: fit-content;
   overflow: hidden;
-  border-top: 2px solid ${props => props.theme.colors.cell.borderDark};
-  border-left: 2px solid ${props => props.theme.colors.cell.borderDark};
-  border-right: 1px solid ${props => props.theme.colors.cell.borderDark};
-  border-bottom: 1px solid ${props => props.theme.colors.cell.borderDark};
+  border-top: 2px solid ${props => props.theme.colors.table.borderDark};
+  border-left: 2px solid ${props => props.theme.colors.table.borderDark};
+  border-right: 1px solid ${props => props.theme.colors.table.borderDark};
+  border-bottom: 1px solid ${props => props.theme.colors.table.borderDark};
 
   * {
     box-sizing: border-box;
@@ -29,12 +30,13 @@ export class Table extends React.PureComponent {
   static propTypes = {
     rows: PropTypes.number.isRequired,
     columns: PropTypes.number.isRequired,
+    setActiveCell: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props)
-    this.handleTableOnClick = this.handleTableOnClick.bind(this)
-    this.handleTableOnKeyDown = this.handleTableOnKeyDown.bind(this)
+    this.handleOnClick = this.handleOnClick.bind(this)
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
     this.colLabels = getColumnNames(props.columns)
   }
 
@@ -43,18 +45,20 @@ export class Table extends React.PureComponent {
 
   componentDidMount() {
     this.focusService.start()
+    this.props.setActiveCell('A-1')
   }
 
   componentWillUnmount() {
     this.focusService.stop()
   }
 
-  handleTableOnClick(event) {
+  handleOnClick(event) {
     event.stopPropagation()
   }
 
-  handleTableOnKeyDown(event) {
+  handleOnKeyDown(event) {
     event.stopPropagation()
+
     const { location } = event.target.dataset
 
     if (location) {
@@ -100,8 +104,8 @@ export class Table extends React.PureComponent {
     return (
       <Grid
         data-table='app'
-        onClick={this.handleTableOnClick}
-        onKeyDown={this.handleTableOnKeyDown}
+        onClick={this.handleOnClick}
+        onKeyDown={this.handleOnKeyDown}
       >
         {this.renderRows()}
       </Grid>
@@ -114,4 +118,6 @@ const mapStateToProps = (state) => {
   return { rows, columns }
 }
 
-export default connect(mapStateToProps)(Table)
+const mapDisptachToProps = { setActiveCell }
+
+export default connect(mapStateToProps, mapDisptachToProps)(Table)

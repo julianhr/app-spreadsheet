@@ -10,7 +10,7 @@ exports[`Table functional tests matches snapshot 1`] = `
     data-row="header"
   >
     <div
-      class="css-57e4l-InnerBorder e40r6tf1"
+      class="css-1xasddq-InnerBorder e40r6tf1"
     />
     <div
       class="col-label-height css-bow3c7-Root-ColHeader e11zdtao0"
@@ -18,7 +18,7 @@ exports[`Table functional tests matches snapshot 1`] = `
     >
       A
       <button
-        class="css-9afeex-BtnWidth e11zdtao1"
+        class="css-rewts0-BtnWidth e11zdtao1"
         tabindex="-1"
       />
     </div>
@@ -28,17 +28,7 @@ exports[`Table functional tests matches snapshot 1`] = `
     >
       B
       <button
-        class="css-9afeex-BtnWidth e11zdtao1"
-        tabindex="-1"
-      />
-    </div>
-    <div
-      class="col-label-height css-bow3c7-Root-ColHeader e11zdtao0"
-      data-col="C"
-    >
-      C
-      <button
-        class="css-9afeex-BtnWidth e11zdtao1"
+        class="css-rewts0-BtnWidth e11zdtao1"
         tabindex="-1"
       />
     </div>
@@ -48,7 +38,7 @@ exports[`Table functional tests matches snapshot 1`] = `
     data-row="1"
   >
     <div
-      class="row-header-width css-1i9qrac-Root e1d5mcq00"
+      class="row-header-width css-1v1t8nu-Root e1d5mcq00"
       data-row="1"
     >
       1
@@ -62,7 +52,7 @@ exports[`Table functional tests matches snapshot 1`] = `
       data-cell="border"
     >
       <div
-        class="css-i8mrfd-Root-Datum e1rvd88v0"
+        class="css-1xcfbet-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="A-1"
         tabindex="0"
@@ -73,20 +63,9 @@ exports[`Table functional tests matches snapshot 1`] = `
       data-cell="border"
     >
       <div
-        class="css-i8mrfd-Root-Datum e1rvd88v0"
+        class="css-1516bbv-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="B-1"
-        tabindex="0"
-      />
-    </div>
-    <div
-      class="css-1kx7ize-Root-OutterBorder e17q3q8l0"
-      data-cell="border"
-    >
-      <div
-        class="css-i8mrfd-Root-Datum e1rvd88v0"
-        data-cell="result"
-        data-location="C-1"
         tabindex="0"
       />
     </div>
@@ -96,7 +75,7 @@ exports[`Table functional tests matches snapshot 1`] = `
     data-row="2"
   >
     <div
-      class="row-header-width css-1i9qrac-Root e1d5mcq00"
+      class="row-header-width css-1v1t8nu-Root e1d5mcq00"
       data-row="2"
     >
       2
@@ -110,7 +89,7 @@ exports[`Table functional tests matches snapshot 1`] = `
       data-cell="border"
     >
       <div
-        class="css-i8mrfd-Root-Datum e1rvd88v0"
+        class="css-1516bbv-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="A-2"
         tabindex="0"
@@ -121,20 +100,9 @@ exports[`Table functional tests matches snapshot 1`] = `
       data-cell="border"
     >
       <div
-        class="css-i8mrfd-Root-Datum e1rvd88v0"
+        class="css-1516bbv-Root-Datum e1rvd88v0"
         data-cell="result"
         data-location="B-2"
-        tabindex="0"
-      />
-    </div>
-    <div
-      class="css-1kx7ize-Root-OutterBorder e17q3q8l0"
-      data-cell="border"
-    >
-      <div
-        class="css-i8mrfd-Root-Datum e1rvd88v0"
-        data-cell="result"
-        data-location="C-2"
         tabindex="0"
       />
     </div>

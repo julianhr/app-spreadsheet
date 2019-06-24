@@ -6,7 +6,7 @@ exports[`ColHeaderRow matches snapshot 1`] = `
   data-row="header"
 >
   <div
-    class="css-57e4l-InnerBorder e40r6tf1"
+    class="css-1xasddq-InnerBorder e40r6tf1"
   />
   <div
     class="col-label-height css-bow3c7-Root-ColHeader e11zdtao0"
@@ -14,7 +14,7 @@ exports[`ColHeaderRow matches snapshot 1`] = `
   >
     A
     <button
-      class="css-9afeex-BtnWidth e11zdtao1"
+      class="css-rewts0-BtnWidth e11zdtao1"
       tabindex="-1"
     />
   </div>
@@ -24,7 +24,7 @@ exports[`ColHeaderRow matches snapshot 1`] = `
   >
     B
     <button
-      class="css-9afeex-BtnWidth e11zdtao1"
+      class="css-rewts0-BtnWidth e11zdtao1"
       tabindex="-1"
     />
   </div>

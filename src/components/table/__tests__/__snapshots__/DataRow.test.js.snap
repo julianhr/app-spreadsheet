@@ -6,7 +6,7 @@ exports[`DataRow matches snapshot 1`] = `
   data-row="2"
 >
   <div
-    class="row-header-width css-1i9qrac-Root e1d5mcq00"
+    class="row-header-width css-1v1t8nu-Root e1d5mcq00"
     data-row="2"
   >
     2
@@ -20,7 +20,7 @@ exports[`DataRow matches snapshot 1`] = `
     data-cell="border"
   >
     <div
-      class="css-i8mrfd-Root-Datum e1rvd88v0"
+      class="css-1516bbv-Root-Datum e1rvd88v0"
       data-cell="result"
       data-location="A-2"
       tabindex="0"
@@ -31,7 +31,7 @@ exports[`DataRow matches snapshot 1`] = `
     data-cell="border"
   >
     <div
-      class="css-i8mrfd-Root-Datum e1rvd88v0"
+      class="css-1516bbv-Root-Datum e1rvd88v0"
       data-cell="result"
       data-location="B-2"
       tabindex="0"

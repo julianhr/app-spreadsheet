@@ -15,9 +15,9 @@ let Root = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid ${props => props.theme.colors.cell.borderDark};
-  border-bottom: 1px solid ${props => props.theme.colors.cell.borderDark};
-  background: ${props => props.theme.colors.cell.labelBkg};
+  border-right: 1px solid ${props => props.theme.colors.table.borderDark};
+  border-bottom: 1px solid ${props => props.theme.colors.table.borderDark};
+  background: ${props => props.theme.colors.table.labelBkg};
   font-size: 12px;
 `
 
@@ -33,7 +33,7 @@ const BtnWidth = styled.button`
   padding: 0;
   right: 0;
   top: 0;
-  z-index: 1;
+  z-index: 2;
 
   :hover {
     background: ${props => props.theme.colors.primary.light};

@@ -4,6 +4,7 @@ import { render, fireEvent, cleanup } from '@testing-library/react'
 
 import MockApp from '~/__tests__/__mocks__/MockApp'
 import ConnectedTable, { Table } from '../Table'
+import * as globalActions from '~/actions/globalActions'
 import { appStoreGen } from '~/reducers'
 import { sleep } from '~/library/utils'
 
@@ -11,6 +12,7 @@ import { sleep } from '~/library/utils'
 const requiredProps = {
   rows: 3,
   columns: 2,
+  setActiveCell: jest.fn(),
 }
 
 const testProps = {
@@ -124,9 +126,7 @@ describe('Table', () => {
   describe('functional tests', () => {
     it('matches snapshot', () => {
       const store = appStoreGen()
-      const { global } = store.getState()
-      global.rows = 2
-      global.columns = 3
+      store.dispatch(globalActions.setTableDimensions(2, 2))
       renderApp(testProps, store)
       const el = document.querySelector('[data-table="app"]')
       expect(el).toMatchSnapshot()
