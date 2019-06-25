@@ -109,6 +109,7 @@ export class FloatingInputter extends React.PureComponent {
           valueEvent={this.props.valueEvent}
           cellRect={this.props.cellRect}
           setInputWidth={this.setInputWidth}
+          style={inputTagProps.style}
         />
         <Inputter
           isInteractive={this.props.inputter.isInteractive}
