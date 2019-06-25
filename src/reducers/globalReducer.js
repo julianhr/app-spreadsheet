@@ -20,8 +20,8 @@ export const INITIAL_STATE = {
     isOpen: false,
     isInteractive: false,
   },
-  rows: 14,
-  columns: 6,
+  rows: 30,
+  columns: 10,
 }
 
 export default createReducer(INITIAL_STATE, {
