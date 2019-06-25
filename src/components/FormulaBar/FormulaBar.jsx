@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { connect } from 'react-redux'
 
+import { scheduleFloatingInputter, closeFloatingInputter } from '~/actions/globalActions'
 import inputTagProps from './inputTagProps'
 import Inputter from '../Inputter/Inputter'
 import { ROW_HEADER_WIDTH } from '../cell/RowHeader'
@@ -33,6 +34,8 @@ class FormulaBar extends React.PureComponent {
 
   static propTypes = {
     location: PropTypes.string,
+    scheduleFloatingInputter: PropTypes.func.isRequired,
+    closeFloatingInputter: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -49,18 +52,17 @@ class FormulaBar extends React.PureComponent {
 
   handleOnFocus() {
     this.setState({ isInteractive: true })
-    
+    this.props.scheduleFloatingInputter(false)
   }
 
   handleOnBlur(event) {
     if (!this.refRoot.current.contains(event.relatedTarget)) {
+      this.props.closeFloatingInputter()
       this.setState({ isInteractive: false })
     }
   }
 
   renderInputter() {
-    if (!this.props.location) { return null }
-
     return (
       <Inputter
         isInteractive={this.state.isInteractive}
@@ -95,4 +97,6 @@ function mapStateToProps(state) {
   return { location }
 }
 
-export default connect(mapStateToProps)(FormulaBar)
+const mapDispatchtoProps = { scheduleFloatingInputter, closeFloatingInputter }
+
+export default connect(mapStateToProps, mapDispatchtoProps)(FormulaBar)

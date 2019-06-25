@@ -104,7 +104,7 @@ class FuncSelector extends React.Component {
     const inputValue = currInputValue.slice(0, endIndex)
     const { fnName } = this.state.listItems[this.state.itemIndex]
     const newInputValue = `${inputValue}${fnName}(`
-    this.context.setValueEvent(newInputValue)
+    this.context.setInputterValueEvent(newInputValue)
   }
 
   setListItems() {

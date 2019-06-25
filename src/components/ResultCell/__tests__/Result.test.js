@@ -7,14 +7,19 @@ import ReduxResult, { Result } from '../Result'
 
 
 const requiredProps = {
-  location: 'A-3',
   fwdRef: React.createRef(),
+  location: 'A-3',
   // redux
-  openFloatingInputter: jest.fn(),
   clearCellData: jest.fn(),
-  setActiveCell: jest.fn(),
-  result: 5,
   isActive: true,
+  openFloatingInputter: jest.fn(),
+  result: 5,
+  scheduledFloatingInputter: {
+    isOpen: true,
+    isInteractive: true,
+  },
+  setActiveCell: jest.fn(),
+  unscheduleFloatingInputter: jest.fn(),
 }
 
 const testProps = {
@@ -89,7 +94,7 @@ describe('Result', () => {
       const el = document.querySelector(selector)
       jest.spyOn(Result.prototype, 'openFloatingInputter')
       fireEvent.doubleClick(el)
-      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(false)
+      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(false, true)
     })
 
     test('stops event propagation', () => {
@@ -132,7 +137,7 @@ describe('Result', () => {
       jest.spyOn(Result.prototype, 'openFloatingInputter')
 
       fireEvent.keyDown(el, { key: 'a' })
-      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(true)
+      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(true, true)
     })
   })
 

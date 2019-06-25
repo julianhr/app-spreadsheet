@@ -8,8 +8,12 @@ describe('globalActions', () => {
     it('sets currently active cell', async () => {
       const location = 'B-2'
       const appStore = appStoreGen()
+      const expected = {
+        entered: '',
+        location: '',
+      }
 
-      expect(appStore.getState().global.activeCell).toEqual({})
+      expect(appStore.getState().global.activeCell).toEqual(expected)
       await appStore.dispatch(actions.setActiveCell(location))
       expect(appStore.getState().global.activeCell).toMatchSnapshot()
     })
