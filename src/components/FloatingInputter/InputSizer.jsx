@@ -7,6 +7,7 @@ import { css, jsx } from '@emotion/core' // eslint-disable-line
 import { Input as BaseInput } from '../Inputter/InputTag'
 
 
+const NoOp = () => {}
 const PADDING_COMPARE = 3
 const PADDING_SIZE = 7
 
@@ -21,9 +22,14 @@ class InputSizer extends React.PureComponent {
   static propTypes = {
     // props
     setInputWidth: PropTypes.func.isRequired,
+    style: PropTypes.func,
     // redux
     cellRect: PropTypes.object,
     valueEvent: PropTypes.object,
+  }
+
+  static defaultProps = {
+    style: NoOp,
   }
 
   refInput = React.createRef()
@@ -51,11 +57,13 @@ class InputSizer extends React.PureComponent {
   render() {
     return (
       <Input
-        ref={this.refInput}
         readOnly
+        ref={this.refInput}
         value={this.props.valueEvent.value}
-        css={{
-          width: this.props.cellRect.width,
+        css={theme => {
+          const style1 = this.props.style(theme)
+          const style2 = `width: ${this.props.cellRect.width}px;`
+          return [style1, style2]
         }}
       />
     )

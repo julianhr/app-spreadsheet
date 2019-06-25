@@ -4,11 +4,11 @@ import React from 'react' // eslint-disable-line
 import { jsx, css } from '@emotion/core'
 
 
-const style = props => css`
+const style = theme => css`
   align-items: center;
   background-color: white;
   border: 2px solid salmon;
-  box-shadow: 0 0 5px ${props.colors.shadow};
+  box-shadow: 0 0 5px ${theme.colors.shadow};
   box-sizing: border-box;
   display: flex;
   font-size: 13px;
