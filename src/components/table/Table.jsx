@@ -46,10 +46,16 @@ export class Table extends React.PureComponent {
   componentDidMount() {
     this.focusService.start()
     this.props.setActiveCell('A-1')
+    this.focusA_1()
   }
 
   componentWillUnmount() {
     this.focusService.stop()
+  }
+
+  focusA_1() {
+    const el = document.querySelector('[data-location="A-1"]')
+    el && el.focus()
   }
 
   handleOnClick(event) {
