@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { jsx, css } from '@emotion/core' // eslint-disable-line
 import { connect } from 'react-redux'
 
-import { closeFloatingInputter } from '~/actions/globalActions'
+import { closeFloatingInputter, setFloatingInputterInteractive } from '~/actions/globalActions'
 import inputTagProps from './inputTagProps'
 import Inputter from '../Inputter/Inputter'
 import InputSizer from './InputSizer'
@@ -24,19 +24,25 @@ export class FloatingInputter extends React.PureComponent {
     // redux
     cellRect: PropTypes.object,
     closeFloatingInputter: PropTypes.func.isRequired,
-    isFloatingInputterOpen: PropTypes.bool,
+    setFloatingInputterInteractive: PropTypes.func.isRequired,
+    inputter: PropTypes.shape({
+      isOpen: PropTypes.bool.isRequired,
+      isInteractive: PropTypes.bool.isRequired,
+    }),
+    isInputterOpen: PropTypes.bool,
   }
 
   static defaultProps = {
     cellRect: {},
-    isFloatingInputterOpen: false,
+    isInputterOpen: false,
   }
 
   constructor() {
     super()
-    this.handleOnBlur = this.handleOnBlur.bind(this)
-    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
     this.handleInputterOnMount = this.handleInputterOnMount.bind(this)
+    this.handleOnBlur = this.handleOnBlur.bind(this)
+    this.handleOnFocus = this.handleOnFocus.bind(this)
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
     this.keyboardFocuser = new KeyboardFocuser(this)
     this.setInputWidth = this.setInputWidth.bind(this)
   }
@@ -49,7 +55,9 @@ export class FloatingInputter extends React.PureComponent {
   refRoot = React.createRef()
 
   componentDidUpdate() {
-    this.keyboardFocuser.run()
+    if (this.props.inputter.isInteractive) {
+      this.keyboardFocuser.run()
+    }
   }
 
   setInputWidth(width) {
@@ -59,8 +67,10 @@ export class FloatingInputter extends React.PureComponent {
   }
 
   handleInputterOnMount(props, state, inputEl) {
-    inputEl.focus()
-    inputEl.selectionEnd = inputEl.value.length
+    if (this.props.inputter.isInteractive) {
+      inputEl.focus()
+      inputEl.selectionEnd = inputEl.value.length
+    }
     this.setState({ keyEvent: INIT_KEY_EVENT })
   }
 
@@ -69,27 +79,20 @@ export class FloatingInputter extends React.PureComponent {
     this.setState({ keyEvent: { key } })
   }
 
+  handleOnFocus() {
+    if (!this.props.inputter.isInteractive) {
+      this.props.setFloatingInputterInteractive(true)
+    }
+  }
+
   handleOnBlur(event) {
     if (!this.refRoot.current.contains(event.relatedTarget)) {
       this.props.closeFloatingInputter()
     }
   }
 
-  renderInputter() {
-    if (!this.props.valueEvent) { return null }
-
-    return (
-      <Inputter
-        isInteractive
-        onMount={this.handleInputterOnMount}
-        inputTagProps={inputTagProps}
-      />
-    )
-  }
-
   render() {
-    const canRender = this.props.isFloatingInputterOpen && this.props.valueEvent
-    if (!canRender) { return null }
+    if (!this.props.inputter.isOpen) { return null }
 
     const { top, left, height } = this.props.cellRect
     const { width } = this.state
@@ -99,6 +102,7 @@ export class FloatingInputter extends React.PureComponent {
         ref={this.refRoot}
         css={{ top, left, width, height }}
         onKeyDown={this.handleOnKeyDown}
+        onFocus={this.handleOnFocus}
         onBlur={this.handleOnBlur}
       >
         <InputSizer
@@ -106,7 +110,11 @@ export class FloatingInputter extends React.PureComponent {
           cellRect={this.props.cellRect}
           setInputWidth={this.setInputWidth}
         />
-        {this.renderInputter()}
+        <Inputter
+          isInteractive={this.props.inputter.isInteractive}
+          onMount={this.handleInputterOnMount}
+          inputTagProps={inputTagProps}
+        />
       </Root>
     )
   }
@@ -116,17 +124,27 @@ function mapStateToProps(state) {
   const {
     global: {
       activeCell: {
-        cellRect,
-        isFloatingInputterOpen,
         location,
+      },
+      inputter: {
         valueEvent,
       },
+      floatingInputter: {
+        cellRect,
+        isOpen,
+        isInteractive,
+      }
     }
   } = state
 
-  return { cellRect, isFloatingInputterOpen, valueEvent, location }
+  const inputter = {
+    isOpen,
+    isInteractive,
+  }
+
+  return { cellRect, valueEvent, location, inputter }
 }
 
-const mapDispatchToProps = { closeFloatingInputter }
+const mapDispatchToProps = { closeFloatingInputter, setFloatingInputterInteractive }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FloatingInputter)

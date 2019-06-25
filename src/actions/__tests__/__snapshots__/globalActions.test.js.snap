@@ -2,53 +2,21 @@
 
 exports[`globalActions #displayCellInputter sets data for cell inputter 1`] = `
 Object {
-  "cellRect": Object {
-    "bottom": 0,
-    "height": 0,
-    "left": 0,
-    "right": 0,
-    "top": 0,
-    "width": 0,
-  },
   "entered": "=5+3",
-  "isFloatingInputterOpen": true,
   "location": "B-2",
-  "valueEvent": Object {
-    "cursorPos": 4,
-    "value": "=5+3",
-  },
 }
 `;
 
 exports[`globalActions #displayCellInputter sets data for cell inputter 2`] = `
 Object {
-  "cellRect": Object {
-    "bottom": 0,
-    "height": 0,
-    "left": 0,
-    "right": 0,
-    "top": 0,
-    "width": 0,
-  },
   "entered": "=5+3",
-  "isFloatingInputterOpen": true,
   "location": "B-2",
-  "valueEvent": Object {
-    "cursorPos": 0,
-    "value": "",
-  },
 }
 `;
 
 exports[`globalActions #setActiveCell sets currently active cell 1`] = `
 Object {
-  "cellRect": null,
   "entered": "",
-  "isFloatingInputterOpen": false,
   "location": "B-2",
-  "valueEvent": Object {
-    "cursorPos": 0,
-    "value": "",
-  },
 }
 `;

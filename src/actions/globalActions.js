@@ -11,60 +11,99 @@ export function setTableDimensions(rows, columns) {
   }
 }
 
+export function setInputterValueEvent(value, cursorPos) {
+  return {
+    type: 'SET_INPUTTER_VALUE_EVENT',
+    payload: {
+      value,
+      cursorPos: cursorPos === undefined
+        ? value.length
+        : cursorPos
+    }
+  }
+}
+
 export function setActiveCell(location) {
   return (dispatch, getState) => {
     const cellData = getState().tableData[location]
     const entered = (cellData || {}).entered || ''
 
+    dispatch(setInputterValueEvent(entered, entered.length))
+
     return Promise.resolve(
       dispatch({
         type: 'SET_ACTIVE_CELL',
         payload: {
-          cellRect: null,
           entered,
-          isFloatingInputterOpen: false,
           location,
-          valueEvent: { value: entered, cursorPos: entered.length },
         }
       })
     )
   }
 }
 
-export function openFloatingInputter(cellRect, willReplaceValue) {
-  const payload = {
-    cellRect,
-    isFloatingInputterOpen: true,
-  }
-
-  if (willReplaceValue) {
-    payload.valueEvent = { value: '', cursorPos: 0 }
-  }
-
+export function setFloatingInputterInteractive(isInteractive) {
   return {
-    type: 'OPEN_FLOATING_INPUTTER',
-    payload,
+    type: 'SET_FLOATING_INPUTTER_INTERACTIVE',
+    payload: isInteractive
   }
 }
 
-export function resetActiveCell() {
+export function openFloatingInputter(cellRect, willReplaceValue, isInteractive) {
   return (dispatch, getState) => {
-    const location = getState().global.activeCell.location
-    const cellData = getState().tableData[location]
-    const entered = (cellData || {}).entered || ''
-    const payload = {
-      isFloatingInputterOpen: false,
-      valueEvent: { value: entered, cursorPos: entered.length },
-    }
+    const state = getState()
+    const value = willReplaceValue ? '' : state.global.activeCell.entered
+
+    dispatch(setInputterValueEvent(value))
 
     return Promise.resolve(
       dispatch({
-        type: 'RESET_INPUTTER',
-        payload
+        type: 'OPEN_FLOATING_INPUTTER',
+        payload: {
+          cellRect,
+          isOpen: true,
+          isInteractive,
+          willOpen: false,
+        }
       })
     )
   }
 }
 
+export function resetInputterValueEvent() {
+  return (dispatch, getState) => {
+    const location = getState().global.activeCell.location
+    const cellData = getState().tableData[location]
+    const entered = (cellData || {}).entered || ''
+
+    dispatch(setInputterValueEvent(entered))
+  }
+}
+
+export function scheduleFloatingInputter(isInteractive) {
+  return (dispatch, getState) => {
+    const { floatingInputter } = getState().global
+
+    if (floatingInputter.isOpen && floatingInputter.isInteractive === isInteractive) {
+      return
+    }
+
+    return Promise.resolve(
+      dispatch({
+        type: 'SCHEDULE_FLOATING_INPUTTER',
+        payload: {
+          isInteractive
+        },
+      })
+    )
+  }
+}
+
+export function unscheduleFloatingInputter() {
+  return {
+    type: 'UNSCHEDULE_FLOATING_INPUTTER',
+    payload: null,
+  }
+}
+
 export const closeFloatingInputter = createAction('CLOSE_FLOATING_INPUTTER')
-export const setInputterValueEvent = createAction('SET_INPUTTER_VALUE_EVENT')

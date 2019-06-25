@@ -117,7 +117,7 @@ class FuncSelector extends React.Component {
     const rightChunk = currInputValue.slice(rightChunkIndex)
     const value = `${leftChunk}${fnName}(${rightChunk}`
     const cursorPos = leftChunk.length + fnName.length + 1
-    this.context.setValueEvent(value, cursorPos)
+    this.context.setInputterValueEvent(value, cursorPos)
   }
 
   setListItems() {

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import { unscheduleFloatingInputter } from '~/actions/globalActions'
 import { clearCellData } from '~/actions/tableDataActions'
 import { openFloatingInputter, setActiveCell } from '~/actions/globalActions'
 import Datum from './Datum'
@@ -14,14 +15,19 @@ export class Result extends React.PureComponent {
     location: PropTypes.string.isRequired,
     fwdRef: PropTypes.object.isRequired,
     // redux
-    openFloatingInputter: PropTypes.func.isRequired,
     clearCellData: PropTypes.func.isRequired,
-    setActiveCell: PropTypes.func.isRequired,
+    isActive: PropTypes.bool.isRequired,
+    openFloatingInputter: PropTypes.func.isRequired,
     result: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
     ]).isRequired,
-    isActive: PropTypes.bool.isRequired,
+    scheduledFloatingInputter: PropTypes.shape({
+      willOpen: PropTypes.bool,
+      isInteractive: PropTypes.bool,
+    }).isRequired,
+    setActiveCell: PropTypes.func.isRequired,
+    unscheduleFloatingInputter: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -33,10 +39,23 @@ export class Result extends React.PureComponent {
     this.refDatum = props.fwdRef
   }
 
-  openFloatingInputter(willReplaceValue) {
+  componentDidUpdate() {
+    this.scheduledFloatingInputter()
+  }
+
+  scheduledFloatingInputter() {
+    if (!this.props.isActive) { return }
+    if (!this.props.scheduledFloatingInputter.willOpen) { return }
+
+    const { isInteractive } = this.props.scheduledFloatingInputter
+    this.props.unscheduleFloatingInputter()
+    this.openFloatingInputter(false, isInteractive)
+  }
+
+  openFloatingInputter(willReplaceValue, isInteractive) {
     const datumRect = this.refDatum.current.getBoundingClientRect()
     const cellRect = JSON.parse(JSON.stringify(datumRect))
-    this.props.openFloatingInputter(cellRect, willReplaceValue)
+    this.props.openFloatingInputter(cellRect, willReplaceValue, isInteractive)
   }
 
   getDatumStyle() {
@@ -57,7 +76,7 @@ export class Result extends React.PureComponent {
 
   handleOnDoubleClick(event) {
     event.stopPropagation()
-    this.openFloatingInputter(false)
+    this.openFloatingInputter(false, true)
   }
 
   handleOnKeyDown({ key }) {
@@ -70,7 +89,7 @@ export class Result extends React.PureComponent {
       // key pressed is a printable symbol, ex: 'a', '1', ','
       // can be further refined, but for now it's fine
     } else if (key.length === 1) {
-      this.openFloatingInputter(true)
+      this.openFloatingInputter(true, true)
     }
   }
 
@@ -92,11 +111,17 @@ export class Result extends React.PureComponent {
 
 function mapStateToProps(state, ownProps) {
   const isActive = state.global.activeCell.location === ownProps.location
+  const { scheduledFloatingInputter } = state.global
   const cell = state.tableData[ownProps.location]
   const result = cell ? cell.result : ''
-  return { result, isActive }
+  return { result, isActive, scheduledFloatingInputter }
 }
 
-const mapDispatchToProps = { clearCellData, openFloatingInputter, setActiveCell }
+const mapDispatchToProps = {
+  clearCellData,
+  openFloatingInputter,
+  setActiveCell,
+  unscheduleFloatingInputter,
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Result)

@@ -13,7 +13,7 @@ class KeyboardActions {
 
     switch (key) { // eslint-disable-line
       case 'Escape':
-        this.c.props.resetActiveCell()
+        this.c.props.resetInputterValueEvent()
         break
       case 'Enter':
       case 'Tab':
@@ -22,7 +22,7 @@ class KeyboardActions {
         break
       case 'ArrowLeft':
       case 'ArrowRight':
-        this.c.setValueEvent(
+        this.c.setInputterValueEvent(
           this.c.props.valueEvent.value,
           this.c.refInput.current.selectionEnd
         )

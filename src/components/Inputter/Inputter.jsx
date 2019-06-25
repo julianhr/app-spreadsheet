@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { setCellData, clearCellData } from '~/actions/tableDataActions'
-import { setInputterValueEvent, resetActiveCell } from '~/actions/globalActions'
+import { setInputterValueEvent, resetInputterValueEvent } from '~/actions/globalActions'
 import { InputContext } from './InputContext'
 import Lexer from '~/formulas/Lexer'
 import KeyboardActions from './KeyboardActions'
@@ -24,13 +24,13 @@ export class Inputter extends React.PureComponent {
     clearCellData: PropTypes.func.isRequired,
     columns: PropTypes.number.isRequired,
     entered: PropTypes.string.isRequired,
-    valueEvent: PropTypes.object.isRequired,
+    inputTagProps: PropTypes.object,
     location: PropTypes.string.isRequired,
+    resetInputterValueEvent: PropTypes.func.isRequired,
     rows: PropTypes.number.isRequired,
     setCellData: PropTypes.func.isRequired,
     setInputterValueEvent: PropTypes.func.isRequired,
-    resetActiveCell: PropTypes.func.isRequired,
-    inputTagProps: PropTypes.object,
+    valueEvent: PropTypes.object.isRequired,
     // lifecycle functions
     onMount: PropTypes.func,
     onUnmount: PropTypes.func,
@@ -52,7 +52,6 @@ export class Inputter extends React.PureComponent {
     this.keyboardFocuser = new KeyboardFocuser(this)
     this.setInputWidth = this.setInputWidth.bind(this)
     this.setIsFuncSelectorVisible = this.setIsFuncSelectorVisible.bind(this)
-    this.setValueEvent = this.setValueEvent.bind(this)
   }
 
   state = {
@@ -60,13 +59,11 @@ export class Inputter extends React.PureComponent {
     isFuncSelectorVisible: false,
     keyEvent: { key: '' },
     width: null,
-    initValueEvent: null,
   }
 
   refInput = React.createRef()
 
   componentDidMount() {
-    this.setState({ initValueEvent: this.props.valueEvent })
     this.props.onMount(this.props, this.state, this.refInput.current)
   }
 
@@ -92,11 +89,6 @@ export class Inputter extends React.PureComponent {
     }
   }
 
-  setValueEvent(value, cursorPos) {
-    const valueEvent = { value, cursorPos }
-    this.props.setInputterValueEvent(valueEvent)
-  }
-
   tokenizeInputValue() {
     const { value } = this.props.valueEvent
     const lexer = new Lexer(value)
@@ -109,7 +101,7 @@ export class Inputter extends React.PureComponent {
   }
 
   focusInputTag() {
-    if (!this.props.isInteractive) { return null }
+    if (!this.props.isInteractive) { return }
 
     const inputEl = this.refInput.current
     const { cursorPos } = this.props.valueEvent
@@ -125,7 +117,7 @@ export class Inputter extends React.PureComponent {
   handleOnChange(event) {
     const { target: { value } } = event
     const cursorPos = event.target.selectionStart
-    this.setValueEvent(value, cursorPos)
+    this.props.setInputterValueEvent(value, cursorPos)
   }
 
   handleOnKeyDown(event) {
@@ -160,7 +152,7 @@ export class Inputter extends React.PureComponent {
           setIsFuncSelectorVisible: this.setIsFuncSelectorVisible,
           keyEvent: this.state.keyEvent,
           valueEvent: this.props.valueEvent,
-          setValueEvent: this.setValueEvent,
+          setInputterValueEvent: this.props.setInputterValueEvent
         }}
       >
         <InputTag
@@ -183,6 +175,8 @@ function mapStateToProps(state) {
       activeCell: {
         entered,
         location,
+      },
+      inputter: {
         valueEvent,
       },
       rows,
@@ -201,7 +195,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   clearCellData,
-  resetActiveCell,
+  resetInputterValueEvent,
   setCellData,
   setInputterValueEvent,
 }
