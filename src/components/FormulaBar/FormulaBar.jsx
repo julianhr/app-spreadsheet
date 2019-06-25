@@ -16,7 +16,7 @@ const Root = styled.div`
   border-color: ${props => props.theme.colors.table.borderDark};
   position: relative;
   height: 30px;
-  width: 893px;
+  width: 100%;
   z-index: 10;
 `
 

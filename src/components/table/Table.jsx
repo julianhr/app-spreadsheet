@@ -14,12 +14,14 @@ import getKeyboardNavMachine from './keyboardNavMachine'
 const Grid = styled.div`
   display: flex;
   flex-direction: column;
-  width: fit-content;
-  overflow: hidden;
+  width: 100%;
+  height: 60vh;
+  min-height: 300px;
   border-top: 2px solid ${props => props.theme.colors.table.borderDark};
   border-left: 2px solid ${props => props.theme.colors.table.borderDark};
   border-right: 1px solid ${props => props.theme.colors.table.borderDark};
   border-bottom: 1px solid ${props => props.theme.colors.table.borderDark};
+  overflow: scroll;
 
   * {
     box-sizing: border-box;
@@ -42,6 +44,7 @@ export class Table extends React.PureComponent {
 
   keyboardNavMachine = getKeyboardNavMachine(this.props.rows, this.props.columns)
   focusService = interpret(this.keyboardNavMachine)
+  refGrid = React.createRef()
 
   componentDidMount() {
     this.focusService.start()
@@ -64,6 +67,7 @@ export class Table extends React.PureComponent {
 
   handleOnKeyDown(event) {
     event.stopPropagation()
+    event.preventDefault()
 
     const { location } = event.target.dataset
 
@@ -109,6 +113,7 @@ export class Table extends React.PureComponent {
   render() {
     return (
       <Grid
+        ref={this.refGrid}
         data-table='app'
         onClick={this.handleOnClick}
         onKeyDown={this.handleOnKeyDown}
