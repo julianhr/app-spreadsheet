@@ -8,7 +8,6 @@ const style = () => css`
   border: 0;
   display: flex;
   font-size: 13px;
-  height: unset;
   padding: 0 8px;
 `
 const props = {
