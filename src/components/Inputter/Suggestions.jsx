@@ -75,43 +75,67 @@ class Suggestions extends React.PureComponent {
     return [ tokenBefore, tokenCurr, tokenAfter ]
   }
 
+  canSelectFunc(tokenBefore, tokenCurr, tokenAfter) {
+    // =func or =5+func
+    if (
+      tokenBefore
+      && tokenCurr
+      && !tokenAfter
+      && (tokenBefore.type === t.EQUALS || tokenBefore.category === 'operator')
+      && [t.UNKNOWN, t.FUNCTION].includes(tokenCurr.type)
+    ) { return true }
+
+    // =SUM(func or =SUM(func1, func2
+    if (
+      tokenBefore
+      && tokenCurr
+      && !tokenAfter
+      && [t.LPAREN, t.COMMA].includes(tokenBefore.type)
+      && [t.UNKNOWN, t.FUNCTION].includes(tokenCurr.type)
+    ) { return true }
+
+    // =5+func+7 or =func+5
+    if (
+      tokenBefore
+      && tokenCurr
+      && tokenAfter
+      && (tokenBefore.type === t.EQUALS || tokenBefore.category === 'operator')
+      && [t.UNKNOWN, t.FUNCTION].includes(tokenCurr.type)
+      && tokenAfter.category === 'operator'
+    ) { return true }
+
+    // =SUM(func1, func2)
+    if (
+      tokenBefore
+      && tokenCurr
+      && tokenAfter
+      && [t.LPAREN, t.COMMA].includes(tokenBefore.type)
+      && [t.UNKNOWN, t.FUNCTION].includes(tokenCurr.type)
+      && [t.RPAREN, t.COMMA].includes(tokenAfter.type)
+    ) { return true }
+
+    return false
+  }
+
   getFuncSelector() {
     const [ tokenBefore, tokenCurr, tokenAfter ] = this.getCompareTokens()
 
     if (this.props.tokens.length < 2) { return null }
 
-    const option1 = (
-      tokenBefore
-      && tokenCurr
-      && tokenAfter
-      && tokenBefore.category === 'operator'
-      && [t.UNKNOWN, t.FUNCTION].includes(tokenCurr.type)
-      && tokenAfter.type !== t.LPAREN
-    )
-
-    const option2 = (
-      tokenBefore
-      && tokenCurr
-      && !tokenAfter
-      && [t.UNKNOWN, t.FUNCTION].includes(tokenCurr.type)
-    )
-
-    if (option1 || option2) {
-      return (
-        <FuncSelector
-            token={tokenCurr}
-        />
-      )
+    if (this.canSelectFunc(tokenBefore, tokenCurr, tokenAfter)) {
+      return {
+        token: tokenCurr
+      }
     }
   }
 
   render() {
     if (this.props.cursorPos === undefined) { return null }
 
-    const renderedFuncSelector = this.getFuncSelector()
+    const funcSelectorProps = this.getFuncSelector()
 
-    if (renderedFuncSelector) {
-      return renderedFuncSelector
+    if (funcSelectorProps) {
+      return <FuncSelector {...funcSelectorProps} />
     } else {
       return (
         <FuncDescription
