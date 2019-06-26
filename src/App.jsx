@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 import Header from './components/header/Header'
-import Table from './components/table/Table'
-import FloatingInputter from './components/FloatingInputter/FloatingInputter'
 import FormulaBar from './components/FormulaBar/FormulaBar'
+import FloatingInputter from './components/FloatingInputter/FloatingInputter'
+import Table from './components/table/Table'
+import Instructions from './components/Instructions/Instructions'
+
 
 
 const Container = styled.div`
@@ -28,6 +30,7 @@ function App() {
         <Header />
         <FormulaBar />
         <Table />
+        <Instructions />
       </Main>
     </Container>
   )
