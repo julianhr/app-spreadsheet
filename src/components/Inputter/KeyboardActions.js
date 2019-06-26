@@ -22,7 +22,7 @@ class KeyboardActions {
         break
       case 'ArrowLeft':
       case 'ArrowRight':
-        this.c.setInputterValueEvent(
+        this.c.props.setInputterValueEvent(
           this.c.props.valueEvent.value,
           this.c.refInput.current.selectionEnd
         )
