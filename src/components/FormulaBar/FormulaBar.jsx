@@ -62,15 +62,6 @@ class FormulaBar extends React.PureComponent {
     }
   }
 
-  renderInputter() {
-    return (
-      <Inputter
-        isInteractive={this.state.isInteractive}
-        inputTagProps={inputTagProps}
-      />
-    )
-  }
-
   render() {
     return (
       <Root
@@ -79,7 +70,10 @@ class FormulaBar extends React.PureComponent {
         onBlur={this.handleOnBlur}
       >
         <Fx>ƒx</Fx>
-        {this.renderInputter()}
+        <Inputter
+          isInteractive={this.state.isInteractive}
+          inputTagProps={inputTagProps}
+        />
       </Root>
     )
   }

@@ -2,17 +2,17 @@ import Lexer, { TOKENS as t } from '~/formulas/Lexer'
 
 
 class CellValueSetter {
-  constructor(component) {
-    this.c = component
+  constructor(props) {
+    this.props = props
   }
 
   run() {
-    const { location } = this.c.props
-    const inputValue = this.c.props.valueEvent.value
+    const { location } = this.props
+    const inputValue = this.props.valueEvent.value
     let cellValue
 
     if (this.isWhitespace(inputValue)) {
-      this.c.props.clearCellData(location)
+      this.props.clearCellData(location)
       return
     }
 
@@ -22,7 +22,7 @@ class CellValueSetter {
       cellValue = inputValue
     }
 
-    this.c.props.setCellData(location, cellValue)
+    this.props.setCellData(location, cellValue)
   }
 
   isFormula(text) {
@@ -39,16 +39,22 @@ class CellValueSetter {
 
     return tokens
       .map(token => {
-        switch (token.type) {
-          case t.FUNCTION:
-            return token.text.toUpperCase()
-          case t.NUMBER:
-            return token.value
-          default:
-            return token.text
-        }
+        const value = this.getTokenValue(token)
+        const whitespace = token.whitespace >= 1 ? ' ' : ''
+        return whitespace + value
       })
       .join('')
+  }
+
+  getTokenValue(token) {
+    switch (token.type) {
+      case t.FUNCTION:
+        return token.text.toUpperCase()
+      case t.NUMBER:
+        return token.value
+      default:
+        return token.text
+    }
   }
 }
 
