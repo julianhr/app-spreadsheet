@@ -94,7 +94,7 @@ describe('Result', () => {
       const el = document.querySelector(selector)
       jest.spyOn(Result.prototype, 'openFloatingInputter')
       fireEvent.doubleClick(el)
-      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(false, true)
+      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(true)
     })
 
     test('stops event propagation', () => {
@@ -137,7 +137,7 @@ describe('Result', () => {
       jest.spyOn(Result.prototype, 'openFloatingInputter')
 
       fireEvent.keyDown(el, { key: 'a' })
-      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(true, true)
+      expect(Result.prototype.openFloatingInputter).toHaveBeenCalledWith(true, 'a')
     })
   })
 

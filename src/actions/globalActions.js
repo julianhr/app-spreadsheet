@@ -49,10 +49,10 @@ export function setFloatingInputterInteractive(isInteractive) {
   }
 }
 
-export function openFloatingInputter(cellRect, willReplaceValue, isInteractive) {
+export function openFloatingInputter(cellRect, isInteractive, replaceValue) {
   return (dispatch, getState) => {
     const state = getState()
-    const value = willReplaceValue ? '' : state.global.activeCell.entered
+    const value = replaceValue ? replaceValue : state.global.activeCell.entered
 
     dispatch(setInputterValueEvent(value))
 
