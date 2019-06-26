@@ -1,11 +1,6 @@
 class KeyboardActions {
   constructor(component) {
     this.c = component
-    this.disabledKeys = {}
-  }
-
-  get isFuncSelectorVisible() {
-    return this.c.state.isFuncSelectorVisible 
   }
 
   run() {
@@ -14,11 +9,6 @@ class KeyboardActions {
     switch (key) { // eslint-disable-line
       case 'Escape':
         this.c.props.resetInputterValueEvent()
-        break
-      case 'Enter':
-      case 'Tab':
-        if (this.isFuncSelectorVisible) { return }
-        this.c.cellValueSetter.run()
         break
       case 'ArrowLeft':
       case 'ArrowRight':

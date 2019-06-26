@@ -2,13 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { setCellData, clearCellData } from '~/actions/tableDataActions'
 import { setInputterValueEvent, resetInputterValueEvent } from '~/actions/globalActions'
 import { InputContext } from './InputContext'
 import Lexer from '~/formulas/Lexer'
 import KeyboardActions from './KeyboardActions'
 import KeyboardFocuser from './KeyboardFocuser'
-import CellValueSetter from './CellValueSetter'
+import Wrapper from './Wrapper'
 import InputTag from './InputTag'
 import Suggestions from './Suggestions'
 
@@ -21,14 +20,12 @@ export class Inputter extends React.PureComponent {
     // props
     isInteractive: PropTypes.bool,
     // redux
-    clearCellData: PropTypes.func.isRequired,
     columns: PropTypes.number.isRequired,
     entered: PropTypes.string.isRequired,
     inputTagProps: PropTypes.object,
     location: PropTypes.string.isRequired,
     resetInputterValueEvent: PropTypes.func.isRequired,
     rows: PropTypes.number.isRequired,
-    setCellData: PropTypes.func.isRequired,
     setInputterValueEvent: PropTypes.func.isRequired,
     valueEvent: PropTypes.object.isRequired,
     // lifecycle functions
@@ -45,7 +42,6 @@ export class Inputter extends React.PureComponent {
 
   constructor(props) {
     super(props)
-    this.cellValueSetter = new CellValueSetter(this)
     this.handleOnChange = this.handleOnChange.bind(this)
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
     this.keyboardActions = new KeyboardActions(this)
@@ -155,15 +151,20 @@ export class Inputter extends React.PureComponent {
           setInputterValueEvent: this.props.setInputterValueEvent
         }}
       >
-        <InputTag
-          fwdRef={this.refInput}
-          value={this.props.valueEvent.value}
-          style={this.props.inputTagProps.style}
-          props={this.props.inputTagProps.props}
-          onChange={this.handleOnChange}
-          onKeyDown={this.handleOnKeyDown}
-        />
-        {this.renderSuggestions()}
+        <Wrapper
+          location={this.props.location}
+          keyEvent={this.state.keyEvent}
+        >
+          <InputTag
+            fwdRef={this.refInput}
+            props={this.props.inputTagProps.props}
+            style={this.props.inputTagProps.style}
+            value={this.props.valueEvent.value}
+            onChange={this.handleOnChange}
+            onKeyDown={this.handleOnKeyDown}
+          />
+          {this.renderSuggestions()}
+        </Wrapper>
       </InputContext.Provider>
     )
   }
@@ -194,9 +195,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  clearCellData,
   resetInputterValueEvent,
-  setCellData,
   setInputterValueEvent,
 }
 
