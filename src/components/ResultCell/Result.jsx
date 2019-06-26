@@ -49,21 +49,13 @@ export class Result extends React.PureComponent {
 
     const { isInteractive } = this.props.scheduledFloatingInputter
     this.props.unscheduleFloatingInputter()
-    this.openFloatingInputter(false, isInteractive)
+    this.openFloatingInputter(isInteractive)
   }
 
-  openFloatingInputter(willReplaceValue, isInteractive) {
+  openFloatingInputter(isInteractive, replaceValue) {
     const datumRect = this.refDatum.current.getBoundingClientRect()
     const cellRect = JSON.parse(JSON.stringify(datumRect))
-    this.props.openFloatingInputter(cellRect, willReplaceValue, isInteractive)
-  }
-
-  getDatumStyle() {
-    if (this.props.isActive) { return }
-
-    return {
-      border: '2px solid salmon',
-    }
+    this.props.openFloatingInputter(cellRect, isInteractive, replaceValue)
   }
 
   handleOnFocus() {
@@ -76,7 +68,7 @@ export class Result extends React.PureComponent {
 
   handleOnDoubleClick(event) {
     event.stopPropagation()
-    this.openFloatingInputter(false, true)
+    this.openFloatingInputter(true)
   }
 
   handleOnKeyDown({ key }) {
@@ -89,7 +81,7 @@ export class Result extends React.PureComponent {
       // key pressed is a printable symbol, ex: 'a', '1', ','
       // can be further refined, but for now it's fine
     } else if (key.length === 1) {
-      this.openFloatingInputter(true, true)
+      this.openFloatingInputter(true, key)
     }
   }
 

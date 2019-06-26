@@ -11,8 +11,8 @@ Array [
       "top": 0,
       "width": 0,
     },
-    false,
     true,
+    undefined,
   ],
 ]
 `;
