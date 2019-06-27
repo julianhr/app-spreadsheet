@@ -5,6 +5,12 @@ import { parseLocation } from '~/library/utils'
 import getKeyboardNavMachine, { getTargetLocation, focusTargetCell } from '../keyboardNavMachine'
 import { sleep } from '~/library/utils'
 
+function getKeyEvent({ key, shiftKey, altKey, optKey }) {
+  shiftKey = !!shiftKey
+  altKey = !!altKey
+  optKey = !!optKey
+  return { key, shiftKey, altKey, optKey }
+}
 
 describe('keyboardNavMachine', () => {
   const rows = 10
@@ -27,35 +33,36 @@ describe('keyboardNavMachine', () => {
 
   it('parses initial context', () => {
     const location = 'C-7'
-    const key = 'ArrowUp'
-    const state = service.send({ type: 'MOVE_FOCUS', location, key })
-    expect(state.context.key).toEqual(key)
+    const keyEvent = getKeyEvent({ key: 'ArrowUp' })
+    const state = service.send({ type: 'MOVE_FOCUS', location, keyEvent })
+    expect(state.context.keyEvent).toBe(keyEvent)
     expect(state.context.colIndex).toEqual(2)
     expect(state.context.rowIndex).toEqual(6)
   })
 
   it('sets target cell', () => {
     const location = 'C-7'
-    const key = 'ArrowUp'
-    const state = service.send({ type: 'MOVE_FOCUS', location, key })
+    const keyEvent = getKeyEvent({ key: 'ArrowUp' })
+    const state = service.send({ type: 'MOVE_FOCUS', location, keyEvent })
     expect(state.context.endLocation).toEqual('C-6')
   })
 
   it('sets document focus on target cell', async () => {
     const location = 'C-7'
-    const key = 'ArrowUp'
+    const keyEvent = getKeyEvent({ key: 'ArrowUp' })
 
-    service.send({ type: 'MOVE_FOCUS', location, key })
+    service.send({ type: 'MOVE_FOCUS', location, keyEvent })
     await sleep(0)
     expect(service.state.context.wasFocused).toBe(true)
   })
 
   it('does nothing if key is invalid', async (done) => {
-    const keys = ['Tab', 'a', '6', ',']
+    const keys = ['a', '6', ',']
     const location = 'C-7'
 
     for (let key of keys) {
-      service.send({ type: 'MOVE_FOCUS', location, key })
+      const keyEvent = getKeyEvent({ key })
+      service.send({ type: 'MOVE_FOCUS', location, keyEvent })
       await sleep(0)
       expect(service.state.context.wasFocused).toBe(false)
     }
@@ -69,39 +76,44 @@ describe('#getTargetLocation', () => {
   const columns = 26
 
   describe('up', () => {
-    const key = 'ArrowUp'
+    const keyEvent = getKeyEvent({ key: 'ArrowUp' })
 
     it('returns same location if row is first one', () => {
       const location = 'C-1'
       const [colIndex, rowIndex] = parseLocation(location)
-      const context = { rows, columns, key, colIndex, rowIndex }
+      const context = { rows, columns, keyEvent, colIndex, rowIndex }
       expect(getTargetLocation(context)).toEqual(location)
     })
 
     it('returns one row up if row > 0', () => {
       const location = 'C-5'
       const [colIndex, rowIndex] = parseLocation(location)
-      const context = { rows, columns, key, colIndex, rowIndex }
+      const context = { rows, columns, keyEvent, colIndex, rowIndex }
       expect(getTargetLocation(context)).toEqual('C-4')
     })
   })
 
   describe('right', () => {
-    const key = 'ArrowRight'
+    const keyEvents = [
+      { key: 'ArrowRight' },
+      { key: 'Tab' },
+    ]
 
-    it('returns same location if column is last one', () => {
-      const location = 'Z-5'
-      const [colIndex, rowIndex] = parseLocation(location)
-      const context = { rows, columns, key, colIndex, rowIndex }
-      expect(getTargetLocation(context)).toEqual(location)
-    })
-
-    it('returns one column to the right if col < columns - 1', () => {
-      const location = 'C-5'
-      const [colIndex, rowIndex] = parseLocation(location)
-      const context = { rows, columns, key, colIndex, rowIndex }
-      expect(getTargetLocation(context)).toEqual('D-5')
-    })
+    for (let keyEvent of keyEvents) {
+      it('returns same location if column is last one', () => {
+        const location = 'Z-5'
+        const [colIndex, rowIndex] = parseLocation(location)
+        const context = { rows, columns, keyEvent, colIndex, rowIndex }
+        expect(getTargetLocation(context)).toEqual(location)
+      })
+  
+      it('returns one column to the right if col < columns - 1', () => {
+        const location = 'C-5'
+        const [colIndex, rowIndex] = parseLocation(location)
+        const context = { rows, columns, keyEvent, colIndex, rowIndex }
+        expect(getTargetLocation(context)).toEqual('D-5')
+      })
+    }
   })
 
   describe('down', () => {
@@ -111,14 +123,16 @@ describe('#getTargetLocation', () => {
       it('returns same location if row is last one', () => {
         const location = 'C-10'
         const [colIndex, rowIndex] = parseLocation(location)
-        const context = { rows, columns, key, colIndex, rowIndex }
+        const keyEvent = getKeyEvent({ key })
+        const context = { rows, columns, keyEvent, colIndex, rowIndex }
         expect(getTargetLocation(context)).toEqual(location)
       })
   
       it('returns one row down if row < rows - 1', () => {
         const location = 'C-5'
         const [colIndex, rowIndex] = parseLocation(location)
-        const context = { rows, columns, key, colIndex, rowIndex }
+        const keyEvent = getKeyEvent({ key })
+        const context = { rows, columns, keyEvent, colIndex, rowIndex }
         expect(getTargetLocation(context)).toEqual('C-6')
       })
     }
@@ -127,21 +141,26 @@ describe('#getTargetLocation', () => {
   })
 
   describe('left', () => {
-    const key = 'ArrowLeft'
+    const keyEvents = [
+      { key: 'ArrowLeft' },
+      { key: 'Tab', shiftKey: true, },
+    ]
 
-    it('returns same location if column is first one', () => {
-      const location = 'A-5'
-      const [colIndex, rowIndex] = parseLocation(location)
-      const context = { rows, columns, key, colIndex, rowIndex }
-      expect(getTargetLocation(context)).toEqual(location)
-    })
-
-    it('returns one column to the left if col > 0', () => {
-      const location = 'C-5'
-      const [colIndex, rowIndex] = parseLocation(location)
-      const context = { rows, columns, key, colIndex, rowIndex }
-      expect(getTargetLocation(context)).toEqual('B-5')
-    })
+    for (let keyEvent of keyEvents) {
+      it('returns same location if column is first one', () => {
+        const location = 'A-5'
+        const [colIndex, rowIndex] = parseLocation(location)
+        const context = { rows, columns, keyEvent, colIndex, rowIndex }
+        expect(getTargetLocation(context)).toEqual(location)
+      })
+  
+      it('returns one column to the left if col > 0', () => {
+        const location = 'C-5'
+        const [colIndex, rowIndex] = parseLocation(location)
+        const context = { rows, columns, keyEvent, colIndex, rowIndex }
+        expect(getTargetLocation(context)).toEqual('B-5')
+      })
+    }
   })
 })
 
