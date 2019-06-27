@@ -11,9 +11,15 @@ import { ROW_HEADER_WIDTH } from '../cell/RowHeader'
 const Row = styled.div`
   display: flex;
   width: fit-content;
+  position: sticky;
+  top: 0;
 `
 
 const InnerBorder = styled.div`
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
