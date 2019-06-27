@@ -6,7 +6,7 @@ exports[`ColHeaderRow matches snapshot 1`] = `
   data-row="header"
 >
   <div
-    class="css-10tzczs-InnerBorder eft810l1"
+    class="css-3294vg-InnerBorder eft810l1"
   />
   <div
     class="col-label-height css-bow3c7-Root-ColHeader e11zdtao0"
