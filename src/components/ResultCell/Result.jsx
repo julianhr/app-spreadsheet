@@ -91,11 +91,11 @@ export class Result extends React.PureComponent {
         fwdRef={this.refDatum}
         location={this.props.location}
         result={this.props.result}
+        isActive={this.props.isActive}
         onClick={this.handleOnClick}
         onDoubleClick={this.handleOnDoubleClick}
         onFocus={this.handleOnFocus}
         onKeyDown={this.handleOnKeyDown}
-        isActive={this.props.isActive}
       />
     )
   }

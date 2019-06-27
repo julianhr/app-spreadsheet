@@ -3,23 +3,19 @@ import { Machine, assign } from 'xstate'
 import { parseLocation, getColumnLabel } from '~/library/utils'
 
 
-function getTargetLocation({ rows, columns, rowIndex, colIndex, key }) {
-  switch (key) {
-    case 'ArrowUp':
-      rowIndex = Math.max(0, rowIndex - 1)
-      break
-    case 'ArrowRight':
-      colIndex = Math.min(columns - 1, colIndex + 1)
-      break
-    case 'ArrowDown':
-    case 'Enter':
-      rowIndex = Math.min(rows - 1, rowIndex + 1)
-      break
-    case 'ArrowLeft':
-      colIndex = Math.max(0, colIndex - 1)
-      break
-    default:
-      return null
+function getTargetLocation({ rows, columns, rowIndex, colIndex, keyEvent }) {
+  const { key, altKey, ctrlKey, shiftKey } = keyEvent // eslint-disable-line
+
+  if (key === 'ArrowUp') {
+    rowIndex = Math.max(0, rowIndex - 1)
+  } else if (key === 'ArrowRight' || (key === 'Tab' && !shiftKey)) {
+    colIndex = Math.min(columns - 1, colIndex + 1)
+  } else if (['ArrowDown', 'Enter'].includes(key)) {
+    rowIndex = Math.min(rows - 1, rowIndex + 1)
+  } else if (key === 'ArrowLeft' || (key === 'Tab' && shiftKey)) {
+    colIndex = Math.max(0, colIndex - 1)
+  } else {
+    return null
   }
 
   const colLabel = getColumnLabel(colIndex)
@@ -47,7 +43,7 @@ const state = {
   context: {
     columns: null,
     rows: null,
-    key: null,
+    keyEvent: null,
     colIndex: null,
     rowIndex: null,
     endLocation: null,
@@ -76,9 +72,9 @@ const state = {
 
 const actions = {
   actions: {
-    setNewContext: assign((ctx, { key, location }) => {
+    setNewContext: assign((ctx, { keyEvent, location }) => {
       const [colIndex, rowIndex] = parseLocation(location)
-      return { colIndex, rowIndex, key }
+      return { colIndex, rowIndex, keyEvent }
     }),
     calcTargetLocation: assign({
       endLocation: (ctx) => {

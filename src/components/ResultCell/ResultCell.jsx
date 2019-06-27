@@ -35,9 +35,9 @@ class ResultCell extends React.PureComponent {
 
     return (
       <OutterBorder
+        location={location}
         onClick={this.handleOnClick}
         onDoubleClick={this.handleOnDoubleClick}
-        location={location}
       >
         <Result
           location={location}

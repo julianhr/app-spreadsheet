@@ -72,12 +72,14 @@ export class Table extends React.PureComponent {
     const { location } = event.target.dataset
 
     if (location) {
-      this.moveFocus(event.key, event.target.dataset.location)
+      this.moveFocus(event, event.target.dataset.location)
     }
   }
 
-  moveFocus(key, location) {
-    this.focusService.send({ type: 'MOVE_FOCUS', key, location })
+  moveFocus(event, location) {
+    const { key, altKey, ctrlKey, shiftKey } = event
+    const keyEvent = { key, altKey, ctrlKey, shiftKey }
+    this.focusService.send({ type: 'MOVE_FOCUS', keyEvent, location })
   }
 
   renderColHeaderRow(i) {
