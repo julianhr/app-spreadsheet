@@ -6,11 +6,11 @@ exports[`Table functional tests matches snapshot 1`] = `
   data-table="app"
 >
   <div
-    class="css-g0yt5d-Row eft810l0"
+    class="css-wkndpb-Row eft810l0"
     data-row="header"
   >
     <div
-      class="css-1xasddq-InnerBorder eft810l1"
+      class="css-10tzczs-InnerBorder eft810l1"
     />
     <div
       class="col-label-height css-bow3c7-Root-ColHeader e11zdtao0"
@@ -38,7 +38,7 @@ exports[`Table functional tests matches snapshot 1`] = `
     data-row="1"
   >
     <div
-      class="row-header-width css-1v1t8nu-Root e1d5mcq00"
+      class="row-header-width css-kuen0s-Root e1d5mcq00"
       data-row="1"
     >
       1
@@ -75,7 +75,7 @@ exports[`Table functional tests matches snapshot 1`] = `
     data-row="2"
   >
     <div
-      class="row-header-width css-1v1t8nu-Root e1d5mcq00"
+      class="row-header-width css-kuen0s-Root e1d5mcq00"
       data-row="2"
     >
       2

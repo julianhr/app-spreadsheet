@@ -13,7 +13,8 @@ import { debounce, clamp } from '~/library/utils'
 export const ROW_HEADER_WIDTH = 50
 
 const Root = styled.div`
-  position: relative;
+  position: sticky;
+  left: 0;
   font-size: 12px;
   display: flex;
   align-items: center;
