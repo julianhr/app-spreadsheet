@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import Header from './components/header/Header'
 import FormulaBar from './components/FormulaBar/FormulaBar'
 import FloatingInputter from './components/FloatingInputter/FloatingInputter'
-import Table from './components/table/Table'
+import Table from './components/Table/Table'
 import Instructions from './components/Instructions/Instructions'
 
 
