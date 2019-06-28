@@ -43,7 +43,7 @@ export class Inputter extends React.PureComponent {
   constructor(props) {
     super(props)
     this.handleOnChange = this.handleOnChange.bind(this)
-    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
+    this.handleOnKeyUp = this.handleOnKeyUp.bind(this)
     this.keyboardActions = new KeyboardActions(this)
     this.keyboardFocuser = new KeyboardFocuser(this)
     this.setInputWidth = this.setInputWidth.bind(this)
@@ -110,20 +110,27 @@ export class Inputter extends React.PureComponent {
     }
   }
 
-  handleOnChange(event) {
-    const { target: { value } } = event
-    const cursorPos = event.target.selectionStart
-    this.props.setInputterValueEvent(value, cursorPos)
+  setValueEvent(event) {
+    const { target: { value, selectionStart } } = event
+    this.props.setInputterValueEvent(value, selectionStart)
   }
 
-  handleOnKeyDown(event) {
-    const { key } = event
+  setKeyEvent(event) {
+    const { key, target: { selectionStart: cursorPos } } = event
+    const keyEvent = { key, cursorPos }
+    this.setState({ keyEvent })
+  }
 
-    if (this.state.isFuncSelectorVisible && ['Tab', 'Enter'].includes(key)) {
+  handleOnChange(event) {
+    this.setValueEvent(event)
+  }
+
+  handleOnKeyUp(event) {
+    if (this.state.isFuncSelectorVisible && ['Tab', 'Enter'].includes(event.target.key)) {
       event.preventDefault()
     }
 
-    this.setState({ keyEvent: { key } })
+    this.setKeyEvent(event)
   }
 
   renderSuggestions() {
@@ -132,7 +139,7 @@ export class Inputter extends React.PureComponent {
     return (
       <Suggestions
         tokens={this.state.tokens}
-        cursorPos={this.props.valueEvent.cursorPos}
+        cursorPos={this.state.keyEvent.cursorPos}
       />
     )
   }
@@ -161,7 +168,7 @@ export class Inputter extends React.PureComponent {
             style={this.props.inputTagProps.style}
             value={this.props.valueEvent.value}
             onChange={this.handleOnChange}
-            onKeyDown={this.handleOnKeyDown}
+            onKeyUp={this.handleOnKeyUp}
           />
           {this.renderSuggestions()}
         </Wrapper>

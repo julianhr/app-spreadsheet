@@ -42,7 +42,7 @@ class Suggestions extends React.PureComponent {
         stack.pop()
         if (stack.length > 0 && stack[stack.length - 1] !== '(') {
           const scope = stack.pop()
-          scope.endIndex = token.index - 1
+          scope.endIndex = token.index
         }
       }
     }

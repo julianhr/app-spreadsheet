@@ -61,7 +61,7 @@ class FuncDescription extends React.PureComponent {
     }
 
     if (currScope && currScope.endIndex === null) { return currScope}
-    if (currScope && cursorPos - 1 < currScope.endIndex) { return currScope }
+    if (currScope && cursorPos <= currScope.endIndex) { return currScope }
     return null
   }
 
