@@ -114,15 +114,6 @@ class ColHeader extends React.PureComponent {
     document.addEventListener('mousemove', this.handleDocumentMouseMove)
     document.addEventListener('mouseup', this.handleDocumentMouseUp)
   }
-  
-  // handleBtnWidthOnMouseMove(event) {
-  //   if (!this.state.isSettingWidth) { return }
-  //   document.addEventListener('mousemove', (event) => {
-
-  //   })
-  //   const { pageX, pageY } = event
-  //   console.log('handle', pageX, pageY)
-  // }
 
   render() {
     const { label, width } = this.props

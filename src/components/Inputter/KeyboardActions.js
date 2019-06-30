@@ -6,17 +6,14 @@ class KeyboardActions {
   run() {
     const { key } = this.c.state.keyEvent
 
-    switch (key) { // eslint-disable-line
-      case 'Escape':
-        this.c.props.resetInputterValueEvent()
-        break
-      case 'ArrowLeft':
-      case 'ArrowRight':
-        this.c.props.setInputterValueEvent(
-          this.c.props.valueEvent.value,
-          this.c.refInput.current.selectionEnd
-        )
-        break
+    if (key === 'Escape') {
+      this.c.props.resetInputterValueEvent()
+      this.c.props.onEscape()
+    } else if (['ArrowLeft', 'ArrowRight'].includes(key)) {
+      this.c.props.setInputterValueEvent(
+        this.c.props.valueEvent.value,
+        this.c.refInput.current.selectionEnd
+      )
     }
   }
 }
