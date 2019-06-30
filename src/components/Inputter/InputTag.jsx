@@ -12,14 +12,14 @@ export const Input = styled.input`
   z-index: 100;
 `
 
-function InputTag({ fwdRef, value, style, props, onChange, onKeyUp }) {
+function InputTag({ fwdRef, value, style, props, onChange, onKeyDown }) {
   return (
     <Input
       ref={fwdRef}
       css={style}
       value={value}
       onChange={onChange}
-      onKeyUp={onKeyUp}
+      onKeyDown={onKeyDown}
       {...props}
     />
   )
@@ -28,7 +28,7 @@ function InputTag({ fwdRef, value, style, props, onChange, onKeyUp }) {
 InputTag.propTypes = {
   fwdRef: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
-  onKeyUp: PropTypes.func.isRequired,
+  onKeyDown: PropTypes.func.isRequired,
   props: PropTypes.object,
   style: PropTypes.oneOfType([
     PropTypes.object,

@@ -40,10 +40,11 @@ function Wrapper(props) {
 Wrapper.propTypes = {
   children: PropTypes.any,
   clearCellData: PropTypes.func.isRequired,
+  keyEvent: PropTypes.object.isRequired,
   location: PropTypes.string.isRequired,
+  onCommit: PropTypes.func,
   setCellData: PropTypes.func.isRequired,
   valueEvent: PropTypes.object.isRequired,
-  keyEvent: PropTypes.object.isRequired,
 }
 
 function mapStateToProps(state) {

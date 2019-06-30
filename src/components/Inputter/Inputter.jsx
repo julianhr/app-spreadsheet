@@ -29,21 +29,23 @@ export class Inputter extends React.PureComponent {
     setInputterValueEvent: PropTypes.func.isRequired,
     valueEvent: PropTypes.object.isRequired,
     // lifecycle functions
+    onCommit: PropTypes.func,
+    onEscape: PropTypes.func,
     onMount: PropTypes.func,
-    onUnmount: PropTypes.func,
   }
 
   static defaultProps = {
-    onMount: NoOp,
-    onUnmount: NoOp,
-    isInteractive: false,
     inputTagProps: {},
+    isInteractive: false,
+    onCommit: NoOp,
+    onEscape: NoOp,
+    onMount: NoOp,
   }
 
   constructor(props) {
     super(props)
     this.handleOnChange = this.handleOnChange.bind(this)
-    this.handleOnKeyUp = this.handleOnKeyUp.bind(this)
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
     this.keyboardActions = new KeyboardActions(this)
     this.keyboardFocuser = new KeyboardFocuser(this)
     this.setInputWidth = this.setInputWidth.bind(this)
@@ -64,19 +66,15 @@ export class Inputter extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.keyEvent !== this.state.keyEvent) {
-      this.keyboardFocuser.run()
-      this.keyboardActions.run()
-    }
-
     if (prevProps.valueEvent !== this.props.valueEvent) {
       this.focusInputTag()
       this.tokenizeInputValue()
     }
-  }
-
-  componentWillUnmount() {
-    this.props.onMount(this.props, this.state, this.refInput.current)
+    
+    if (prevState.keyEvent !== this.state.keyEvent) {
+      this.keyboardActions.run()
+      this.keyboardFocuser.run()
+    }
   }
 
   setInputWidth(width) {
@@ -116,20 +114,29 @@ export class Inputter extends React.PureComponent {
   }
 
   setKeyEvent(event) {
-    const { key, target: { selectionStart: cursorPos } } = event
-    const keyEvent = { key, cursorPos }
-    this.setState({ keyEvent })
+    const { key, altKey, ctrlKey, shiftKey, metaKey } = event
+
+    setTimeout(() => {
+      const input = this.refInput.current
+      const cursorPos = input.selectionStart
+      const keyEvent = { key, altKey, ctrlKey, shiftKey, metaKey, cursorPos }
+
+      this.setState({ keyEvent })
+    }, 0)
+  }
+
+  keyDownEventBehavior(event) {
+    if (['Tab', 'Enter'].includes(event.key)) {
+      event.preventDefault()
+    }
   }
 
   handleOnChange(event) {
     this.setValueEvent(event)
   }
 
-  handleOnKeyUp(event) {
-    if (this.state.isFuncSelectorVisible && ['Tab', 'Enter'].includes(event.target.key)) {
-      event.preventDefault()
-    }
-
+  handleOnKeyDown(event) {
+    this.keyDownEventBehavior(event)
     this.setKeyEvent(event)
   }
 
@@ -161,6 +168,7 @@ export class Inputter extends React.PureComponent {
         <Wrapper
           location={this.props.location}
           keyEvent={this.state.keyEvent}
+          onCommit={this.props.onCommit}
         >
           <InputTag
             fwdRef={this.refInput}
@@ -168,7 +176,7 @@ export class Inputter extends React.PureComponent {
             style={this.props.inputTagProps.style}
             value={this.props.valueEvent.value}
             onChange={this.handleOnChange}
-            onKeyUp={this.handleOnKeyUp}
+            onKeyDown={this.handleOnKeyDown}
           />
           {this.renderSuggestions()}
         </Wrapper>

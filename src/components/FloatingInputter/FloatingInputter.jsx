@@ -9,10 +9,7 @@ import { closeFloatingInputter, setFloatingInputterInteractive } from '~/actions
 import inputTagProps from './inputTagProps'
 import Inputter from '../Inputter/Inputter'
 import InputSizer from './InputSizer'
-import KeyboardFocuser from './KeyboardFocuser'
 
-
-const INIT_KEY_EVENT = { key: '' }
 
 const Root = styled.div`
   position: fixed;
@@ -37,28 +34,18 @@ export class FloatingInputter extends React.PureComponent {
     isInputterOpen: false,
   }
 
-  constructor() {
-    super()
-    this.handleInputterOnMount = this.handleInputterOnMount.bind(this)
-    this.handleOnBlur = this.handleOnBlur.bind(this)
+  constructor(props) {
+    super(props)
     this.handleOnFocus = this.handleOnFocus.bind(this)
-    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
-    this.keyboardFocuser = new KeyboardFocuser(this)
+    this.handleOnMount = this.handleOnMount.bind(this)
     this.setInputWidth = this.setInputWidth.bind(this)
   }
 
   state = {
-    keyEvent: INIT_KEY_EVENT,
     width: 'auto',
   }
 
   refRoot = React.createRef()
-
-  componentDidUpdate() {
-    if (this.props.inputter.isInteractive) {
-      this.keyboardFocuser.run()
-    }
-  }
 
   setInputWidth(width) {
     if (this.state.width !== width) {
@@ -66,28 +53,16 @@ export class FloatingInputter extends React.PureComponent {
     }
   }
 
-  handleInputterOnMount(props, state, inputEl) {
+  handleOnMount(props, state, inputEl) {
     if (this.props.inputter.isInteractive) {
       inputEl.focus()
       inputEl.selectionEnd = inputEl.value.length
     }
-    this.setState({ keyEvent: INIT_KEY_EVENT })
-  }
-
-  handleOnKeyDown(event) {
-    const { key } = event
-    this.setState({ keyEvent: { key } })
   }
 
   handleOnFocus() {
     if (!this.props.inputter.isInteractive) {
       this.props.setFloatingInputterInteractive(true)
-    }
-  }
-
-  handleOnBlur(event) {
-    if (!this.refRoot.current.contains(event.relatedTarget)) {
-      this.props.closeFloatingInputter()
     }
   }
 
@@ -99,22 +74,22 @@ export class FloatingInputter extends React.PureComponent {
 
     return (
       <Root
-        ref={this.refRoot}
         css={{ top, left, width, height }}
-        onKeyDown={this.handleOnKeyDown}
         onFocus={this.handleOnFocus}
-        onBlur={this.handleOnBlur}
+        ref={this.refRoot}
       >
         <InputSizer
-          valueEvent={this.props.valueEvent}
           cellRect={this.props.cellRect}
           setInputWidth={this.setInputWidth}
           style={inputTagProps.style}
+          valueEvent={this.props.valueEvent}
         />
         <Inputter
-          isInteractive={this.props.inputter.isInteractive}
-          onMount={this.handleInputterOnMount}
           inputTagProps={inputTagProps}
+          isInteractive={this.props.inputter.isInteractive}
+          onCommit={this.props.closeFloatingInputter}
+          onEscape={this.props.closeFloatingInputter}
+          onMount={this.handleOnMount}
         />
       </Root>
     )

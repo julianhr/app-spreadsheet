@@ -7,56 +7,75 @@ class KeyboardFocuser {
   }
 
   run() {
-    const { key } = this.c.state.keyEvent
     const { location } = this.c.props
-    let elementId
+    let elQry
 
     if (this.c.state.isFuncSelectorVisible) {
-      elementId = this.funcSelectorElId(key, location)
+      elQry = this.funcSelectorElQry(location)
     } else {
-      elementId = this.defaultElId(key, location)
+      elQry = this.defaultElQry(location)
     }
 
-    this.focusElement(elementId)
+    this.focusElement(elQry)
   }
 
-  funcSelectorElId(key, location) {
+  funcSelectorElQry(location) {
+    const { key } = this.c.state.keyEvent
+
     if (key === 'Escape') {
-      return `[data-cell="result"][data-location="${location}"]`
+      return this.resultCellQry(location)
     }
   }
 
-  defaultElId(key, location) {
-    switch (key) {
-      case 'Tab':
-        return `[data-cell="result"][data-location="${location}"]`
-      case 'Enter':
-        return this.defaultEnter(location)
-      case 'Escape':
-        return `[data-cell="result"][data-location="${location}"]`
-      default:
-        // this.c.refInput.current.focus()
+  defaultElQry(location) {
+    const { key, shiftKey } = this.c.state.keyEvent
+
+    if (key === 'Escape') {
+      return this.resultCellQry(location)
+    } else if (key === 'Tab' && shiftKey) {
+      return this.left(location)
+    } else if (key === 'Tab') {
+      return this.right(location)
+    } else if (key === 'Enter') {
+      return this.down(location)
     }
   }
 
-  defaultEnter(location) {
+  left(location) {
+    const [colIndex, rowIndex] = parseLocation(location)
+    const nextColIndex = Math.max(0, colIndex - 1)
+    const colLabel = getColumnLabel(nextColIndex)
+    const rowLabel = '' + (rowIndex + 1)
+    const endLocation = `${colLabel}-${rowLabel}`
+    return this.resultCellQry(endLocation)
+  }
+
+  right(location) {
+    const [colIndex, rowIndex] = parseLocation(location)
+    const nextColIndex = Math.min(this.c.props.columns - 1, colIndex + 1)
+    const colLabel = getColumnLabel(nextColIndex)
+    const rowLabel = '' + (rowIndex + 1)
+    const endLocation = `${colLabel}-${rowLabel}`
+    return this.resultCellQry(endLocation)
+  }
+
+  down(location) {
     const [colIndex, rowIndex] = parseLocation(location)
     const nextRowIndex = Math.min(this.c.props.rows - 1, rowIndex + 1)
     const colLabel = getColumnLabel(colIndex)
     const rowLabel = '' + (nextRowIndex + 1)
     const endLocation = `${colLabel}-${rowLabel}`
-
-    return `[data-cell="result"][data-location="${endLocation}"]`
+    return this.resultCellQry(endLocation)
   }
 
-  focusElement(id) {
-    if (!id) { return }
+  resultCellQry(location) {
+    return `[data-cell="result"][data-location="${location}"]`
+  }
 
-    const el = document.querySelector(id)
-
-    if (document.activeElement !== el) {
-      el.focus()
-    }
+  focusElement(elQry) {
+    if (!elQry) { return }
+    const el = document.querySelector(elQry)
+    el.focus()
   }
 }
 
