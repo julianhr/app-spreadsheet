@@ -83,10 +83,10 @@ class ColHeader extends React.PureComponent {
     `
   }
 
-  debSetColWidth = debounce(40, (event) => {
+  debSetColWidth = debounce((event) => {
     const delta = event.pageX - this.state.pageX
     this.setState({ btnRight: delta, })
-  })
+  }, 40)
 
   handleDocumentMouseMove(event) {
     this.debSetColWidth(event)

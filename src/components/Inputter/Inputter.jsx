@@ -7,6 +7,7 @@ import { InputContext } from './InputContext'
 import Lexer from '~/formulas/Lexer'
 import KeyboardActions from './KeyboardActions'
 import KeyboardFocuser from './KeyboardFocuser'
+import History from './History'
 import Wrapper from './Wrapper'
 import InputTag from './InputTag'
 import Suggestions from './Suggestions'
@@ -60,18 +61,26 @@ export class Inputter extends React.PureComponent {
   }
 
   refInput = React.createRef()
+  history = new History(this, 20, 150)
 
   componentDidMount() {
     this.props.onMount(this.props, this.state, this.refInput.current)
+    this.history.reset()
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevProps.location !== this.props.location) {
+      this.history.reset()
+    }
+
     if (prevProps.valueEvent !== this.props.valueEvent) {
       this.focusInputTag()
       this.tokenizeInputValue()
+      this.history.push(this.props.valueEvent)
     }
     
     if (prevState.keyEvent !== this.state.keyEvent) {
+      this.history.keyAction()
       this.keyboardActions.run()
       this.keyboardFocuser.run()
     }
@@ -116,6 +125,7 @@ export class Inputter extends React.PureComponent {
   setKeyEvent(event) {
     const { key, altKey, ctrlKey, shiftKey, metaKey } = event
 
+    // important so the correct cursor position is captured
     setTimeout(() => {
       const input = this.refInput.current
       const cursorPos = input.selectionStart
@@ -126,7 +136,10 @@ export class Inputter extends React.PureComponent {
   }
 
   keyDownEventBehavior(event) {
-    if (['Tab', 'Enter'].includes(event.key)) {
+    const { key, metaKey, ctrlKey } = event
+    if (['Tab', 'Enter'].includes(key)) {
+      event.preventDefault()
+    } else if (key === 'z' && (metaKey || ctrlKey)) {
       event.preventDefault()
     }
   }

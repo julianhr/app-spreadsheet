@@ -104,18 +104,26 @@ export function isNumber(numStr) {
   return true
 }
 
-export function debounce(time, fn) {
+export function debounce(fn, wait, isImmediate=true) {
   let timeout
 
   return (...args) => {
-    if (timeout) { return }
+    if (isImmediate) {
+      if (timeout) { return }
 
-    fn(...args)
+      fn(...args)
 
-    timeout = setTimeout(() => {
-      clearTimeout(timeout)
-      timeout = null
-    }, time)
+      timeout = setTimeout(() => {
+        clearTimeout(timeout)
+        timeout = null
+      }, wait)
+    } else {
+      clearInterval(timeout)
+
+      timeout = setTimeout(() => {
+        fn(...args)
+        timeout = null
+      }, wait)
+    }
   }
 }
-
