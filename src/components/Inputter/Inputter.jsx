@@ -137,6 +137,7 @@ export class Inputter extends React.PureComponent {
 
   keyDownEventBehavior(event) {
     const { key, metaKey, ctrlKey } = event
+
     if (['Tab', 'Enter'].includes(key)) {
       event.preventDefault()
     } else if (key === 'z' && (metaKey || ctrlKey)) {

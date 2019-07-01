@@ -25,6 +25,7 @@ function Wrapper(props) {
 
   function handleOnBlur(event) {
     setNewCellValue(event)
+    props.onCommit()
   }
 
   return (

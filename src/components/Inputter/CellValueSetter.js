@@ -23,7 +23,6 @@ class CellValueSetter {
     }
 
     this.props.setCellData(location, cellValue)
-    this.props.onCommit()
   }
 
   isFormula(text) {
