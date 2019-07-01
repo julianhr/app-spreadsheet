@@ -100,10 +100,10 @@ class RowHeader extends React.PureComponent {
     `
   }
 
-  debSetRowHeight = debounce(40, (event) => {
+  debSetRowHeight = debounce((event) => {
     const delta = event.pageY - this.state.pageY
     this.setState({ btnBottom: delta, })
-  })
+  }, 40)
 
   handleDocumentMouseMove(event) {
     this.debSetRowHeight(event)
