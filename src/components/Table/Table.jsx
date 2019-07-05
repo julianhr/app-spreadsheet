@@ -8,7 +8,8 @@ import { setActiveCell } from '~/actions/globalActions'
 import ColHeaderRow from './ColHeaderRow'
 import DataRow from './DataRow'
 import { getColumnNames } from '~/library/utils'
-import getKeyboardNavMachine from './keyboardNavMachine'
+import getKeyboardFocusMachine from './keyboardFocusMachine'
+import history from '../Table/TableHistory/TableHistory'
 
 
 const Grid = styled.div`
@@ -42,18 +43,18 @@ export class Table extends React.PureComponent {
     this.colLabels = getColumnNames(props.columns)
   }
 
-  keyboardNavMachine = getKeyboardNavMachine(this.props.rows, this.props.columns)
-  focusService = interpret(this.keyboardNavMachine)
+  keyboardFocusMachine = getKeyboardFocusMachine(this.props.rows, this.props.columns)
+  keyboardFocusService = interpret(this.keyboardFocusMachine)
   refGrid = React.createRef()
 
   componentDidMount() {
-    this.focusService.start()
+    this.keyboardFocusService.start()
     this.props.setActiveCell('A-1')
     this.focusA_1()
   }
 
   componentWillUnmount() {
-    this.focusService.stop()
+    this.keyboardFocusService.stop()
   }
 
   focusA_1() {
@@ -69,17 +70,28 @@ export class Table extends React.PureComponent {
     event.stopPropagation()
     event.preventDefault()
 
-    const { location } = event.target.dataset
+    this.keyListenerService(event)
+    this.focusService(event)
+  }
 
-    if (location) {
-      this.moveFocus(event, event.target.dataset.location)
+  keyListenerService(event) {
+    const { key, shiftKey, metaKey, ctrlKey } = event
+    
+    if (key === 'z' && shiftKey && (metaKey || ctrlKey)) {
+      history.redo()
+    } else if (key === 'z' && (metaKey || ctrlKey)) {
+      history.undo()
     }
   }
 
-  moveFocus(event, location) {
+  focusService(event) {
+    const { location } = event.target.dataset
+
+    if (!location) { return }
+
     const { key, altKey, ctrlKey, shiftKey } = event
     const keyEvent = { key, altKey, ctrlKey, shiftKey }
-    this.focusService.send({ type: 'MOVE_FOCUS', keyEvent, location })
+    this.keyboardFocusService.send({ type: 'MOVE_FOCUS', keyEvent, location })
   }
 
   renderColHeaderRow(i) {

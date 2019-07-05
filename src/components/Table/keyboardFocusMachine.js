@@ -84,7 +84,7 @@ const actions = {
   },
 }
 
-function getKeyboardNavMachine(rows, columns) {
+function getKeyboardFocusMachine(rows, columns) {
   const newContext = {
     ...state.context,
     columns,
@@ -101,4 +101,4 @@ export {
   focusTargetCell,
 }
 
-export default getKeyboardNavMachine
+export default getKeyboardFocusMachine
