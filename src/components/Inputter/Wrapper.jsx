@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { connect } from 'react-redux'
 
-import { setCellData, clearCellData } from '~/actions/tableDataActions'
+import { setCellData } from '~/actions/tableDataActions'
 import CellValueSetter from './CellValueSetter'
 
 
@@ -40,7 +40,7 @@ function Wrapper(props) {
 
 Wrapper.propTypes = {
   children: PropTypes.any,
-  clearCellData: PropTypes.func.isRequired,
+  entered: PropTypes.string.isRequired,
   keyEvent: PropTypes.object.isRequired,
   location: PropTypes.string.isRequired,
   onCommit: PropTypes.func,
@@ -63,7 +63,6 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  clearCellData,
   setCellData,
 }
 

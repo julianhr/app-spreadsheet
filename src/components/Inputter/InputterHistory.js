@@ -1,7 +1,7 @@
 import { debounce } from '~/library/utils'
 
 
-class History {
+class InputterHistory {
   constructor(component, maxLen, wait) {
     this.c = component
     this.maxLen = maxLen
@@ -87,4 +87,4 @@ class History {
   }
 }
 
-export default History
+export default InputterHistory

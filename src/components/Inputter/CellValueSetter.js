@@ -1,5 +1,6 @@
 import Lexer, { TOKENS as t } from '~/formulas/Lexer'
 import graph from '~/formulas/graph'
+import history from '../Table/TableHistory/TableHistory'
 
 
 class CellValueSetter {
@@ -13,7 +14,11 @@ class CellValueSetter {
     let cellValue
 
     if (this.isWhitespace(inputValue)) {
-      graph.delVertex(location)
+      if (this.props.entered.length > 0) {
+        history.push('clear', location)
+        graph.delVertex(location)
+      }
+
       return
     }
 
@@ -23,7 +28,9 @@ class CellValueSetter {
       cellValue = inputValue
     }
 
-    graph.addVertex(location, cellValue)
+    const oldVertex = graph.adj[location]
+    const newVertex = graph.addVertex(location, cellValue)
+    history.push('add', location, oldVertex, newVertex)
   }
 
   isFormula(text) {

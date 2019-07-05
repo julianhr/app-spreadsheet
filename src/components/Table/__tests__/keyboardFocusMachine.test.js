@@ -2,7 +2,7 @@ import React from 'react'
 import { interpret } from 'xstate'
 
 import { parseLocation } from '~/library/utils'
-import getKeyboardNavMachine, { getTargetLocation, focusTargetCell } from '../keyboardNavMachine'
+import getKeyboardFocusMachine, { getTargetLocation, focusTargetCell } from '../keyboardFocusMachine'
 import { sleep } from '~/library/utils'
 
 function getKeyEvent({ key, shiftKey, altKey, optKey }) {
@@ -12,13 +12,13 @@ function getKeyEvent({ key, shiftKey, altKey, optKey }) {
   return { key, shiftKey, altKey, optKey }
 }
 
-describe('keyboardNavMachine', () => {
+describe('keyboardFocusMachine', () => {
   const rows = 10
   const columns = 26
   let service
 
   beforeEach(() => {
-    const machine = getKeyboardNavMachine(rows, columns)
+    const machine = getKeyboardFocusMachine(rows, columns)
     service = interpret(machine)
     service.start()
   })

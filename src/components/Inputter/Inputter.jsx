@@ -7,7 +7,7 @@ import { InputContext } from './InputContext'
 import Lexer from '~/formulas/Lexer'
 import KeyboardActions from './KeyboardActions'
 import KeyboardFocuser from './KeyboardFocuser'
-import History from './History'
+import InputterHistory from './InputterHistory'
 import Wrapper from './Wrapper'
 import InputTag from './InputTag'
 import Suggestions from './Suggestions'
@@ -61,7 +61,7 @@ export class Inputter extends React.PureComponent {
   }
 
   refInput = React.createRef()
-  history = new History(this, 20, 150)
+  history = new InputterHistory(this, 20, 150)
 
   componentDidMount() {
     this.props.onMount(this.props, this.state, this.refInput.current)
@@ -180,8 +180,9 @@ export class Inputter extends React.PureComponent {
         }}
       >
         <Wrapper
-          location={this.props.location}
+          entered={this.props.entered}
           keyEvent={this.state.keyEvent}
+          location={this.props.location}
           onCommit={this.props.onCommit}
         >
           <InputTag

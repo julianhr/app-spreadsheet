@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import graph from '~/formulas/graph'
+import history from '../Table/TableHistory/TableHistory'
 
 import { unscheduleFloatingInputter } from '~/actions/globalActions'
 import { openFloatingInputter, setActiveCell } from '~/actions/globalActions'
@@ -37,8 +38,11 @@ export class Result extends React.PureComponent {
     this.refDatum = props.fwdRef
   }
 
-  componentDidUpdate() {
+  history = history
+
+  componentDidUpdate(prevProps) {
     this.scheduledFloatingInputter()
+    this.focus(prevProps)
   }
 
   scheduledFloatingInputter() {
@@ -56,6 +60,16 @@ export class Result extends React.PureComponent {
     this.props.openFloatingInputter(cellRect, isInteractive, replaceValue)
   }
 
+  focus(prevProps) {
+    if (!prevProps.isActive && this.props.isActive) {
+      const element = this.props.fwdRef.current
+
+      if (document.activeElement !== element) {
+        element.focus()
+      }
+    }
+  }
+
   handleOnFocus() {
     this.props.setActiveCell(this.props.location)
   }
@@ -69,16 +83,20 @@ export class Result extends React.PureComponent {
     this.openFloatingInputter(true)
   }
 
-  handleOnKeyDown({ key }) {
+  handleOnKeyDown(event) {
+    const { key, metaKey, ctrlKey } = event
+
     if (['Delete', 'Backspace'].includes(key)) {
       const valueStr = '' + this.props.result
 
       if (valueStr.length > 0) {
-        graph.delVertex(this.props.location)
+        const { location } = this.props
+        history.push('clear', location)
+        graph.delVertex(location)
       }
       // key pressed is a printable symbol, ex: 'a', '1', ','
       // can be further refined, but for now it's fine
-    } else if (key.length === 1) {
+    } else if (key.length === 1 && !(metaKey || ctrlKey)) {
       this.openFloatingInputter(true, key)
     }
   }
