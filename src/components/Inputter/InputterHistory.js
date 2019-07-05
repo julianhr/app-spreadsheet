@@ -2,9 +2,9 @@ import { debounce } from '~/library/utils'
 
 
 class InputterHistory {
-  constructor(component, maxLen, wait) {
+  constructor(component, maxUndo, wait) {
     this.c = component
-    this.maxLen = maxLen
+    this.maxUndo = maxUndo
     this.history = []
     this.index = 0
     this.lastUndo = null
@@ -14,7 +14,7 @@ class InputterHistory {
 
   reset() {
     const { entered, valueEvent } = this.c.props
-    this.history = []
+    this.history.length = 0
 
     if (entered !== valueEvent.value) {
       this.history.push({ value: entered, cursorPos: entered.length })
@@ -72,7 +72,7 @@ class InputterHistory {
       this.history.pop()
     }
 
-    if (this.history.length === this.maxLen) {
+    if (this.history.length === this.maxUndo) {
       this.history.shift()
     }
   }
