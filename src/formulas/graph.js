@@ -100,7 +100,7 @@ class Graph {
     }
   }
 
-  addVertex(location, entered) {
+  addVertex(location, entered, willRecalculate=true) {
     const vertex = new Vertex(entered)
     const interpreter = new Interpreter(location)
     const oldVertex = this.hasVertex(location) && this.getVertex(location)
@@ -116,7 +116,7 @@ class Graph {
       vertex.error = vertex.result = error.message
     }
 
-    this.recalculate(location)
+    willRecalculate && this.recalculate(location)
     return vertex
   }
 
