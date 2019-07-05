@@ -13,15 +13,13 @@ class TableHistory {
     this.graph = graph
     this._undo = []
     this._redo = []
+    this.maxUndo = 30
   }
 
   push(type, ...args) {
     const command = this.getEvent(type, ...args)
+    this.truncateHistory()
     this._undo.push(command)
-
-    if (this._redo.length > 0) {
-      this._redo.length = 0
-    }
   }
 
   getEvent(type, ...args) {
@@ -67,6 +65,16 @@ class TableHistory {
 
     graph.recalculate()
   }, 300, false)
+
+  truncateHistory() {
+    if (this._undo.length === this.maxUndo) {
+      this._undo.shift()
+    }
+
+    if (this._redo.length > 0) {
+      this._redo.length = 0
+    }
+  }
 }
 
 const history = new TableHistory(graph)
