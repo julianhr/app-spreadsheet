@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Interpreter #getAST gets expression AST 1`] = `
+FuncOp {
+  "_name": "FuncOp",
+  "argNodes": Array [
+    NumberNode {
+      "_name": "NumberNode",
+      "node": Token {
+        "category": "entity",
+        "html": null,
+        "index": 6,
+        "text": "9",
+        "type": "NUMBER",
+        "value": 9,
+        "whitespace": 0,
+      },
+    },
+  ],
+  "funcNode": Token {
+    "category": "entity",
+    "html": null,
+    "index": 1,
+    "text": "sqrt",
+    "type": "FUNCTION",
+    "value": [Function],
+    "whitespace": 0,
+  },
+}
+`;

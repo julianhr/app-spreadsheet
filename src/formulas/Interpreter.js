@@ -2,7 +2,7 @@ import { Lexer } from './Lexer'
 import { parseLocation, getColumnLabel } from '~/library/utils'
 import graph from '~/formulas/graph'
 import Parser from './Parser'
-import ReduxConnect from './ReduxConnect'
+import ReduxStore from './ReduxStore'
 
 
 const ERR_DIVISION_BY_ZERO = '#DIV/0!'
@@ -15,27 +15,19 @@ class Interpreter {
     this.error = null
     this.cache = {}
     this.result = null
-    this.state = new ReduxConnect()
+    this.store = new ReduxStore()
   }
 
-  interpret(input) {
-    const vertex = graph.addVertex(this.location, input)
-    let lexer, parser
-
+  getAST(entered) {
     try {
-      lexer = new Lexer(input)
-      parser = new Parser( lexer.getTokens() )
-      vertex.ast = parser.parse()
-      graph.recalculate(this.location)
-      this.result = vertex.result
+      const lexer = new Lexer(entered)
+      const parser = new Parser( lexer.getTokens() )
+      const ast = parser.parse()
+      return ast
     } catch (error) {
-      this.error = vertex.error = error
-      this.result = vertex.result = this.errorResponse()
-      return this.result
+      this.error = error
+      throw new Error(ERR_GENERIC)
     }
-
-    this.error = vertex.error
-    return this.result
   }
 
   visitAST(location) {
@@ -186,8 +178,8 @@ class Interpreter {
     const [colIndex, rowIndex] = parseLocation(location)
 
     if (Math.min(colIndex, rowIndex) < 0) { return false }
-    if (colIndex >= this.state.columns) { return false }
-    if (rowIndex >= this.state.rows) { return false }
+    if (colIndex >= this.store.columns) { return false }
+    if (rowIndex >= this.store.rows) { return false }
     return true
   }
 

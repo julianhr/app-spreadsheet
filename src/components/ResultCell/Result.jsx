@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import graph from '~/formulas/graph'
 
 import { unscheduleFloatingInputter } from '~/actions/globalActions'
-import { clearCellData } from '~/actions/tableDataActions'
 import { openFloatingInputter, setActiveCell } from '~/actions/globalActions'
 import Datum from './Datum'
 
@@ -14,8 +14,6 @@ export class Result extends React.PureComponent {
     // props
     location: PropTypes.string.isRequired,
     fwdRef: PropTypes.object.isRequired,
-    // redux
-    clearCellData: PropTypes.func.isRequired,
     isActive: PropTypes.bool.isRequired,
     openFloatingInputter: PropTypes.func.isRequired,
     result: PropTypes.oneOfType([
@@ -76,7 +74,7 @@ export class Result extends React.PureComponent {
       const valueStr = '' + this.props.result
 
       if (valueStr.length > 0) {
-        this.props.clearCellData(this.props.location)
+        graph.delVertex(this.props.location)
       }
       // key pressed is a printable symbol, ex: 'a', '1', ','
       // can be further refined, but for now it's fine
@@ -110,7 +108,6 @@ function mapStateToProps(state, ownProps) {
 }
 
 const mapDispatchToProps = {
-  clearCellData,
   openFloatingInputter,
   setActiveCell,
   unscheduleFloatingInputter,
