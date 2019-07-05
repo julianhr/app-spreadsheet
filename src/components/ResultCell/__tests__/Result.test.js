@@ -10,7 +10,6 @@ const requiredProps = {
   fwdRef: React.createRef(),
   location: 'A-3',
   // redux
-  clearCellData: jest.fn(),
   isActive: true,
   openFloatingInputter: jest.fn(),
   result: 5,
@@ -117,7 +116,7 @@ describe('Result', () => {
   })
 
   describe('#handleOnKeyDown', () => {
-    it('calls #clearCellData if key pressed is Backspace or Delete', () => {
+    xit('calls #clearCellData if key pressed is Backspace or Delete', () => {
       renderApp(testProps)
       const el = document.querySelector(selector)
       jest.spyOn(testProps, 'clearCellData')

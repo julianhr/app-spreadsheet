@@ -14,26 +14,105 @@ describe('Interpreter', () => {
     jest.spyOn(graph, 'updateStore').mockReturnValue(null)
   })
 
-  describe('#_visit', () => {
+  describe('#getAST', () => {
+    it('gets expression AST', () => {
+      const entered = '=sqrt(9)'
+      const interpreter = new Interpreter(location)
+      const ast = interpreter.getAST(entered)
+      expect(ast).toMatchSnapshot()
+    })
+
+    it('throws error if expression is invalid', () => {
+      const entered = '=sqrt(9'
+      const interpreter = new Interpreter(location)
+      expect(() => interpreter.getAST(entered)).toThrow(ERR_GENERIC)
+    })
+  })
+
+  describe('#visitAST', () => {
+    it('returns error message if vertex is missing AST', () => {
+      const entered = '=sqrt(9'
+      const interpreter = new Interpreter(location)
+
+      graph.addVertex(location, entered)
+      expect(interpreter.visitAST(location)).toEqual(ERR_GENERIC)
+    })
+
+    it('calls #visitNode', () => {
+      const entered = '=sqrt(9)'
+      const interpreter = new Interpreter(location)
+
+      graph.addVertex(location, entered)
+      jest.spyOn(interpreter, 'visitNode')
+      interpreter.visitAST(location)
+      expect(interpreter.visitNode).toHaveBeenCalled()
+    })
+
+    it('returns result', () => {
+      const entered = '=sqrt(9)'
+      const interpreter = new Interpreter(location)
+
+      graph.addVertex(location, entered)
+      expect(interpreter.visitAST(location)).toEqual(3)
+    })
+  })
+
+  describe('#visitNode', () => {
     it('visits NumberNode', () => {
       const interpreter = new Interpreter(location)
       jest.spyOn(Interpreter.prototype, 'NumberNode')
-      interpreter.interpret('=5')
+      graph.addVertex(location, '=5')
       expect(interpreter.NumberNode).toHaveBeenCalledTimes(1)
+    })
+
+    it('visits CellNode', () => {
+      const interpreter = new Interpreter(location)
+      jest.spyOn(Interpreter.prototype, 'CellNode')
+      graph.addVertex('A-2', '5')
+      graph.addVertex(location, '=A2 + 6')
+      expect(interpreter.CellNode).toHaveBeenCalledTimes(1)
+    })
+
+    it('visits TextNode', () => {
+      const interpreter = new Interpreter(location)
+      jest.spyOn(Interpreter.prototype, 'TextNode')
+      graph.addVertex(location, '"hi"')
+      expect(interpreter.TextNode).toHaveBeenCalledTimes(1)
+    })
+
+    it('visits StringNode', () => {
+      const interpreter = new Interpreter(location)
+      jest.spyOn(Interpreter.prototype, 'StringNode')
+      graph.addVertex(location, '=concat("hi")')
+      expect(interpreter.StringNode).toHaveBeenCalledTimes(1)
+    })
+
+    it('visits CellRange', () => {
+      const interpreter = new Interpreter(location)
+      jest.spyOn(Interpreter.prototype, 'CellRange')
+      graph.addVertex(location, '=sum(B1:C3)')
+      expect(interpreter.CellRange).toHaveBeenCalledTimes(1)
     })
 
     it('visits FuncOp', () => {
       const interpreter = new Interpreter(location)
       jest.spyOn(Interpreter.prototype, 'FuncOp')
-      interpreter.interpret('=sum(5)')
+      graph.addVertex(location, '=sum(5)')
       expect(interpreter.FuncOp).toHaveBeenCalledTimes(1)
     })
 
     it('visits BinaryOp', () => {
       const interpreter = new Interpreter(location)
       jest.spyOn(Interpreter.prototype, 'BinaryOp')
-      interpreter.interpret('=5+2')
+      graph.addVertex(location, '=5+2')
       expect(interpreter.BinaryOp).toHaveBeenCalledTimes(1)
+    })
+
+    it('visits UnaryOp', () => {
+      const interpreter = new Interpreter(location)
+      jest.spyOn(Interpreter.prototype, 'UnaryOp')
+      graph.addVertex(location, '=5+-2')
+      expect(interpreter.UnaryOp).toHaveBeenCalledTimes(1)
     })
 
     it('throws error if node is unrecognized', () => {
@@ -48,50 +127,43 @@ describe('Interpreter', () => {
     describe('no cell references happy path ', () => {
       test('  testing ', () => {
         const input = '  testing '
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
+        const { result } = graph.addVertex(location, input)
         expect(result).toBe(input)
       })
 
       test('  5 ', () => {
         const input = '  5 '
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
+        const { result } = graph.addVertex(location, input)
         expect(result).toBe(input)
       })
 
       test('=5', () => {
         const input = '=5'
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
+        const { result } = graph.addVertex(location, input)
         expect(result).toBe(5)
       })
 
       test('=5 + -4 * (3 + -1)', () => {
         const input = '=5 + -4 * (3 + -1)'
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
+        const { result } = graph.addVertex(location, input)
         expect(result).toBe(-3)
       })
 
       test('=( 5 + 2) * 3', () => {
         const input = '=( 5 + 2) * 3'
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
+        const { result } = graph.addVertex(location, input)
         expect(result).toBe(21)
       })
 
       test('=3 + sum(  6, 3,1) - 5', () => {
         const input = '=3 + sum(  6, 3,1) - 5'
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
+        const { result } = graph.addVertex(location, input)
         expect(result).toBe(8)
       })
   
       test('=(sqrt(49) + 1) / sum(3,(70/10))', () => {
         const input = '=(sqrt(49) + 3) * sum(3,(70/10))'
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
+        const { result } = graph.addVertex(location, input)
         expect(result).toBe(100)
       })
     })
@@ -99,171 +171,135 @@ describe('Interpreter', () => {
     describe('no cell references error path', () => {
       test('=5/0', () => {
         const input = '=5/0'
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
-        expect(result).toBe(ERR_DIVISION_BY_ZERO)
-        expect(interpreter.error).toBeTruthy()
+        const vertex = graph.addVertex(location, input)
+        expect(vertex.result).toBe(ERR_DIVISION_BY_ZERO)
+        expect(vertex.error).toBeTruthy()
       })
 
       test('=(5+2))', () => {
         const input = '=(5+2))'
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
-        expect(result).toBe(ERR_GENERIC)
-        expect(interpreter.error).toBeTruthy()
+        const vertex = graph.addVertex(location, input)
+        expect(vertex.result).toBe(ERR_GENERIC)
+        expect(vertex.error).toBeTruthy()
       })
 
       test('=sum(5,-))', () => {
         const input = '=sum(5,-))'
-        const interpreter = new Interpreter(location)
-        const result = interpreter.interpret(input)
-        expect(result).toBe(ERR_GENERIC)
-        expect(interpreter.error).toBeTruthy()
+        const vertex = graph.addVertex(location, input)
+        expect(vertex.result).toBe(ERR_GENERIC)
+        expect(vertex.error).toBeTruthy()
       })
     })
 
     describe('cell references happy path', () => {
       test('A1=4, B2=A1', () => {
-        const a1 = new Interpreter('A-1')
-        const b2 = new Interpreter('B-2')
-        a1.interpret('4')
-        const result = b2.interpret('=A1')
+        graph.addVertex('A-1', '4')
+        const { result } = graph.addVertex('A-2', '=A1')
         expect(result).toBe(4)
       })
 
       test('A1="test", B1=A1, C1=B1', () => {
         const input = 'test'
-        const a1 = new Interpreter('A-1')
-        const b1 = new Interpreter('B-1')
-        const c1 = new Interpreter('C-1')
         let result
 
-        a1.interpret('test')
-        result = b1.interpret('=A1')
+        graph.addVertex('A-1', 'test')
+        result = graph.addVertex('B-1', '=A1').result
         expect(result).toBe(input)
-        result = c1.interpret('=B1')
+        result = graph.addVertex('C-1', '=B1').result
         expect(result).toBe(input)
       })
 
       test('A1=4, B1=A1, C1=B1', () => {
-        const a1 = new Interpreter('A-1')
-        const b1 = new Interpreter('B-1')
-        const c1 = new Interpreter('C-1')
-
-        a1.interpret('4')
-        b1.interpret('=A1')
-        const result = c1.interpret('=B1')
+        graph.addVertex('A-1', '4')
+        graph.addVertex('B-1', '=A1')
+        const { result } = graph.addVertex('C-1', '=B1')
         expect(result).toBe(4)
       })
 
       test('A1=3, B1=A1, C1=A1+B1', () => {
-        const a1 = new Interpreter('A-1')
-        const b1 = new Interpreter('B-1')
-        const c1 = new Interpreter('C-1')
-
-        a1.interpret('3')
-        b1.interpret('=A1')
-        const result = c1.interpret('=A1+B1')
+        graph.addVertex('A-1', '3')
+        graph.addVertex('B-1', '=A1')
+        const { result } = graph.addVertex('C-1', '=A1+B1')
         expect(result).toBe(6)
       })
 
       test('dependent cells update their result', () => {
-        const a1 = new Interpreter('A-1')
-        const a2 = new Interpreter('A-2')
-        const a3 = new Interpreter('A-3')
-
-        a1.interpret('4')
-        a2.interpret('=A1 + 5')
-        a3.interpret('=A2 + 3')
+        graph.addVertex('A-1', '4')
+        graph.addVertex('A-2', '=A1 + 5')
+        graph.addVertex('A-3', '=A2 + 3')
         expect(graph.getCellResult('A-2')).toBe(9)
         expect(graph.getCellResult('A-3')).toBe(12)
 
-        a1.interpret('3')
+        graph.addVertex('A-1', '3')
         expect(graph.getCellResult('A-2')).toBe(8)
         expect(graph.getCellResult('A-3')).toBe(11)
       })
 
       test('A1=3, A3=2, C1=SUM(A1:A3)', () => {
-        const a1 = new Interpreter('A-1')
-        const a3 = new Interpreter('A-3')
-        const c1 = new Interpreter('C-1')
-
-        a1.interpret('3')
-        a3.interpret('2')
-        const result = c1.interpret('=SUM(A1:A3)')
+        graph.addVertex('A-1', '3')
+        graph.addVertex('A-3', '2')
+        const { result } = graph.addVertex('C-1', '=SUM(A1:A3)')
         expect(result).toBe(5)
       })
 
       test('A1=3, C2=A1+1, C1=SUM(A1:B2,C2,(C3+9)/3)', () => {
-        const a1 = new Interpreter('A-1')
-        const c2 = new Interpreter('C-2')
-        const c1 = new Interpreter('C-1')
-
-        a1.interpret('3')
-        c2.interpret('=A1+1')
-        const result = c1.interpret('=SUM(A1:B2,C2,(C3+9)/3)')
+        graph.addVertex('A-1', '3')
+        graph.addVertex('C-2', '=A1+1')
+        const { result } = graph.addVertex('C-1', '=SUM(A1:B2,C2,(C3+9)/3)')
         expect(result).toBe(10)
       })
 
       test('A1=CONCAT(" one ", "two")', () => {
-        const a1 = new Interpreter('A-1')
-        const result = a1.interpret('=CONCAT(" one ", "two")')
+        const { result } = graph.addVertex('A-1', '=CONCAT(" one ", "two")')
         expect(result).toBe(" one two")
       })
     })
 
     describe('cell references error path', () => {
       it('updates cells with errors ', () => {
-        const a1 = new Interpreter('A-1')
-        const b1 = new Interpreter('B-1')
-        a1.interpret('=invalid')
-        b1.interpret('=A1')
-        expect(graph.getVertex('A-1').result).toBe(ERR_GENERIC)
-        expect(graph.getVertex('B-1').result).toBe(ERR_GENERIC)
+        graph.addVertex('A-1', '=invalid')
+        graph.addVertex('B-1', '=A1')
+        expect(graph.getCellResult('A-1')).toBe(ERR_GENERIC)
+        expect(graph.getCellResult('B-1')).toBe(ERR_GENERIC)
 
-        a1.interpret('=7')
-        expect(graph.getVertex('A-1').result).toBe(7)
-        expect(graph.getVertex('B-1').result).toBe(7)
+        graph.addVertex('A-1', '=7')
+        expect(graph.getCellResult('A-1')).toBe(7)
+        expect(graph.getCellResult('B-1')).toBe(7)
       })
 
       test('out of bounds error', () => {
-        const a1 = new Interpreter('A-1')
+        let vertex
 
-        a1.interpret('=a10000')
-        expect(a1.result).toBe(ERR_GENERIC)
-        expect(a1.error.message).toMatch(/out of bounds/i)
+        vertex = graph.addVertex(location, '=a10000')
+        expect(vertex.result).toBe(ERR_GENERIC)
+        expect(vertex.error.message).toMatch(/out of bounds/i)
 
-        a1.interpret('=aaa1')
-        expect(a1.result).toBe(ERR_GENERIC)
-        expect(a1.error.message).toMatch(/out of bounds/i)
+        vertex = graph.addVertex(location, '=aaa1')
+        expect(vertex.result).toBe(ERR_GENERIC)
+        expect(vertex.error.message).toMatch(/out of bounds/i)
 
-        a1.interpret('=aaa10000')
-        expect(a1.result).toBe(ERR_GENERIC)
-        expect(a1.error.message).toMatch(/out of bounds/i)
+        vertex = graph.addVertex(location, '=aaa10000')
+        expect(vertex.result).toBe(ERR_GENERIC)
+        expect(vertex.error.message).toMatch(/out of bounds/i)
       })
 
       test('cache', () => {
-        const a1 = new Interpreter('A-1')
-        const b1 = new Interpreter('B-1')
-        b1.interpret('2')
+        graph.addVertex('B-1', '2')
         jest.spyOn(graph, 'visitCell')
-        a1.interpret('=B1+B1+B1')
+        graph.addVertex('A-1', '=B1+B1+B1')
         expect(graph.visitCell).toHaveBeenCalledTimes(1)
-        expect(a1.result).toBe(6)
+        expect(graph.getCellResult('A-1')).toBe(6)
       })
 
       describe('circular reference', () => {
         test('A1=A1', () => {
-          const a1 = new Interpreter('A-1')
-          const result = a1.interpret('=A1')
+          const { result } = graph.addVertex(location, '=A1')
           expect(result).toBe(ERR_CIRCULAR_REFERENCE)
         })
   
         test('A1=B2, B2=A1', () => {
-          const a1 = new Interpreter('A-1')
-          const b2 = new Interpreter('B-2')
-          a1.interpret('=B2')
-          const result = b2.interpret('=A1')
+          graph.addVertex(location, '=B2')
+          const { result } = graph.addVertex('B-2', '=A1')
           expect(result).toBe(ERR_CIRCULAR_REFERENCE)
         })
       })

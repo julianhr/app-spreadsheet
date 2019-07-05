@@ -1,11 +1,5 @@
 import graph from '../graph'
-import Interpreter from '../Interpreter'
 
-
-function interpret(location, formula) {
-  const interpreter = new Interpreter(location)
-  return interpreter.interpret(formula)
-}
 
 describe('graph', () => {
   beforeEach(() => {
@@ -13,7 +7,7 @@ describe('graph', () => {
   })
 
   test('#recalculate', () => {
-    interpret('A-1', '=5+2')
+    graph.addVertex('A-1', '=5+2')
     jest.spyOn(graph, 'setPendingNodes')
     jest.spyOn(graph, 'dfs')
     jest.spyOn(graph, 'updateStore')
@@ -26,7 +20,7 @@ describe('graph', () => {
 
   describe('#getCellResult', () => {
     it('returns value if vertex exists', () => {
-      interpret('A-1', '=5+2')
+      graph.addVertex('A-1', '=5+2')
       expect(graph.getCellResult('A-1')).toBe(7)
     })
 
@@ -36,9 +30,9 @@ describe('graph', () => {
   })
 
   test('#setPendingNodes', () => {
-    interpret('A-1', '=5+2')
-    interpret('A-2', '=A1+3')
-    interpret('B-2', '5')
+    graph.addVertex('A-1', '=5+2')
+    graph.addVertex('A-2', '=A1+3')
+    graph.addVertex('B-2', '5')
     graph.setPendingNodes()
     expect(graph.pending).toEqual(new Set(['A-1', 'A-2', 'B-2']))
   })

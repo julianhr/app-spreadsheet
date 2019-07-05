@@ -1,4 +1,5 @@
 import Lexer, { TOKENS as t } from '~/formulas/Lexer'
+import graph from '~/formulas/graph'
 
 
 class CellValueSetter {
@@ -12,7 +13,7 @@ class CellValueSetter {
     let cellValue
 
     if (this.isWhitespace(inputValue)) {
-      this.props.clearCellData(location)
+      graph.delVertex(location)
       return
     }
 
@@ -22,7 +23,7 @@ class CellValueSetter {
       cellValue = inputValue
     }
 
-    this.props.setCellData(location, cellValue)
+    graph.addVertex(location, cellValue)
   }
 
   isFormula(text) {

@@ -1,4 +1,4 @@
-import ReduxConnect from './ReduxConnect'
+import ReduxStore from './ReduxStore'
 import Interpreter from './Interpreter'
 
 
@@ -16,7 +16,7 @@ class Graph {
     this.adj = {}
     this.pending = null
     this.visited = null
-    this.store = new ReduxConnect()
+    this.reduxStore = new ReduxStore()
   }
 
   recalculate(location) {
@@ -82,26 +82,41 @@ class Graph {
   }
 
   updateStore() {
-    const locationKeys = new Set(this.store.locations)
+    const locationKeys = new Set(this.reduxStore.locations)
 
     for (let [location, vertex] of Object.entries(this.adj)) {
       const { entered, result } = vertex
+      const currResult = this.reduxStore.getCellResult(location)
 
       locationKeys.delete(location)
 
-      if (result !== this.store.getCellResult(location)) {
-        this.store.replaceCellData(location, entered, result)
+      if (result !== currResult) {
+        this.reduxStore.setCellData(location, entered, result)
       }
     }
 
     for (let location of locationKeys) {
-      this.store.clearCell(location)
+      this.reduxStore.clearCellData(location)
     }
   }
 
   addVertex(location, entered) {
     const vertex = new Vertex(entered)
-    this.adj[location] = vertex
+    const interpreter = new Interpreter(location)
+    const oldVertex = this.hasVertex(location) && this.getVertex(location)
+
+    if (oldVertex && oldVertex.entered === entered) {
+      return
+    }
+
+    try {
+      this.adj[location] = vertex
+      vertex.ast = interpreter.getAST(entered)
+    } catch (error) {
+      vertex.error = vertex.result = error.message
+    }
+
+    this.recalculate(location)
     return vertex
   }
 
@@ -125,7 +140,7 @@ class Graph {
     this.adj = {}
     this.pending = null
     this.visited = null
-    this.store = new ReduxConnect()
+    this.reduxStore = new ReduxStore()
   }
 
   testMissingLocation(location) {
